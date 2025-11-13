@@ -21,9 +21,8 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-
-        supportActionBar?.title = "Park Mobile"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(false) //menu hamburguer, para aparecer tem que da true
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_hamburguer)
     }
 

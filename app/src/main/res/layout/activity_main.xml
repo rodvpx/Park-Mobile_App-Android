@@ -16,10 +16,22 @@
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="ParkMobile"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/img_capa"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginStart="8dp"
@@ -33,27 +45,27 @@
         app:srcCompat="@drawable/capa_home" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/bt_entrar"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="80dp"
         android:layout_marginStart="45sp"
         android:layout_marginEnd="45sp"
         android:layout_marginBottom="10dp"
         android:backgroundTint="@color/design_default_color_secondary"
         android:text="Entrar"
         android:textSize="25sp"
-        app:icon="@drawable/ic_search_user"
+        app:icon="@drawable/ic_profile"
         app:iconSize="35dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/bt_cadastrar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/img_capa"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/bt_cadastrar"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="80dp"
         android:layout_marginStart="45sp"
         android:layout_marginEnd="45sp"
         android:backgroundTint="@color/design_default_color_secondary"
@@ -64,6 +76,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_entrar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
