@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkMobile">
         <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity
             android:name=".CadastroActivity"
             android:exported="false" />
         <activity
