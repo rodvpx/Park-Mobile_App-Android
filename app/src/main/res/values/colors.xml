@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- Cores da Marca (Exemplos) -->
+    <color name="md_theme_primary">#00668B</color> <!-- Azul escuro -->
+    <color name="md_theme_onPrimary">#FFFFFF</color> <!-- Texto sobre a cor primária -->
+    <color name="md_theme_secondary">#4D616C</color> <!-- Um tom de cinza-azulado -->
+    <color name="md_theme_onSecondary">#FFFFFF</color> <!-- Texto sobre a cor secundária -->
+    <color name="md_theme_error">#BA1A1A</color> <!-- Vermelho para erros -->
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_background">#FDFCFF</color> <!-- Fundo geral do app -->
+    <color name="md_theme_onBackground">#1A1C18</color> <!-- Texto sobre o fundo -->
+    <color name="md_theme_surface">#FDFCFF</color> <!-- Cor de superfícies como Cards -->
+    <color name="md_theme_onSurface">#1A1C18</color> <!-- Texto sobre superfícies -->
+
+    <!-- Cores comuns -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="yellow_600">#FDD835</color>
-    <color name="yellow_700">#FBC02D</color>
 </resources>
