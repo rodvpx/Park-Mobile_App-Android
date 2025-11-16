@@ -1,7 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ParkMobile" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <!-- Base application theme for Night/Dark mode. -->
+    <style name="Base.Theme.ParkMobile" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- As cores aqui devem ser versões escuras das cores do seu app -->
+        <!-- Exemplo: (idealmente, use o Material Theme Builder para gerar) -->
+        <item name="colorPrimary">#52D7FE</item> <!-- Azul mais claro -->
+        <item name="colorOnPrimary">#003548</item>
+        <item name="colorSecondary">#B4C9D5</item>
+        <item name="colorOnSecondary">#1F333C</item>
+        <item name="colorError">#FFB4AB</item>
+        <item name="colorOnError">#690005</item>
+        <item name="android:colorBackground">#1A1C18</item>
+        <item name="colorOnBackground">#E2E2E6</item>
+        <item name="colorSurface">#1A1C18</item>
+        <item name="colorOnSurface">#E2E2E6</item>
+
+        <!-- Cor da barra de status -->
+        <item name="android:statusBarColor">?attr/colorSurface</item>
     </style>
+
+    <style name="Theme.ParkMobile" parent="Base.Theme.ParkMobile" />
 </resources>

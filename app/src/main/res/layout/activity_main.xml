@@ -7,13 +7,49 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_sup_padrao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ImageView
+        android:id="@+id/img_capa"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="Capa"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/capa_home" />
+
+    <Button
+        android:id="@+id/bt_entrar"
+        style="@style/BotaoTelaPrincipal"
+        android:layout_marginBottom="10dp"
+        android:text="Entrar"
+        app:icon="@drawable/ic_profile"
+        app:layout_constraintBottom_toTopOf="@+id/bt_cadastrar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_capa"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+
+    <Button
+        android:id="@+id/bt_cadastrar"
+        style="@style/BotaoTelaPrincipal"
+        android:text="Cadastrar"
+        app:icon="@drawable/ic_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_entrar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
