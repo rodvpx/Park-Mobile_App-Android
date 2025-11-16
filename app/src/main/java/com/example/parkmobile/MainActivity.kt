@@ -32,10 +32,22 @@ class MainActivity : AppCompatActivity() {
         toolbarTitle.text = "Park Mobile"
         // --- Fim da configuração da Toolbar ---
 
+        // configura imagem de capa
+        val header: HeaderView = findViewById(R.id.header_view)
+
+        header.setHeaderText("Park Mobile")
+        header.setHeaderImageResource(R.drawable.capa_home)
+
 
         val btnCadastrar: Button = findViewById(R.id.bt_cadastrar)
         btnCadastrar.setOnClickListener {
             val intent = Intent(this, CadastroActivity::class.java)
+            startActivity(intent)
+        }
+
+        val btnLogin: Button = findViewById(R.id.bt_entrar)
+        btnLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }
