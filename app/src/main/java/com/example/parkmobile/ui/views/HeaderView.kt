@@ -1,9 +1,10 @@
-package com.example.parkmobile
+package com.example.parkmobile.ui.views
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import com.example.parkmobile.R
 import com.example.parkmobile.databinding.ViewHeaderBinding
 import com.google.android.material.card.MaterialCardView
 
