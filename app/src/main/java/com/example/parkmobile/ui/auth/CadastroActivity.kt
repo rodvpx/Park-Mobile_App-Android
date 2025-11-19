@@ -1,29 +1,23 @@
-package com.example.parkmobile
+package com.example.parkmobile.ui.auth
 
 import android.os.Bundle
-import android.widget.TextView
+import android.view.Menu
 import androidx.activity.enableEdgeToEdge
+import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.parkmobile.R
 
-class ConcluirCadastroActivity : AppCompatActivity() {
+class CadastroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_concluir_cadastro)
-
-        // configura imagem de capa
-        val header: HeaderView = findViewById(R.id.header_view)
-
-        header.setHeaderText("Vai Estacionar?")
-        header.setHeaderImageResource(R.color.md_theme_secondary)
-        // -------------------//
+        setContentView(R.layout.activity_cadastro)
 
         // Configura o título customizado da Toolbar
         val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
-        toolbarTitle.text = "Concluir Cadastro"
+        toolbarTitle.text = "Cadastro"
 
         // Configura a Toolbar para ter o botão de voltar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
