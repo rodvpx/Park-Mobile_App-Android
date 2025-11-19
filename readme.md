@@ -22,7 +22,7 @@ Para manter a consistência visual, padronizamos alguns componentes da UI que s�
 
 ### 2.1. Toolbar Superior
 
-A `Toolbar` superior é padronizada através do layout `app/src/main/res/layout/toolbar_sup_padrao.xml`.
+A `Toolbar` superior é padronizada através do layout `app/src/main/res/layout/partial_toolbar_superior.xml`.
 
 **Uso:**
 
@@ -31,7 +31,7 @@ Para incluir a `Toolbar` em uma tela, use a tag `<include>`:
 ```xml
 <include
     android:id="@+id/toolbar"
-    layout="@layout/toolbar_sup_padrao" />
+    layout="@layout/partial_toolbar_superior" />
 ```
 
 **Características:**

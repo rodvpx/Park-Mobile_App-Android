@@ -5,11 +5,11 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CadastroActivity">
+    tools:context=".ui.auth.CadastroActivity">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_sup_padrao"
+        layout="@layout/partial_toolbar_superior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
