@@ -1,12 +1,14 @@
-package com.example.parkmobile
+package com.example.parkmobile.ui.auth
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import com.example.parkmobile.R
+import com.example.parkmobile.ui.views.HeaderView
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +39,12 @@ class LoginActivity : AppCompatActivity() {
         // Define a ação do clique no botão de voltar
         toolbar.setNavigationOnClickListener {
             finish() // <--- Ação para voltar
+        }
+
+        val btnEntrar: Button = findViewById(R.id.button_login)
+        btnEntrar.setOnClickListener {
+            val intent = Intent(this, ConcluirCadastroActivity::class.java)
+            startActivity(intent)
         }
     }
 }

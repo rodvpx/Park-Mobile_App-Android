@@ -1,8 +1,7 @@
-package com.example.parkmobile
+package com.example.parkmobile.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -10,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.parkmobile.R
+import com.example.parkmobile.ui.views.HeaderView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,16 +39,15 @@ class MainActivity : AppCompatActivity() {
         header.setHeaderText("Park Mobile")
         header.setHeaderImageResource(R.drawable.capa_home)
 
-
-        val btnCadastrar: Button = findViewById(R.id.bt_cadastrar)
-        btnCadastrar.setOnClickListener {
-            val intent = Intent(this, CadastroActivity::class.java)
+        val btnLogin = findViewById<Button>(R.id.bt_entrar)
+        btnLogin.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
 
-        val btnLogin: Button = findViewById(R.id.bt_entrar)
-        btnLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+        val btnCadastro = findViewById<Button>(R.id.bt_cadastrar)
+        btnCadastro.setOnClickListener {
+            val intent = Intent(this, CadastroActivity::class.java)
             startActivity(intent)
         }
     }
