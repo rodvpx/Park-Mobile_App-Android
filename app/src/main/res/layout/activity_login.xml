@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".LoginActivity">
+    tools:context=".ui.auth.LoginActivity">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_sup_padrao"
+        layout="@layout/partial_toolbar_superior"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.example.parkmobile.HeaderView
+            <com.example.parkmobile.ui.views.HeaderView
                 android:id="@+id/header_view"
                 android:layout_width="0dp"
                 android:layout_height="250dp"
