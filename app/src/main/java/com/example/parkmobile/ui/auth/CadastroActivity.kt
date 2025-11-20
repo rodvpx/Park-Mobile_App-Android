@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.activity.enableEdgeToEdge
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import com.example.parkmobile.R
 
 class CadastroActivity : AppCompatActivity() {
@@ -18,6 +20,9 @@ class CadastroActivity : AppCompatActivity() {
         // Configura o título customizado da Toolbar
         val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
         toolbarTitle.text = "Cadastro"
+
+        val profileImageCard: CardView = findViewById(R.id.profile_image_card)
+        profileImageCard.visibility = View.GONE
 
         // Configura a Toolbar para ter o botão de voltar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
