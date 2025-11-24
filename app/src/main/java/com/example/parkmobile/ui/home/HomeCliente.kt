@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
@@ -32,6 +32,21 @@ class HomeCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelected
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_cliente)
 
+        // Handle system back (including gesture) to close drawer if it's open
+        val backCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    drawerLayout.closeDrawer(GravityCompat.END)
+                } else {
+                    // disable and let system handle back
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                    isEnabled = true
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, backCallback)
+
         val toolbar: Toolbar = findViewById(R.id.toolbar_sup)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -40,12 +55,24 @@ class HomeCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelected
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
+        // Acessa a view de header do NavigationView e configura clique em "Configurar Conta"
+        val header = navigationView.getHeaderView(0)
+        // atualiza o nome do header a partir de resources (permite tradução)
+        val headerName = header.findViewById<TextView>(R.id.nav_header_name)
+        headerName?.text = getString(R.string.nome_do_usuario)
+//        val headerConfig = header.findViewById<TextView>(R.id.nav_header_configurar)
+//        headerConfig?.setOnClickListener {
+//            val intent = Intent(this, ConfiguracoesActivity::class.java)
+//            startActivity(intent)
+//            drawerLayout.closeDrawer(GravityCompat.END)
+//        }
+
         // Botão de voltar (seta) não é necessário quando se tem o menu lateral
         // Ação de abrir o menu será no ícone de perfil
         profileImageCard = findViewById(R.id.profile_image_card)
         profileImageCard.visibility = View.VISIBLE
         profileImageCard.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
+            drawerLayout.openDrawer(GravityCompat.END)
         }
 
         toolbarTitle = findViewById(R.id.toolbar_title)
@@ -76,7 +103,7 @@ class HomeCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 finish()
             }
         }
-        drawerLayout.closeDrawer(GravityCompat.START)
+        drawerLayout.closeDrawer(GravityCompat.END)
         return true
     }
 
@@ -93,11 +120,6 @@ class HomeCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelected
         updateButtonSelection(title)
     }
 
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
+    // back is handled via OnBackPressedCallback registered in onCreate
+
 }
