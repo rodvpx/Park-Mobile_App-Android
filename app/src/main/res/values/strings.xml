@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">Park Mobile</string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Perfil / Navegação -->
+    <string name="descricao_imagem_perfil">Foto do perfil</string>
+    <string name="nome_do_usuario">Nome do Usuário</string>
+    <string name="configurar_conta">Configurar Conta</string>
+
+    <!-- Configurações -->
+    <string name="alterar_senha">Alterar Senha</string>
+    <string name="senha_atual">Senha atual</string>
+    <string name="nova_senha">Nova senha</string>
+    <string name="confirmar_nova_senha">Confirmar nova senha</string>
+    <string name="sair_da_conta">Sair da Conta</string>
+
+    <!-- Drawer menu titles -->
+    <string name="menu_configuracoes">Configurações</string>
+    <string name="menu_sair">Sair</string>
+
+    <!-- Header -->
+    <string name="titulo_app_bar">Park Mobile</string>
+    <string name="descricao_app_bar">Encontre e reserve seu estacionamento</string>
+
+    <!-- Configurações adicionais -->
+    <string name="titulo_configuracoes">Configurações</string>
+    <string name="descricao_configuracoes">Ajuste as preferências do aplicativo</string>
 </resources>

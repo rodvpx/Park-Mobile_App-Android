@@ -2,11 +2,13 @@ package com.example.parkmobile.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.parkmobile.R
@@ -27,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar) // Define como a action bar principal
         supportActionBar?.setDisplayShowTitleEnabled(false) // Desabilita o título padrão
+
+        // oculta o icon de profile na toolbar
+        val profileImageCard: CardView = findViewById(R.id.profile_image_card)
+        profileImageCard.visibility = View.GONE
 
         // Define o título customizado
         val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
