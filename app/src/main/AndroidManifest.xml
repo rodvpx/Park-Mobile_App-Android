@@ -11,13 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkMobile">
-
+        <activity
+            android:name=".ui.home.HomeAdmin"
+            android:exported="false" />
         <!-- Telas de Autenticação -->
         <activity
             android:name=".ui.auth.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,18 +34,13 @@
         <activity
             android:name=".ui.auth.ConcluirCadastroActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" />
-
-        <!-- Tela Principal -->
+            android:windowSoftInputMode="adjustResize" /> <!-- Tela Principal -->
         <activity
             android:name=".ui.home.HomeCliente"
-            android:exported="false" />
-
-        <!-- Tela de Configurações -->
+            android:exported="false" /> <!-- Tela de Configurações -->
         <activity
             android:name=".ui.configuracoes.ConfiguracoesActivity"
             android:exported="false" />
-
     </application>
 
 </manifest>
