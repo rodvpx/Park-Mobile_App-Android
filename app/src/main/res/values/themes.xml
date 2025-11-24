@@ -46,6 +46,16 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="BotaoGeralVermelho" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="CampoFormulario" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

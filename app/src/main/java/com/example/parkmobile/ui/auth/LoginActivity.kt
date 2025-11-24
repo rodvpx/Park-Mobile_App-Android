@@ -2,11 +2,13 @@ package com.example.parkmobile.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import com.example.parkmobile.R
 import com.example.parkmobile.ui.views.HeaderView
 
@@ -26,6 +28,9 @@ class LoginActivity : AppCompatActivity() {
         // Configura o título customizado da Toolbar
         val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
         toolbarTitle.text = "Login"
+
+        val profileImageCard: CardView = findViewById(R.id.profile_image_card)
+        profileImageCard.visibility = View.GONE
 
         // Configura a Toolbar para ter o botão de voltar
         val toolbar: Toolbar = findViewById(R.id.toolbar)
