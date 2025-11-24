@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="?attr/actionBarSize"
+    android:fitsSystemWindows="true"
     android:background="?attr/colorPrimary"
     android:minHeight="?attr/actionBarSize"
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
@@ -32,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/ic_profile"
+            android:contentDescription="@string/descricao_imagem_perfil"
             android:scaleType="centerCrop" />
 
     </androidx.cardview.widget.CardView>

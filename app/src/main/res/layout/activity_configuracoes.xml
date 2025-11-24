@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.configuracoes.ConfiguracoesActivity">
 
     <LinearLayout
@@ -28,6 +29,7 @@
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginBottom="24dp"
+                android:contentDescription="@string/descricao_imagem_perfil"
                 android:src="@drawable/ic_profile" />
 
             <!-- Informações do Usuário -->
@@ -57,17 +59,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alterar Senha"
+                android:layout_marginBottom="16dp"
+                android:text="@string/alterar_senha"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"/>
+                android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout_senha_atual"
                 style="@style/CampoFormulario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Senha atual"
+                android:hint="@string/senha_atual"
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Nova senha"
+                android:hint="@string/nova_senha"
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -99,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Confirmar nova senha"
+                android:hint="@string/confirmar_nova_senha"
                 app:endIconMode="password_toggle">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -114,19 +116,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Alterar Senha" />
+                android:text="@string/alterar_senha" />
 
         </LinearLayout>
-
 
         <Button
             android:id="@+id/btn_sair"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/md_theme_error"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="25dp"
-            android:text="Sair da Conta" />
+            android:backgroundTint="@color/md_theme_error"
+            android:text="@string/sair_da_conta" />
     </LinearLayout>
 </ScrollView>
