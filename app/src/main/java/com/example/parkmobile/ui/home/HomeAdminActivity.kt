@@ -20,7 +20,7 @@ import com.example.parkmobile.ui.configuracoes.ConfiguracoesActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
-class HomeAdmin : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class HomeAdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbarTitle: TextView

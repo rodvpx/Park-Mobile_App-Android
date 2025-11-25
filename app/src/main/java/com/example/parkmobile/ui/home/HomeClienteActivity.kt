@@ -20,7 +20,7 @@ import com.example.parkmobile.ui.historico.HistoricoFragment
 import com.example.parkmobile.ui.relatorio.RelatorioFragment
 import com.google.android.material.navigation.NavigationView
 
-class HomeCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class HomeClienteActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbarTitle: TextView

@@ -12,7 +12,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.parkmobile.R
-import com.example.parkmobile.ui.home.HomeAdmin
+import com.example.parkmobile.ui.home.HomeAdminActivity
 import com.example.parkmobile.ui.views.HeaderView
 
 class MainActivity : AppCompatActivity() {
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         // pra testar mais facil a parte do Admin
         val btnCadastro = findViewById<Button>(R.id.bt_cadastrar)
         btnCadastro.setOnClickListener {
-            val intent = Intent(this, HomeAdmin::class.java)
+            val intent = Intent(this, HomeAdminActivity::class.java)
             startActivity(intent)
         }
     }
