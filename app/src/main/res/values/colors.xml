@@ -15,4 +15,7 @@
     <!-- Cores comuns -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="vaga_disponivel">#AFF4C6</color>
+    <color name="vaga_ocupada">#FCB3AD</color>
 </resources>

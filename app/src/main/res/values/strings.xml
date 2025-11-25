@@ -37,4 +37,6 @@
     <string name="desc_admin_vagas">Seção Vagas</string>
     <string name="desc_admin_estacionamento">Seção Estacionamento</string>
     <string name="desc_admin_relatorios">Seção Relatórios</string>
+
+    <string name="adicionar_vaga">Adicionar Vaga</string>
 </resources>

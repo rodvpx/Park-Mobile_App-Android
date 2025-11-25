@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment
 import com.example.parkmobile.R
 import com.example.parkmobile.ui.clientes.ClientesAdminFragment
 import com.example.parkmobile.ui.configuracoes.ConfiguracoesActivity
+import com.example.parkmobile.ui.vagas.VagasFragment
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 
 class HomeAdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -86,14 +86,12 @@ class HomeAdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }
 
         navClientes.setOnClickListener { loadFragment(ClientesAdminFragment(), "Clientes") }
-        navVagas.setOnClickListener {
-            Snackbar.make(findViewById(R.id.main), "Vagas - Em desenvolvimento", Snackbar.LENGTH_SHORT).show()
+        navVagas.setOnClickListener { loadFragment(VagasFragment(), "Vagas") }
+        navEstacionamento.setOnClickListener { 
+            // TODO: Implementar fragmento de Estacionamento
         }
-        navEstacionamento.setOnClickListener {
-            Snackbar.make(findViewById(R.id.main), "Estacionamento - Em desenvolvimento", Snackbar.LENGTH_SHORT).show()
-        }
-        navRelatorios.setOnClickListener {
-            Snackbar.make(findViewById(R.id.main), "Relatórios - Em desenvolvimento", Snackbar.LENGTH_SHORT).show()
+        navRelatorios.setOnClickListener { 
+            // TODO: Implementar fragmento de Relatórios
         }
     }
 
