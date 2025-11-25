@@ -6,16 +6,17 @@
     android:background="?attr/colorPrimary"
     android:elevation="4dp"
     android:orientation="horizontal"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:minHeight="?attr/actionBarSize">
 
     <!-- Seção Clientes -->
     <LinearLayout
         android:id="@+id/nav_clientes"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/bottom_toolbar_item_background"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -38,9 +39,11 @@
     <LinearLayout
         android:id="@+id/nav_vagas"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/bottom_toolbar_item_background"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -63,9 +66,11 @@
     <LinearLayout
         android:id="@+id/nav_estacionamento"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/bottom_toolbar_item_background"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -88,9 +93,11 @@
     <LinearLayout
         android:id="@+id/nav_relatorios"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="?attr/selectableItemBackgroundBorderless"
+        android:background="@drawable/bottom_toolbar_item_background"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:orientation="vertical">
 
