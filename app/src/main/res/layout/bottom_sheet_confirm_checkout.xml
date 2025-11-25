@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/bottom_sheet_backgroud"
+    tools:context=".ui.estacionamento.ConfirmCheckOutBottomSheetFragment">
+
+    <ImageView
+        android:id="@+id/drag_handle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/drag_handle"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirmar Check-out?"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_car_icon"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:contentDescription="Ícone de carro"
+            android:src="@drawable/ic_front_car"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="25dp"
+            app:tint="?attr/colorPrimary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_confirm_nome_cliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                tools:text="Nome do Cliente" />
+
+            <TextView
+                android:id="@+id/tv_confirm_cpf_cliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="CPF: 123.456.789-00" />
+
+            <TextView
+                android:id="@+id/tv_confirm_placa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tools:text="Placa: ABC-1234" />
+
+            <TextView
+                android:id="@+id/tv_confirm_vaga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="Vaga: 01" />
+
+            <TextView
+                android:id="@+id/tv_confirm_entrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                tools:text="Entrada: 25/11/2025 10:00" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cancelar"
+        style="@style/BotaoGeral"
+        android:layout_width="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/md_theme_error"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Cancelar" />
+
+        <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_confirmar"
+        style="@style/BotaoGeral"
+        android:layout_width="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Confirmar" />
+    </LinearLayout>
+
+</LinearLayout>

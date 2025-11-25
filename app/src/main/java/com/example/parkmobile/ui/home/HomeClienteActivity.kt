@@ -20,7 +20,7 @@ import com.example.parkmobile.ui.historico.HistoricoFragment
 import com.example.parkmobile.ui.relatorio.RelatorioFragment
 import com.google.android.material.navigation.NavigationView
 
-class HomeCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class HomeClienteActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbarTitle: TextView
@@ -60,13 +60,6 @@ class HomeCliente : AppCompatActivity(), NavigationView.OnNavigationItemSelected
         // atualiza o nome do header a partir de resources (permite tradução)
         val headerName = header.findViewById<TextView>(R.id.nav_header_name)
         headerName?.text = getString(R.string.nome_do_usuario)
-//        val headerConfig = header.findViewById<TextView>(R.id.nav_header_configurar)
-//        headerConfig?.setOnClickListener {
-//            val intent = Intent(this, ConfiguracoesActivity::class.java)
-//            startActivity(intent)
-//            drawerLayout.closeDrawer(GravityCompat.END)
-//        }
-
         // Botão de voltar (seta) não é necessário quando se tem o menu lateral
         // Ação de abrir o menu será no ícone de perfil
         profileImageCard = findViewById(R.id.profile_image_card)

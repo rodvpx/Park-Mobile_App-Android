@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import com.example.parkmobile.R
-import com.example.parkmobile.ui.home.HomeCliente
+import com.example.parkmobile.ui.home.HomeClienteActivity
 import com.example.parkmobile.ui.views.HeaderView
 
 class ConcluirCadastroActivity : AppCompatActivity() {
@@ -49,7 +49,7 @@ class ConcluirCadastroActivity : AppCompatActivity() {
 
         val btnConluir: Button = findViewById(R.id.button_concluir_cadastro)
         btnConluir.setOnClickListener {
-            val intent = Intent(this, HomeCliente::class.java)
+            val intent = Intent(this, HomeClienteActivity::class.java)
             startActivity(intent)
         }
     }
