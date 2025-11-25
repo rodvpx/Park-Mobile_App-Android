@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkMobile">
         <activity
-            android:name=".ui.home.HomeAdmin"
+            android:name=".ui.home.HomeAdminActivity"
             android:exported="false" />
         <!-- Telas de Autenticação -->
         <activity
@@ -36,7 +36,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" /> <!-- Tela Principal -->
         <activity
-            android:name=".ui.home.HomeCliente"
+            android:name=".ui.home.HomeClienteActivity"
             android:exported="false" /> <!-- Tela de Configurações -->
         <activity
             android:name=".ui.configuracoes.ConfiguracoesActivity"
