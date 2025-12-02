@@ -19,6 +19,7 @@ import com.example.parkmobile.R
 import com.example.parkmobile.ui.clientes.ClientesAdminFragment
 import com.example.parkmobile.ui.configuracoes.ConfiguracoesActivity
 import com.example.parkmobile.ui.estacionamento.EstacionamentoFragment
+import com.example.parkmobile.ui.relatorio.RelatoriosActivity
 import com.example.parkmobile.ui.vagas.VagasFragment
 import com.google.android.material.navigation.NavigationView
 
@@ -93,7 +94,7 @@ class HomeAdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         navVagas.setOnClickListener { loadFragment(VagasFragment(), "Vagas", true) }
         navEstacionamento.setOnClickListener { loadFragment(EstacionamentoFragment(), "Estacionamento", true) }
         navRelatorios.setOnClickListener {
-            // TODO: Implementar fragmento de Relatórios
+            startActivity(Intent(this, RelatoriosActivity::class.java))
         }
 
         updateToolbarNavigation() // Set initial state
