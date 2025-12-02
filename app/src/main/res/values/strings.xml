@@ -39,4 +39,8 @@
     <string name="desc_admin_relatorios">Seção Relatórios</string>
 
     <string name="adicionar_vaga">Adicionar Vaga</string>
+
+    <!-- Relatórios -->
+    <string name="desc_consultar_recibo">Ícone Consultar Recibo</string>
+    <string name="desc_consultar_historico">Ícone Consultar Histórico</string>
 </resources>
