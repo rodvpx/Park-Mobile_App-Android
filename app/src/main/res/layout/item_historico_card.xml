@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_codigo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="#1525626"
+            android:textColor="@color/md_theme_onSurface"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Vaga:"
+                android:textColor="@color/md_theme_onSurface"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_vaga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="A-05"
+                android:textColor="@color/md_theme_onSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Entrada:"
+                android:textColor="@color/md_theme_onSurface"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_entrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="04/10/25 - 15:00hrs"
+                android:textColor="@color/md_theme_onSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Saída:"
+                android:textColor="@color/md_theme_onSurface"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_saida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="04/10/2025 - 16:30hrs"
+                android:textColor="@color/md_theme_onSurface"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_detalhes"
+            style="@style/BotaoGeral"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="1dp"
+            android:text="Detalhes" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
+
