@@ -41,6 +41,10 @@
         <activity
             android:name=".ui.configuracoes.ConfiguracoesActivity"
             android:exported="false" />
+        <!-- Tela de Relatórios -->
+        <activity
+            android:name=".ui.relatorio.RelatoriosActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
