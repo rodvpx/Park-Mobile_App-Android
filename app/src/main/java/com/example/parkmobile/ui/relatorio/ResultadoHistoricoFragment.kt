@@ -41,11 +41,10 @@ class ResultadoHistoricoFragment : Fragment() {
             adapter = HistoricoRelatorioAdapter(list) { item ->
                 // Quando clicar em "Detalhes", navegar para a tela de detalhes
                 val fragment = ResultadoReciboFragment.newInstance(item)
-                (activity as? RelatoriosActivity)?.loadFragment(
-                    fragment,
-                    "Detalhes do Recibo",
-                    false
-                )
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
             }
             rvHistorico.adapter = adapter
         }
@@ -62,4 +61,3 @@ class ResultadoHistoricoFragment : Fragment() {
             }
     }
 }
-
