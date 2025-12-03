@@ -98,13 +98,12 @@
 
         <Button
             android:id="@+id/btn_detalhes"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/BotaoGeral"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="Detalhes"
-            android:textColor="@color/md_theme_primary"
-            app:strokeColor="@color/md_theme_primary" />
+            android:layout_marginEnd="1dp"
+            android:text="Detalhes" />
 
     </LinearLayout>
 

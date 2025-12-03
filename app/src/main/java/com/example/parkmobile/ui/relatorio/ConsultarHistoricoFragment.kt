@@ -4,23 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.parkmobile.R
 import com.example.parkmobile.data.model.HistoricoItem
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.button.MaterialButton
 
 class ConsultarHistoricoFragment : Fragment() {
 
     private lateinit var etNumeroCpf: TextInputEditText
-    private lateinit var btnBuscar: Button
+    private lateinit var btnBuscar: MaterialButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_consultar_historico, container, false)
     }
 
@@ -73,11 +72,10 @@ class ConsultarHistoricoFragment : Fragment() {
 
             val fragment = ResultadoHistoricoFragment.newInstance(ArrayList(historico))
 
-            (activity as? RelatoriosActivity)?.loadFragment(
-                fragment,
-                "Consultar Histórico",
-                false
-            )
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 }

@@ -56,12 +56,10 @@ class ConsultarReciboFragment : Fragment() {
 
             // Navegar para a tela de resultado
             val fragment = ResultadoReciboFragment.newInstance(recibo)
-            (activity as? RelatoriosActivity)?.loadFragment(
-                fragment,
-                "Consultar Recibo",
-                false
-            )
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 }
-

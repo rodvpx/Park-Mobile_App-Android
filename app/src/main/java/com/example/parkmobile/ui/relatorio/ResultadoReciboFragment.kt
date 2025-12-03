@@ -25,25 +25,58 @@ class ResultadoReciboFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_resultado_recibo, container, false)
+        return inflater.inflate(R.layout.fragment_receipt_detalhes_bottom_sheet, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         recibo?.let { item ->
-            view.findViewById<TextView>(R.id.tv_codigo_recibo).text = item.codigo
-            view.findViewById<TextView>(R.id.tv_cpf).text = item.cpf
-            view.findViewById<TextView>(R.id.tv_vaga).text = item.vaga
-            view.findViewById<TextView>(R.id.tv_entrada).text = item.entrada
-            view.findViewById<TextView>(R.id.tv_saida).text = item.saida
-            view.findViewById<TextView>(R.id.tv_placa).text = item.placa
-            view.findViewById<TextView>(R.id.tv_veiculo).text = item.marca
-            view.findViewById<TextView>(R.id.tv_modelo).text = item.modelo
-            view.findViewById<TextView>(R.id.tv_cor).text = item.cor
-            view.findViewById<TextView>(R.id.tv_valor).text = item.valor
-            view.findViewById<TextView>(R.id.tv_desconto).text = item.desconto
-            view.findViewById<TextView>(R.id.tv_total).text = item.total
+            view.findViewById<TextView>(R.id.detalhes_codigo_valor).text = item.codigo
+
+            val cpfView = view.findViewById<View>(R.id.item_cpf)
+            cpfView.findViewById<TextView>(R.id.label).text = "CPF:"
+            cpfView.findViewById<TextView>(R.id.valor).text = item.cpf
+
+            val vagaView = view.findViewById<View>(R.id.item_vaga)
+            vagaView.findViewById<TextView>(R.id.label).text = "Vaga:"
+            vagaView.findViewById<TextView>(R.id.valor).text = item.vaga
+
+            val entradaView = view.findViewById<View>(R.id.item_entrada)
+            entradaView.findViewById<TextView>(R.id.label).text = "Entrada:"
+            entradaView.findViewById<TextView>(R.id.valor).text = item.entrada
+
+            val saidaView = view.findViewById<View>(R.id.item_saida)
+            saidaView.findViewById<TextView>(R.id.label).text = "Saída:"
+            saidaView.findViewById<TextView>(R.id.valor).text = item.saida
+
+            val placaView = view.findViewById<View>(R.id.item_placa)
+            placaView.findViewById<TextView>(R.id.label).text = "Placa:"
+            placaView.findViewById<TextView>(R.id.valor).text = item.placa
+
+            val marcaView = view.findViewById<View>(R.id.item_marca)
+            marcaView.findViewById<TextView>(R.id.label).text = "Veículo:"
+            marcaView.findViewById<TextView>(R.id.valor).text = item.marca
+
+            val modeloView = view.findViewById<View>(R.id.item_modelo)
+            modeloView.findViewById<TextView>(R.id.label).text = "Modelo:"
+            modeloView.findViewById<TextView>(R.id.valor).text = item.modelo
+
+            val corView = view.findViewById<View>(R.id.item_cor)
+            corView.findViewById<TextView>(R.id.label).text = "Cor:"
+            corView.findViewById<TextView>(R.id.valor).text = item.cor
+
+            val valorView = view.findViewById<View>(R.id.item_valor)
+            valorView.findViewById<TextView>(R.id.label).text = "Valor:"
+            valorView.findViewById<TextView>(R.id.valor).text = item.valor
+
+            val descontoView = view.findViewById<View>(R.id.item_desconto)
+            descontoView.findViewById<TextView>(R.id.label).text = "Desconto:"
+            descontoView.findViewById<TextView>(R.id.valor).text = item.desconto
+
+            val totalView = view.findViewById<View>(R.id.item_valor_total)
+            totalView.findViewById<TextView>(R.id.label).text = "Total:"
+            totalView.findViewById<TextView>(R.id.valor).text = item.total
         }
     }
 
@@ -58,4 +91,3 @@ class ResultadoReciboFragment : Fragment() {
             }
     }
 }
-
