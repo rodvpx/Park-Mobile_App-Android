@@ -3,28 +3,26 @@ package com.example.parkmobile.ui.relatorio
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
 import com.example.parkmobile.data.model.HistoricoItem
-
-class HistoricoRelatorioAdapter(
+class HistoricoAdapter(
     private val historicoList: List<HistoricoItem>,
     private val onDetalhesClick: (HistoricoItem) -> Unit
-) : RecyclerView.Adapter<HistoricoRelatorioAdapter.HistoricoViewHolder>() {
+) : RecyclerView.Adapter<HistoricoAdapter.HistoricoViewHolder>() {
 
     class HistoricoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvCodigo: TextView = itemView.findViewById(R.id.tv_codigo)
-        val tvVaga: TextView = itemView.findViewById(R.id.tv_vaga)
-        val tvEntrada: TextView = itemView.findViewById(R.id.tv_entrada)
-        val tvSaida: TextView = itemView.findViewById(R.id.tv_saida)
-        val btnDetalhes: Button = itemView.findViewById(R.id.btn_detalhes)
+        val tvCodigo: TextView = itemView.findViewById(R.id.textViewCodigo)
+        val tvVaga: TextView = itemView.findViewById(R.id.textViewVaga)
+        val tvEntrada: TextView = itemView.findViewById(R.id.textViewEntrada)
+        val tvSaida: TextView = itemView.findViewById(R.id.textViewSaida)
+        val btnDetalhes: TextView = itemView.findViewById(R.id.buttonDetalhes)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoricoViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_historico_card, parent, false)
+            .inflate(R.layout.item_historico, parent, false)
         return HistoricoViewHolder(view)
     }
 

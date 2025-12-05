@@ -1,5 +1,6 @@
 package com.example.parkmobile.ui.historico
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +16,18 @@ class DetalhesBottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_receipt_detalhes_bottom_sheet, container, false)
+        return inflater.inflate(R.layout.fragment_recibo_detalhes_bottom_sheet, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item = arguments?.getSerializable("historico_item") as? HistoricoItem
+        val item = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable("historico_item", HistoricoItem::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            arguments?.getParcelable<HistoricoItem>("historico_item")
+        }
 
         item?.let {
             // Popula o código do recibo
@@ -56,7 +62,7 @@ class DetalhesBottomSheetFragment : BottomSheetDialogFragment() {
         fun newInstance(item: HistoricoItem): DetalhesBottomSheetFragment {
             val fragment = DetalhesBottomSheetFragment()
             val args = Bundle()
-            args.putSerializable("historico_item", item)
+            args.putParcelable("historico_item", item)
             fragment.arguments = args
             return fragment
         }

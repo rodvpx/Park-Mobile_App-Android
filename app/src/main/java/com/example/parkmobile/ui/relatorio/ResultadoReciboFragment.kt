@@ -1,5 +1,6 @@
 package com.example.parkmobile.ui.relatorio
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +17,12 @@ class ResultadoReciboFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            @Suppress("DEPRECATION")
-            recibo = it.getSerializable(ARG_RECIBO) as? HistoricoItem
+            recibo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getParcelable(ARG_RECIBO, HistoricoItem::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                it.getParcelable(ARG_RECIBO)
+            }
         }
     }
 
@@ -25,7 +30,7 @@ class ResultadoReciboFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_receipt_detalhes_bottom_sheet, container, false)
+        return inflater.inflate(R.layout.fragment_recibo_detalhes_bottom_sheet, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -86,7 +91,7 @@ class ResultadoReciboFragment : Fragment() {
         fun newInstance(recibo: HistoricoItem) =
             ResultadoReciboFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(ARG_RECIBO, recibo)
+                    putParcelable(ARG_RECIBO, recibo)
                 }
             }
     }
