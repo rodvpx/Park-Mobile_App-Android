@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     tools:context=".ui.relatorio.ConsultarHistoricoFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,27 +21,40 @@
             android:textColor="@color/md_theme_onBackground"
             android:textSize="16sp"
             android:textStyle="bold" />
+
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Valor"
-            app:endIconMode="custom"
-            app:endIconDrawable="@android:drawable/ic_menu_search"
-            app:boxStrokeColor="@color/md_theme_primary"
-            app:hintTextColor="@color/md_theme_primary">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_numero_cpf"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-        <Button
-            android:id="@+id/btn_buscar"
-            style="@style/BotaoGeral"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Buscar" />
-    </LinearLayout>
-</ScrollView>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Valor"
+        app:endIconMode="custom"
+        app:endIconDrawable="@android:drawable/ic_menu_search"
+        app:boxStrokeColor="@color/md_theme_primary"
+        app:hintTextColor="@color/md_theme_primary">
+
+        <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/et_numero_cpf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/btn_buscar"
+        style="@style/BotaoGeral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Buscar" />
+
+    <!-- Lista de clientes encontrados -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_clientes_resultado"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_result_clientes" />
+
+</LinearLayout>
+    </ScrollView>

@@ -1,7 +1,9 @@
 package com.example.parkmobile.data.model
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class HistoricoItem(
     val codigo: String,
     val vaga: String,
@@ -16,4 +18,4 @@ data class HistoricoItem(
     val valor: String,
     val desconto: String,
     val total: String
-) : Serializable
+) : Parcelable
