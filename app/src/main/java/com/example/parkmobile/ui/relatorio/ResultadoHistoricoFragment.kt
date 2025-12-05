@@ -1,5 +1,6 @@
 package com.example.parkmobile.ui.relatorio
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,18 +10,23 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
 import com.example.parkmobile.data.model.HistoricoItem
+import com.example.parkmobile.ui.historico.DetalhesBottomSheetFragment
 
 class ResultadoHistoricoFragment : Fragment() {
 
     private var historicoList: ArrayList<HistoricoItem>? = null
     private lateinit var rvHistorico: RecyclerView
-    private lateinit var adapter: HistoricoRelatorioAdapter
+    private lateinit var adapter: HistoricoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            @Suppress("DEPRECATION")
-            historicoList = it.getSerializable(ARG_HISTORICO) as? ArrayList<HistoricoItem>
+            historicoList = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getParcelableArrayList(ARG_HISTORICO, HistoricoItem::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                it.getParcelableArrayList(ARG_HISTORICO)
+            }
         }
     }
 
@@ -38,13 +44,9 @@ class ResultadoHistoricoFragment : Fragment() {
         rvHistorico.layoutManager = LinearLayoutManager(requireContext())
 
         historicoList?.let { list ->
-            adapter = HistoricoRelatorioAdapter(list) { item ->
-                // Quando clicar em "Detalhes", navegar para a tela de detalhes
-                val fragment = ResultadoReciboFragment.newInstance(item)
-                parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(null)
-                    .commit()
+            adapter = HistoricoAdapter(list) { item ->
+                val bottomSheet = DetalhesBottomSheetFragment.newInstance(item)
+                bottomSheet.show(parentFragmentManager, "DetalhesBottomSheetFragment")
             }
             rvHistorico.adapter = adapter
         }
@@ -56,7 +58,7 @@ class ResultadoHistoricoFragment : Fragment() {
         fun newInstance(historico: ArrayList<HistoricoItem>) =
             ResultadoHistoricoFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(ARG_HISTORICO, historico)
+                    putParcelableArrayList(ARG_HISTORICO, historico)
                 }
             }
     }
