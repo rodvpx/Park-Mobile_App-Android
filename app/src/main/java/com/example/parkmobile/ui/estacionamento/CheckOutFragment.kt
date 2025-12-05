@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
 import com.example.parkmobile.data.repository.CheckOutRepository
@@ -25,12 +26,13 @@ class CheckOutFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val rvCheckOut = view.findViewById<RecyclerView>(R.id.rv_check_out)
+        rvCheckOut.layoutManager = LinearLayoutManager(requireContext())
 
         // Initialize repository and get data
         checkOutRepository = CheckOutRepository()
         val checkOutList = checkOutRepository.getCheckOutItems()
 
-        // Pass the childFragmentManager to the adapter
-        rvCheckOut.adapter = CheckOutAdapter(checkOutList, childFragmentManager)
+        // Pass the parentFragmentManager to the adapter for consistency
+        rvCheckOut.adapter = CheckOutAdapter(checkOutList, parentFragmentManager)
     }
 }

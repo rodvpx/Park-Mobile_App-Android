@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="@id/tv_nome_cliente"
             app:layout_constraintTop_toBottomOf="@id/tv_nome_cliente"
             tools:text="CPF: 123.456.789-00" />
-            
+
         <TextView
             android:id="@+id/tv_placa"
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
             app:layout_constraintStart_toStartOf="@id/tv_cpf_cliente"
             app:layout_constraintTop_toBottomOf="@id/tv_cpf_cliente"
             tools:text="Placa: ABC-1234" />
-            
+
         <TextView
             android:id="@+id/tv_vaga"
             android:layout_width="0dp"
@@ -75,7 +75,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_placa"
             tools:text="Entrada: 25/11/2025 10:00" />
-            
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_check_out"
             android:layout_width="0dp"
