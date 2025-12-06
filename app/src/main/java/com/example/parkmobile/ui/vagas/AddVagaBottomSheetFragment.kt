@@ -5,29 +5,60 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.example.parkmobile.R
+import androidx.fragment.app.activityViewModels
+import com.example.parkmobile.data.model.Vaga
+import com.example.parkmobile.databinding.BottomSheetAddVagaBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.button.MaterialButton
 
 class AddVagaBottomSheetFragment : BottomSheetDialogFragment() {
+
+    private var _binding: BottomSheetAddVagaBinding? = null
+    private val binding get() = _binding!!
+
+    // Use activityViewModels() para compartilhar o ViewModel com o VagasFragment
+    private val viewModel: VagasViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.bottom_sheet_add_vaga, container, false)
+    ): View {
+        _binding = BottomSheetAddVagaBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val btnCadastrar = view.findViewById<MaterialButton>(R.id.btn_cadastrar_vaga)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        btnCadastrar.setOnClickListener {
-            // TODO: Implementar a lógica de cadastro da vaga
-            Toast.makeText(context, "Vaga cadastrada com sucesso!", Toast.LENGTH_SHORT).show()
-            dismiss()
+        binding.btnCadastrarVaga.setOnClickListener {
+            val codigo = binding.etCodigoVaga.text.toString()
+            val status = if (binding.rbLivre.isChecked) {
+                Vaga.StatusVaga.LIVRE
+            } else {
+                Vaga.StatusVaga.OCUPADA
+            }
+            viewModel.addVaga(codigo, status)
         }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
+            if (message.isNotBlank()) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.dismiss.observe(viewLifecycleOwner) { shouldDismiss ->
+            if (shouldDismiss) {
+                dismiss()
+                viewModel.onDismissed() // Reseta o estado para não fechar novamente
+            }
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
