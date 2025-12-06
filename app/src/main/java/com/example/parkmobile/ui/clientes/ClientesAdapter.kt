@@ -1,34 +1,49 @@
 package com.example.parkmobile.ui.clientes
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Cliente
+import com.example.parkmobile.databinding.ItemResultClientesBinding
 
-class ClientesAdapter(private val items: List<Cliente>) : RecyclerView.Adapter<ClientesAdapter.ViewHolder>() {
+class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) : ListAdapter<Cliente, ClientesAdapter.ClienteViewHolder>(ClienteDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_result_clientes, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClienteViewHolder {
+        return ClienteViewHolder.from(parent)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.tvId.text = item.id.toString()
-        holder.tvNome.text = item.nome
-        holder.tvCpf.text = item.cpf
+    override fun onBindViewHolder(holder: ClienteViewHolder, position: Int) {
+        val cliente = getItem(position)
+        holder.bind(cliente, onItemClick)
     }
 
-    override fun getItemCount(): Int = items.size
+    class ClienteViewHolder private constructor(private val binding: ItemResultClientesBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvId: TextView = view.findViewById(R.id.tv_id_cliente)
-        val tvNome: TextView = view.findViewById(R.id.tv_nome_cliente)
-        val tvCpf: TextView = view.findViewById(R.id.tv_cpf_cliente)
+        fun bind(cliente: Cliente, onItemClick: (Cliente) -> Unit) {
+            binding.cliente = cliente
+            binding.root.setOnClickListener { onItemClick(cliente) }
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ClienteViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemResultClientesBinding.inflate(layoutInflater, parent, false)
+                return ClienteViewHolder(binding)
+            }
+        }
+    }
+}
+
+class ClienteDiffCallback : DiffUtil.ItemCallback<Cliente>() {
+    override fun areItemsTheSame(oldItem: Cliente, newItem: Cliente): Boolean {
+        return oldItem.id == newItem.id
     }
 
+    override fun areContentsTheSame(oldItem: Cliente, newItem: Cliente): Boolean {
+        return oldItem == newItem
+    }
 }
