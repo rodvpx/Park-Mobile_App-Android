@@ -8,10 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.data.model.Cliente
 import com.example.parkmobile.databinding.ItemResultClientesBinding
 
-class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) : ListAdapter<Cliente, ClientesAdapter.ClienteViewHolder>(ClienteDiffCallback()) {
+class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) :
+    ListAdapter<Cliente, ClientesAdapter.ClienteViewHolder>(ClienteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClienteViewHolder {
-        return ClienteViewHolder.from(parent)
+        val binding = ItemResultClientesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ClienteViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ClienteViewHolder, position: Int) {
@@ -19,21 +21,15 @@ class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) : ListAdapter<
         holder.bind(cliente, onItemClick)
     }
 
-    class ClienteViewHolder private constructor(private val binding: ItemResultClientesBinding) :
+    class ClienteViewHolder(private val binding: ItemResultClientesBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(cliente: Cliente, onItemClick: (Cliente) -> Unit) {
-            binding.cliente = cliente
             binding.root.setOnClickListener { onItemClick(cliente) }
-            binding.executePendingBindings()
-        }
 
-        companion object {
-            fun from(parent: ViewGroup): ClienteViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemResultClientesBinding.inflate(layoutInflater, parent, false)
-                return ClienteViewHolder(binding)
-            }
+            binding.tvIdCliente.text = cliente.id
+            binding.tvNomeCliente.text = cliente.nome
+            binding.tvCpfCliente.text = cliente.cpf
         }
     }
 }

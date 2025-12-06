@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.parkmobile.data.repository.ClienteRepository
 import com.example.parkmobile.data.repository.ClienteVagaRepository
 import com.example.parkmobile.data.repository.EstacionamentoRepository
-import com.example.parkmobile.data.repository.VagaRepository
 import com.google.firebase.firestore.FirebaseFirestore
 
 @Suppress("UNCHECKED_CAST")
@@ -15,14 +14,14 @@ class EstacionamentoViewModelFactory : ViewModelProvider.Factory {
             // Construir manualmente a cadeia de dependências
             val firestore = FirebaseFirestore.getInstance()
             val clienteRepository = ClienteRepository(firestore)
-            val vagaRepository = VagaRepository(firestore)
             val clienteVagaRepository = ClienteVagaRepository(firestore)
+            
+            // CORREÇÃO: Passar apenas os argumentos que o construtor do EstacionamentoRepository espera
             val estacionamentoRepository = EstacionamentoRepository(
                 firestore,
-                clienteVagaRepository,
-                clienteRepository,
-                vagaRepository
+                clienteRepository
             )
+            
             return EstacionamentoViewModel(estacionamentoRepository, clienteVagaRepository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

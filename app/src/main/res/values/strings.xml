@@ -39,6 +39,23 @@
     <string name="desc_admin_relatorios">Seção Relatórios</string>
 
     <string name="adicionar_vaga">Adicionar Vaga</string>
+    <string name="adicionar_cliente">Adicionar Cliente</string>
+
+    <!-- Formatação -->
+    <string name="valor_currency_format">R$ %.2f</string>
+
+    <!-- Detalhes do Recibo -->
+    <string name="recibo_label">Recibo: %s</string>
+    <string name="placa_label">Placa</string>
+    <string name="marca_label">Marca</string>
+    <string name="modelo_label">Modelo</string>
+    <string name="cor_label">Cor</string>
+    <string name="entrada_label">Entrada</string>
+    <string name="saida_label">Saída</string>
+    <string name="valor_label">Valor</string>
+    <string name="desconto_label">Desconto</string>
+    <string name="total_label">Total</string>
+    <string name="estacionado">Estacionado</string>
 
     <!-- Relatórios -->
     <string name="desc_consultar_recibo">Ícone Consultar Recibo</string>

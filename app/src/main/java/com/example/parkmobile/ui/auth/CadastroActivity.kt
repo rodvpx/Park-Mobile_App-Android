@@ -6,10 +6,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import com.example.parkmobile.R
 import com.example.parkmobile.databinding.ActivityCadastroBinding
-import com.example.parkmobile.ui.HomeAdminActivity
+import com.example.parkmobile.ui.home.HomeAdminActivity
 
 class CadastroActivity : AppCompatActivity() {
 
@@ -18,10 +16,8 @@ class CadastroActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_cadastro)
-
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding = ActivityCadastroBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupListeners()
         observeAuthState()
@@ -59,6 +55,7 @@ class CadastroActivity : AppCompatActivity() {
                     binding.buttonCadastrar.isEnabled = true
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                 }
+                else -> {}
             }
         }
     }

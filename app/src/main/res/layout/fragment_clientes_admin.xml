@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.clientes.ClientesAdminFragment">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.example.parkmobile.ui.clientes.ClientesViewModel" />
-    </data>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_clientes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.clientes.ClientesAdminFragment">
+        android:clipToPadding="false"
+        android:paddingBottom="80dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_result_clientes" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_clientes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:listitem="@layout/item_result_clientes" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_cliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/md_theme_primary"
+        android:contentDescription="@string/adicionar_cliente"
+        android:src="@drawable/ic_add"
+        app:tint="@android:color/white" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

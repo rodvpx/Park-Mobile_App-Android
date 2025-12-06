@@ -30,9 +30,6 @@ class CheckOutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
         val adapter = EstacionamentoAdapter { clienteVaga ->
             // Confirmar antes de fazer o check-out
             AlertDialog.Builder(requireContext())

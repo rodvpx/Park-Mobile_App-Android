@@ -1,52 +1,55 @@
 package com.example.parkmobile.ui.historico
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.parkmobile.R
-import com.example.parkmobile.data.model.HistoricoItem
+import com.example.parkmobile.data.model.ClienteVaga
+import com.example.parkmobile.databinding.ItemHistoricoBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class HistoricoAdapter(
-    private var historicoList: List<HistoricoItem>,
-    private val onItemClick: (HistoricoItem) -> Unit
-) : RecyclerView.Adapter<HistoricoAdapter.HistoricoViewHolder>() {
+class HistoricoAdapter(private val onItemClick: (ClienteVaga) -> Unit) :
+    ListAdapter<ClienteVaga, HistoricoAdapter.HistoricoViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoricoViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_historico, parent, false)
-        return HistoricoViewHolder(view)
+        val binding = ItemHistoricoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return HistoricoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: HistoricoViewHolder, position: Int) {
-        val item = historicoList[position]
-        holder.bind(item)
+        val item = getItem(position)
+        holder.bind(item, onItemClick)
     }
 
-    override fun getItemCount(): Int = historicoList.size
+    class HistoricoViewHolder(private val binding: ItemHistoricoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    fun updateData(newData: List<HistoricoItem>) {
-        historicoList = newData
-        notifyDataSetChanged()
+        fun bind(item: ClienteVaga, onItemClick: (ClienteVaga) -> Unit) {
+            // Define o clique na view raiz do item
+            binding.root.setOnClickListener { onItemClick(item) }
+
+            // Preenche os dados manualmente usando os IDs do View Binding
+            binding.tvPlaca.text = item.placa
+            binding.tvRecibo.text = "Recibo: ${item.recibo}"
+
+            val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            binding.tvDataEntrada.text = item.dataEntrada?.let { "Entrada: ${format.format(it)}" } ?: "Entrada: --"
+            binding.tvDataSaida.text = item.dataSaida?.let { "Saída: ${format.format(it)}" } ?: "Saída: --"
+
+            val valorSeguro = item.valor ?: 0.0
+            binding.tvValor.text = String.format(Locale.getDefault(), "R$ %.2f", valorSeguro)
+        }
     }
 
-    inner class HistoricoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textViewCodigo: TextView = itemView.findViewById(R.id.textViewCodigo)
-        private val textViewVaga: TextView = itemView.findViewById(R.id.textViewVaga)
-        private val textViewEntrada: TextView = itemView.findViewById(R.id.textViewEntrada)
-        private val textViewSaida: TextView = itemView.findViewById(R.id.textViewSaida)
-
-        init {
-            itemView.setOnClickListener {
-                onItemClick(historicoList[adapterPosition])
-            }
+    companion object DiffCallback : DiffUtil.ItemCallback<ClienteVaga>() {
+        override fun areItemsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        fun bind(item: HistoricoItem) {
-            textViewCodigo.text = item.codigo
-            textViewVaga.text = item.vaga
-            textViewEntrada.text = item.entrada
-            textViewSaida.text = item.saida
+        override fun areContentsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
+            return oldItem == newItem
         }
     }
 }

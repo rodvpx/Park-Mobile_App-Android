@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/clientesAdminFragment">
+
+    <fragment
+        android:id="@+id/clientesAdminFragment"
+        android:name="com.example.parkmobile.ui.clientes.ClientesAdminFragment"
+        android:label="Clientes"
+        tools:layout="@layout/fragment_clientes_admin" />
+
+    <fragment
+        android:id="@+id/vagasFragment"
+        android:name="com.example.parkmobile.ui.vagas.VagasFragment"
+        android:label="Vagas"
+        tools:layout="@layout/fragment_vagas" />
+
+    <fragment
+        android:id="@+id/estacionamentoFragment"
+        android:name="com.example.parkmobile.ui.estacionamento.EstacionamentoFragment"
+        android:label="Estacionamento"
+        tools:layout="@layout/fragment_estacionamento" />
+
+    <fragment
+        android:id="@+id/relatoriosAdminFragment"
+        android:name="com.example.parkmobile.ui.relatorio.RelatoriosAdminFragment"
+        android:label="Relatórios"
+        tools:layout="@layout/fragment_relatorios_admin" >
+        <action
+            android:id="@+id/action_relatoriosAdminFragment_to_resultadoHistoricoFragment"
+            app:destination="@id/resultadoHistoricoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/resultadoHistoricoFragment"
+        android:name="com.example.parkmobile.ui.historico.ResultadoHistoricoFragment"
+        android:label="Histórico Cliente"
+        tools:layout="@layout/fragment_resultado_historico" >
+        <argument
+            android:name="clienteId"
+            app:argType="string" />
+        <argument
+            android:name="nomeCliente"
+            app:argType="string" />
+    </fragment>
+
+</navigation>

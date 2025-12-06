@@ -1,44 +1,55 @@
 package com.example.parkmobile.ui.estacionamento
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.parkmobile.R
-import com.example.parkmobile.data.model.CheckOutItem
+import com.example.parkmobile.data.model.ClienteVaga
+import com.example.parkmobile.databinding.ItemCheckOutBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
-class CheckOutAdapter(private val items: List<CheckOutItem>, private val fragmentManager: FragmentManager) : RecyclerView.Adapter<CheckOutAdapter.CheckOutViewHolder>() {
+class CheckOutAdapter(private val onCheckOutClick: (ClienteVaga) -> Unit) : ListAdapter<ClienteVaga, CheckOutAdapter.CheckOutViewHolder>(ClienteVagaDiffCallback()) {
 
-    class CheckOutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nome: TextView = itemView.findViewById(R.id.tv_nome_cliente)
-        val cpf: TextView = itemView.findViewById(R.id.tv_cpf_cliente)
-        val placa: TextView = itemView.findViewById(R.id.tv_placa)
-        val vaga: TextView = itemView.findViewById(R.id.tv_vaga)
-        val entrada: TextView = itemView.findViewById(R.id.tv_entrada)
-        val checkOutButton: Button = itemView.findViewById(R.id.btn_check_out)
-    }
+    class CheckOutViewHolder private constructor(private val binding: ItemCheckOutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckOutViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_check_out, parent, false)
-        return CheckOutViewHolder(view)
-    }
+        fun bind(item: ClienteVaga, onCheckOutClick: (ClienteVaga) -> Unit) {
+            binding.tvPlaca.text = item.placa
+            binding.tvModeloMarca.text = "${item.modelo} - ${item.marca}"
 
-    override fun onBindViewHolder(holder: CheckOutViewHolder, position: Int) {
-        val item = items[position]
-        holder.nome.text = item.nome
-        holder.cpf.text = "CPF: ${item.cpf}"
-        holder.placa.text = "Placa: ${item.placa}"
-        holder.vaga.text = "Vaga: ${item.vaga}"
-        holder.entrada.text = "Entrada: ${item.entrada}"
+            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            binding.tvDataEntrada.text = sdf.format(item.dataEntrada)
 
-        holder.checkOutButton.setOnClickListener {
-            val bottomSheet = ConfirmCheckOutBottomSheetFragment.newInstance(item)
-            bottomSheet.show(fragmentManager, "ConfirmCheckOutBottomSheetFragment")
+            binding.btnFazerCheckout.setOnClickListener { onCheckOutClick(item) }
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): CheckOutViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemCheckOutBinding.inflate(layoutInflater, parent, false)
+                return CheckOutViewHolder(binding)
+            }
         }
     }
 
-    override fun getItemCount() = items.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckOutViewHolder {
+        return CheckOutViewHolder.from(parent)
+    }
+
+    override fun onBindViewHolder(holder: CheckOutViewHolder, position: Int) {
+        val item = getItem(position)
+        holder.bind(item, onCheckOutClick)
+    }
+}
+
+class ClienteVagaDiffCallback : DiffUtil.ItemCallback<ClienteVaga>() {
+    override fun areItemsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
+        return oldItem == newItem
+    }
 }

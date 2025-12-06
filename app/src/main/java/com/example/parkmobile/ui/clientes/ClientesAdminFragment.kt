@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.example.parkmobile.data.repository.ClienteRepository
 import com.example.parkmobile.databinding.FragmentClientesAdminBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,7 +16,8 @@ class ClientesAdminFragment : Fragment() {
     private var _binding: FragmentClientesAdminBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: ClientesViewModel
+    private val clienteRepository by lazy { ClienteRepository(FirebaseFirestore.getInstance()) }
+    private val viewModel: ClientesViewModel by activityViewModels { ClientesViewModelFactory(clienteRepository) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,38 +31,30 @@ class ClientesAdminFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Configuração do ViewModel (sem Hilt)
-        val firestore = FirebaseFirestore.getInstance()
-        val clienteRepository = ClienteRepository(firestore)
-        val factory = ClientesViewModelFactory(clienteRepository)
-        viewModel = ViewModelProvider(this, factory)[ClientesViewModel::class.java]
-
-        // 2. Ligar o ViewModel e o LifecycleOwner ao DataBinding
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        // 3. Configuração do RecyclerView
         val clientesAdapter = ClientesAdapter { cliente ->
-            // TODO: Definir ação de clique no item do cliente, ex: navegar para detalhes
-            Toast.makeText(requireContext(), "Cliente selecionado: ${cliente.nome}", Toast.LENGTH_SHORT).show()
+            AddEditClienteFragment.newInstance(cliente).show(childFragmentManager, "AddEditClienteFragment")
         }
         binding.rvClientes.adapter = clientesAdapter
 
-        // 4. Observar mudanças nos dados
         viewModel.clientes.observe(viewLifecycleOwner) { clientes ->
             clientesAdapter.submitList(clientes)
         }
 
         viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            if (message.isNotBlank()) {
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
         }
 
-        // 5. Carregar os dados iniciais
         viewModel.carregarClientes()
+
+        binding.fabAddCliente.setOnClickListener {
+            AddEditClienteFragment.newInstance(null).show(childFragmentManager, "AddEditClienteFragment")
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null // Evitar memory leaks
+        _binding = null
     }
 }

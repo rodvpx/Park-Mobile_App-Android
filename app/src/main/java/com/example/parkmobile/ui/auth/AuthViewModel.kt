@@ -12,7 +12,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
-    fun cadastrar(email: String, senha: String, confirmarSenha: String, nome: String, cpf: String) {
+    fun cadastrar(email: String, senha: String, confirmarSenha: String, nome: String, cpf: String): Unit {
         if (senha != confirmarSenha) {
             _authState.value = AuthState.Error("As senhas não conferem.")
             return

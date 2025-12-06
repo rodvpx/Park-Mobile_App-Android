@@ -12,23 +12,19 @@ class AuthRepository(
 ) {
 
     suspend fun cadastrar(email: String, senha: String, nome: String, cpf: String): Result<Usuario> {
-        return try {
-            // 1. Criar o usuário no Firebase Auth
+        try {
             val authResult = auth.createUserWithEmailAndPassword(email, senha).await()
-            val firebaseUser = authResult.user ?: return Result.failure(Exception("Usuário Firebase não encontrado após cadastro."))
+            val firebaseUser = authResult.user
+                ?: return Result.failure(Exception("Falha ao criar o usuário no Firebase. O usuário é nulo."))
 
-            // 2. Criar o nosso objeto de Usuário
             val novoUsuario = Usuario(
                 id = firebaseUser.uid,
                 username = email,
-                role = Usuario.Role.ROLE_CLIENTE.name
+                role = Usuario.Role.CLIENTE.name
             )
             firestore.collection("usuarios").document(firebaseUser.uid).set(novoUsuario).await()
 
-            // 3. Criar o nosso objeto de Cliente associado
             val novoCliente = Cliente(
-                // O id do cliente pode ser o mesmo do usuário ou um novo ID.
-                // Usar o mesmo ID do usuário simplifica as buscas.
                 id = firebaseUser.uid,
                 nome = nome,
                 cpf = cpf,
@@ -36,22 +32,22 @@ class AuthRepository(
             )
             firestore.collection("clientes").document(firebaseUser.uid).set(novoCliente).await()
 
-            Result.success(novoUsuario)
+            return Result.success(novoUsuario)
         } catch (e: Exception) {
-            Result.failure(e)
+            return Result.failure(e)
         }
     }
 
     suspend fun login(email: String, senha: String): Result<Unit> {
-        return try {
+        try {
             auth.signInWithEmailAndPassword(email, senha).await()
-            Result.success(Unit)
+            return Result.success(Unit)
         } catch (e: Exception) {
-            Result.failure(e)
+            return Result.failure(e)
         }
     }
 
-    fun logout() {
+    fun logout(): Unit { // Retorno explícito para ajudar o compilador
         auth.signOut()
     }
 

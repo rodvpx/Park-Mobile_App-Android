@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.parkmobile.R
 import com.example.parkmobile.databinding.FragmentCheckInBinding
 
 class CheckInFragment : Fragment() {
@@ -31,9 +32,6 @@ class CheckInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.btnConfirmarCheckIn.setOnClickListener {
             val cpf = binding.etCpfCliente.text.toString()

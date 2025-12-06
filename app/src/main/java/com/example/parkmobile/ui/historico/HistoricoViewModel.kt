@@ -3,18 +3,27 @@ package com.example.parkmobile.ui.historico
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.parkmobile.data.model.HistoricoItem
+import androidx.lifecycle.viewModelScope
+import com.example.parkmobile.data.model.ClienteVaga
+import com.example.parkmobile.data.repository.ClienteVagaRepository
+import kotlinx.coroutines.launch
 
-class HistoricoViewModel : ViewModel() {
+class HistoricoViewModel(private val clienteVagaRepository: ClienteVagaRepository) : ViewModel() {
 
-    private val repository = HistoricoRepository()
+    private val _historico = MutableLiveData<List<ClienteVaga>>()
+    val historico: LiveData<List<ClienteVaga>> = _historico
 
-    private val _historicoItems = MutableLiveData<List<HistoricoItem>>()
-    val historicoItems: LiveData<List<HistoricoItem>> = _historicoItems
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
 
-    fun carregarHistorico() {
-        // Em uma aplicação real, isso poderia ser uma operação assíncrona
-        val items = repository.getHistoricoItems()
-        _historicoItems.postValue(items)
+    fun carregarHistoricoCompleto() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            try {
+                _historico.value = clienteVagaRepository.getHistoricoCompleto()
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 }

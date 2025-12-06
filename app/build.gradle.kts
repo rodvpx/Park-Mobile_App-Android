@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
+    id("kotlin-kapt") // Adicionado para processamento de anotações
     alias(libs.plugins.google.gms.google.services)
 }
 
@@ -40,11 +41,18 @@ android {
 
     buildFeatures {
         viewBinding = true
-        dataBinding = true
+        dataBinding = false // Desabilitado para resolver o erro de compilação
     }
 }
 
 dependencies {
+    // Firebase BoM - Gerencia todas as versões das bibliotecas Firebase
+    implementation(platform(libs.firebase.bom))
+
+    // Dependências do Firebase (sem especificar a versão)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -54,8 +62,6 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

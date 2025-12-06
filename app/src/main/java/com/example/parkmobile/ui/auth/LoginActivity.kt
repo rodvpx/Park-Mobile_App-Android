@@ -6,10 +6,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import com.example.parkmobile.R
 import com.example.parkmobile.databinding.ActivityLoginBinding
-import com.example.parkmobile.ui.HomeAdminActivity
+import com.example.parkmobile.ui.home.HomeAdminActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -18,10 +16,8 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         setupListeners()
         observeAuthState()
@@ -29,8 +25,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         binding.buttonLogin.setOnClickListener {
-            val email = binding.editEmail.text.toString()
-            val senha = binding.editSenha.text.toString()
+            val email = binding.editEmail.text.toString().trim()
+            val senha = binding.editSenha.text.toString().trim()
             viewModel.login(email, senha)
         }
     }
@@ -48,13 +44,14 @@ class LoginActivity : AppCompatActivity() {
                     Toast.makeText(this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
                     // Navegar para a tela principal
                     startActivity(Intent(this, HomeAdminActivity::class.java))
-                    finish()
+                    finishAffinity() // Fecha todas as activities da pilha
                 }
                 is AuthState.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.buttonLogin.isEnabled = true
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                 }
+                else -> {}
             }
         }
     }
