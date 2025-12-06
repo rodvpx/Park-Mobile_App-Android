@@ -1,83 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.auth.CadastroActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/partial_toolbar_superior"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.parkmobile.ui.auth.AuthViewModel" />
+    </data>
 
-    <!-- Campo de Email com TextInputLayout -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_email"
-        style="@style/CampoFormulario"
-        android:layout_marginTop="32dp"
-        android:hint="Email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.auth.CadastroActivity">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_email"
-            android:layout_width="match_parent"
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/partial_toolbar_superior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Campo Nome -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_nome"
+            style="@style/CampoFormulario"
+            android:layout_marginTop="32dp"
+            android:hint="Nome Completo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo CPF -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_cpf"
+            style="@style/CampoFormulario"
+            android:layout_marginTop="16dp"
+            android:hint="CPF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_nome">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_cpf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de Email -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_email"
+            style="@style/CampoFormulario"
+            android:layout_marginTop="16dp"
+            android:hint="Email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_cpf">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de Senha -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_senha"
+            style="@style/CampoFormulario"
+            android:layout_marginTop="16dp"
+            android:hint="Senha"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Campo de Confirmar Senha -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/input_layout_confirmar_senha"
+            style="@style/CampoFormulario"
+            android:layout_marginTop="16dp"
+            android:hint="Confirmar Senha"
+            app:endIconMode="password_toggle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_senha">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_confirmar_senha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_cadastrar"
+            style="@style/BotaoGeral"
+            android:layout_marginTop="24dp"
+            android:text="Cadastrar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/input_layout_confirmar_senha" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress" />
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- Campo de Senha com TextInputLayout e Ícone para visualizar senha -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_senha"
-        style="@style/CampoFormulario"
-        android:layout_marginTop="16dp"
-        android:hint="Senha"
-        app:endIconMode="password_toggle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_email">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_senha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <!-- Campo de Confirmar Senha com TextInputLayout -->
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/input_layout_confirmar_senha"
-        style="@style/CampoFormulario"
-        android:layout_marginTop="16dp"
-        android:hint="Confirmar Senha"
-        app:endIconMode="password_toggle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_senha">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_confirmar_senha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/button_cadastrar"
-        style="@style/BotaoGeral"
-        android:layout_marginTop="24dp"
-        android:text="Cadastrar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_layout_confirmar_senha" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
