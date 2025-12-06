@@ -29,7 +29,7 @@ class UsuarioRepository(private val firestore: FirebaseFirestore) {
         }
     }
 
-    suspend fun createUsuario(usuario: Usuario) {
+    suspend fun createUsuario(usuario: Usuario): Unit {
         userCollection.document(usuario.id).set(usuario).await()
     }
 }

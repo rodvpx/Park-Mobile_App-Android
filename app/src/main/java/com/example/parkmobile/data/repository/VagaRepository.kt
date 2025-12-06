@@ -17,7 +17,7 @@ class VagaRepository(private val firestore: FirebaseFirestore) {
         }
     }
 
-    suspend fun addVaga(vaga: Vaga) {
+    suspend fun addVaga(vaga: Vaga): Unit {
         // O Firestore vai gerar um ID automaticamente se não passarmos um no document()
         vagaCollection.add(vaga).await()
     }
@@ -56,7 +56,7 @@ class VagaRepository(private val firestore: FirebaseFirestore) {
         }
     }
 
-    suspend fun updateVaga(vaga: Vaga) {
+    suspend fun updateVaga(vaga: Vaga): Unit {
         vagaCollection.document(vaga.id).set(vaga).await()
     }
 }

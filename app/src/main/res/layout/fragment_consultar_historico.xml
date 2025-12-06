@@ -1,60 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".ui.relatorio.ConsultarHistoricoFragment">
+    android:orientation="vertical"
+    tools:context=".ui.historico.ConsultarHistoricoFragment">
 
-    <LinearLayout
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_margin="8dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="Buscar cliente por nome ou CPF..." />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Número do CPF"
-            android:textColor="@color/md_theme_onBackground"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Valor"
-        app:endIconMode="custom"
-        app:endIconDrawable="@android:drawable/ic_menu_search"
-        app:boxStrokeColor="@color/md_theme_primary"
-        app:hintTextColor="@color/md_theme_primary">
-
-        <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/et_numero_cpf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/btn_buscar"
-        style="@style/BotaoGeral"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:text="Buscar" />
-
-    <!-- Lista de clientes encontrados -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_clientes_resultado"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_result_clientes" />
 
 </LinearLayout>
-    </ScrollView>

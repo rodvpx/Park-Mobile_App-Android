@@ -7,7 +7,26 @@ import kotlinx.coroutines.tasks.await
 
 class ClienteVagaRepository(private val firestore: FirebaseFirestore) {
 
-    private val clienteVagaCollection = firestore.collection("cliente_vaga")
+    // Nova função para buscar todo o histórico finalizado
+    suspend fun getHistoricoCompleto(): List<ClienteVaga> {
+        return try {
+            clienteVagaCollection.whereNotEqualTo("dataSaida", null)
+                .orderBy("dataSaida", Query.Direction.DESCENDING)
+                .get().await().toObjects(ClienteVaga::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    suspend fun getHistoricoPorClienteId(clienteId: String): List<ClienteVaga> {
+        return try {
+            clienteVagaCollection.whereEqualTo("idCliente", clienteId)
+                .orderBy("dataEntrada", Query.Direction.DESCENDING)
+                .get().await().toObjects(ClienteVaga::class.java)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 
     suspend fun getVeiculosEstacionados(): List<ClienteVaga> {
         return try {
@@ -19,38 +38,22 @@ class ClienteVagaRepository(private val firestore: FirebaseFirestore) {
         }
     }
 
-    suspend fun getClienteVaga(id: String): ClienteVaga? {
-        return try {
-            clienteVagaCollection.document(id).get().await().toObject(ClienteVaga::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
-
     suspend fun getClienteVagaByRecibo(recibo: String): ClienteVaga? {
         return try {
             val query = clienteVagaCollection.whereEqualTo("recibo", recibo).limit(1).get().await()
             if (query.isEmpty) {
                 null
             } else {
-                query.documents.first().toObject(ClienteVaga::class.java)
+                query.documents.firstOrNull()?.toObject(ClienteVaga::class.java)
             }
         } catch (e: Exception) {
             null
         }
     }
 
-    suspend fun getHistoricoCliente(idCliente: String): List<ClienteVaga> {
-        return try {
-            clienteVagaCollection.whereEqualTo("idCliente", idCliente)
-                .orderBy("dataEntrada", Query.Direction.DESCENDING)
-                .get().await().toObjects(ClienteVaga::class.java)
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    suspend fun save(clienteVaga: ClienteVaga) {
+    suspend fun save(clienteVaga: ClienteVaga): Unit {
         clienteVagaCollection.document(clienteVaga.id).set(clienteVaga).await()
     }
+
+    private val clienteVagaCollection = firestore.collection("cliente_vaga")
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,118 +15,51 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/textViewCodigo"
+            android:id="@+id/tv_placa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="codigo"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            tools:text="#251230256"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/divider1"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewCodigo" />
-        <TextView
-            android:id="@+id/textViewLabelVaga"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Vaga:"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider1" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="BRA-1234" />
 
         <TextView
-            android:id="@+id/textViewVaga"
+            android:id="@+id/tv_recibo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textViewLabelVaga"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textViewLabelVaga"
-            tools:text="A-01" />
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewVaga" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_placa"
+            tools:text="Recibo: REC-123456" />
 
         <TextView
-            android:id="@+id/textViewLabelEntrada"
+            android:id="@+id/tv_data_entrada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Entrada:"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_recibo"
+            tools:text="Entrada: 20/07/2024 10:00" />
 
         <TextView
-            android:id="@+id/textViewEntrada"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textViewLabelEntrada"
-            app:layout_constraintEnd_toStartOf="@+id/textViewLabelSaida"
-            app:layout_constraintStart_toEndOf="@+id/textViewLabelEntrada"
-            tools:text="10:00" />
-
-        <TextView
-            android:id="@+id/textViewLabelSaida"
+            android:id="@+id/tv_data_saida"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Saída:"
-            android:textStyle="bold"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textViewLabelEntrada"
-            app:layout_constraintEnd_toStartOf="@+id/textViewSaida"
-            app:layout_constraintStart_toEndOf="@+id/textViewEntrada" />
-
-        <TextView
-            android:id="@+id/textViewSaida"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textViewLabelSaida"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textViewLabelSaida"
-            tools:text="11:30" />
-
-        <View
-            android:id="@+id/divider3"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewEntrada" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_data_entrada"
+            tools:text="Saída: 20/07/2024 12:00" />
 
         <TextView
-            android:id="@+id/buttonDetalhes"
+            android:id="@+id/tv_valor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Detalhes"
-            android:textColor="?attr/colorPrimary"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider3" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="R$ 20,00" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

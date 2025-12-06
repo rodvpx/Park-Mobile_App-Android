@@ -2,6 +2,8 @@ package com.example.parkmobile.ui.relatorio
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.parkmobile.ui.historico.ConsultarHistoricoFragment
+import com.example.parkmobile.ui.recibo.ConsultarReciboFragment
 
 class RelatoriosAdminAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 

@@ -1,110 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.estacionamento.CheckInFragment">
 
-    <data>
-        <variable
-            name="viewModel"
-            type="com.example.parkmobile.ui.estacionamento.EstacionamentoViewModel" />
-    </data>
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.estacionamento.CheckInFragment">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check-in de Veículo"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- CPF do Cliente -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:hint="CPF do Cliente">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Check-in de Veículo"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="24dp"/>
-
-            <!-- CPF do Cliente -->
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_cpf_cliente"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="CPF do Cliente">
+                android:inputType="number"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_cpf_cliente"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <!-- Placa do Carro -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Placa do Carro">
 
-            <!-- Placa do Carro -->
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_placa_carro"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Placa do Carro">
+                android:layout_height="wrap_content" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_placa_carro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <!-- Marca -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Marca">
 
-            <!-- Marca -->
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_marca_carro"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Marca">
+                android:layout_height="wrap_content" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_marca_carro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <!-- Modelo -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Modelo">
 
-            <!-- Modelo -->
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_modelo_carro"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Modelo">
+                android:layout_height="wrap_content" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_modelo_carro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <!-- Cor -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="Cor">
 
-            <!-- Cor -->
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_cor_carro"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="Cor">
+                android:layout_height="wrap_content" />
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_cor_carro"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_confirmar_check_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Confirmar Check-in"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_confirmar_check_in"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:text="Confirmar Check-in"/>
-
-        </LinearLayout>
-    </ScrollView>
-</layout>
+    </LinearLayout>
+</ScrollView>

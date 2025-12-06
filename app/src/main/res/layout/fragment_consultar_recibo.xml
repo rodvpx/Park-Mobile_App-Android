@@ -1,60 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".ui.relatorio.ConsultarReciboFragment">
+    android:orientation="vertical"
+    tools:context=".ui.recibo.ConsultarReciboFragment">
 
-    <LinearLayout
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_margin="8dp"
+        app:iconifiedByDefault="false"
+        app:queryHint="Buscar pelo número do recibo..." />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="Número do Recibo"
-            android:textColor="@color/md_theme_onBackground"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Valor"
-            app:boxStrokeColor="@color/md_theme_primary"
-            app:endIconDrawable="@android:drawable/ic_menu_search"
-            app:endIconMode="custom"
-            app:hintTextColor="@color/md_theme_primary">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_recibos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_historico" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_numero_recibo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/btn_buscar"
-            style="@style/BotaoGeral"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Buscar" />
-
-        <!-- Lista de recibos encontrados -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_recibos_resultado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_historico" />
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>
