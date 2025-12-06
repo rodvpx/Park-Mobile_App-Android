@@ -1,0 +1,71 @@
+package com.example.parkmobile.ui.vagas
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.parkmobile.data.model.Vaga
+import com.example.parkmobile.data.repository.VagaRepository
+import kotlinx.coroutines.launch
+
+class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
+
+    private val _vagas = MutableLiveData<List<Vaga>>()
+    val vagas: LiveData<List<Vaga>> = _vagas
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String> = _errorMessage
+
+    private val _dismiss = MutableLiveData<Boolean>()
+    val dismiss: LiveData<Boolean> = _dismiss
+
+    fun carregarVagas() {
+        viewModelScope.launch {
+            try {
+                _vagas.value = vagaRepository.getAllVagas()
+            } catch (e: Exception) {
+                _errorMessage.value = e.message
+            }
+        }
+    }
+
+    fun addVaga(codigo: String, status: Vaga.StatusVaga) {
+        if (codigo.isBlank()) {
+            _errorMessage.value = "O código da vaga não pode estar em branco."
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val novaVaga = Vaga(codigo = codigo, status = status.name)
+                vagaRepository.addVaga(novaVaga)
+                carregarVagas() // Recarrega a lista para mostrar a nova vaga
+                _dismiss.value = true // Sinaliza para o BottomSheet fechar
+            } catch (e: Exception) {
+                _errorMessage.value = e.message
+            }
+        }
+    }
+
+    fun updateVaga(vaga: Vaga, novoCodigo: String, novoStatus: Vaga.StatusVaga) {
+        if (novoCodigo.isBlank()) {
+            _errorMessage.value = "O código da vaga não pode estar em branco."
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                val vagaAtualizada = vaga.copy(codigo = novoCodigo, status = novoStatus.name)
+                vagaRepository.updateVaga(vagaAtualizada)
+                carregarVagas() // Recarrega a lista para refletir a mudança
+                _dismiss.value = true // Sinaliza para o BottomSheet fechar
+            } catch (e: Exception) {
+                _errorMessage.value = e.message
+            }
+        }
+    }
+
+    fun onDismissed() {
+        _dismiss.value = false
+    }
+}
