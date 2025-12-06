@@ -4,52 +4,86 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.parkmobile.R
-import com.example.parkmobile.data.repository.ClienteRepository
-import com.example.parkmobile.data.repository.VagaRepository
+import androidx.fragment.app.activityViewModels
+import com.example.parkmobile.databinding.FragmentCheckInBinding
 
 class CheckInFragment : Fragment() {
 
-    private lateinit var clienteRepository: ClienteRepository
-    private lateinit var vagaRepository: VagaRepository
+    private var _binding: FragmentCheckInBinding? = null
+    private val binding get() = _binding!!
+
+    // Compartilha o ViewModel com o Fragment pai (EstacionamentoFragment)
+    private val viewModel: EstacionamentoViewModel by activityViewModels {
+        EstacionamentoViewModelFactory()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_check_in, container, false)
+    ): View {
+        _binding = FragmentCheckInBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        clienteRepository = ClienteRepository()
-        vagaRepository = VagaRepository()
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        // Configurar a lista de clientes
-        val clientes = clienteRepository.getClientesItems().map { it.nome }
-        val clienteAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, clientes)
-        val actvSelecionarCliente = view.findViewById<AutoCompleteTextView>(R.id.actv_selecionar_cliente)
-        actvSelecionarCliente.setAdapter(clienteAdapter)
+        binding.btnConfirmarCheckIn.setOnClickListener {
+            val cpf = binding.etCpfCliente.text.toString()
+            val placa = binding.etPlacaCarro.text.toString()
+            val marca = binding.etMarcaCarro.text.toString()
+            val modelo = binding.etModeloCarro.text.toString()
+            val cor = binding.etCorCarro.text.toString()
 
-        // Configurar a lista de vagas disponíveis
-        val vagasDisponiveis = vagaRepository.getVagas().filter { it.status == "disponivel" }.map { it.nome }
-        val vagaAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, vagasDisponiveis)
-        val actvSelecionarVaga = view.findViewById<AutoCompleteTextView>(R.id.actv_selecionar_vaga)
-        actvSelecionarVaga.setAdapter(vagaAdapter)
-
-        // Configurar o botão de confirmação
-        val btnConfirmarCheckIn = view.findViewById<Button>(R.id.btn_confirmar_check_in)
-        btnConfirmarCheckIn.setOnClickListener {
-            // TODO: Adicionar a lógica real de check-in
-            Toast.makeText(context, "Check-in realizado com sucesso!", Toast.LENGTH_SHORT).show()
-            parentFragmentManager.popBackStack()
+            viewModel.realizarCheckIn(cpf, placa, marca, modelo, cor)
         }
+
+        observeUiState()
+    }
+
+    private fun observeUiState() {
+        val progressBar = view?.findViewById<ProgressBar>(R.id.progressBar) // Adicione um ProgressBar ao seu layout se desejar
+
+        viewModel.uiState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is EstacionamentoUiState.Loading -> {
+                    progressBar?.visibility = View.VISIBLE
+                    // Desabilitar botão para evitar cliques duplos
+                    binding.btnConfirmarCheckIn.isEnabled = false
+                }
+                is EstacionamentoUiState.Success -> {
+                    progressBar?.visibility = View.GONE
+                    binding.btnConfirmarCheckIn.isEnabled = true
+                    Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
+                    // Limpar campos ou navegar para outra tela
+                    clearFields()
+                }
+                is EstacionamentoUiState.Error -> {
+                    progressBar?.visibility = View.GONE
+                    binding.btnConfirmarCheckIn.isEnabled = true
+                    Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun clearFields() {
+        binding.etCpfCliente.text?.clear()
+        binding.etPlacaCarro.text?.clear()
+        binding.etMarcaCarro.text?.clear()
+        binding.etModeloCarro.text?.clear()
+        binding.etCorCarro.text?.clear()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

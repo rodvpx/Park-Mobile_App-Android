@@ -1,91 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginVertical="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+        <variable
+            name="clienteVaga"
+            type="com.example.parkmobile.data.model.ClienteVaga" />
+        <variable
+            name="clickListener"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp">
 
-        <ImageView
-            android:id="@+id/iv_car_icon"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/ic_front_car"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/colorPrimary"
-            android:contentDescription="Ícone de carro" />
-
-        <TextView
-            android:id="@+id/tv_nome_cliente"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@id/iv_car_icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_car_icon"
-            tools:text="Nome do Cliente" />
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tv_cpf_cliente"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_nome_cliente"
-            app:layout_constraintTop_toBottomOf="@id/tv_nome_cliente"
-            tools:text="CPF: 123.456.789-00" />
+            <TextView
+                android:id="@+id/tv_placa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{clienteVaga.placa}"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="BRA-1234" />
 
-        <TextView
-            android:id="@+id/tv_placa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@id/tv_cpf_cliente"
-            app:layout_constraintTop_toBottomOf="@id/tv_cpf_cliente"
-            tools:text="Placa: ABC-1234" />
+            <TextView
+                android:id="@+id/tv_modelo_marca"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@{clienteVaga.modelo + ' - ' + clienteVaga.marca}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_placa"
+                tools:text="Fusca - VW" />
 
-        <TextView
-            android:id="@+id/tv_vaga"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_placa"
-            app:layout_constraintStart_toEndOf="@id/tv_placa"
-            app:layout_constraintTop_toTopOf="@id/tv_placa"
-            tools:text="Vaga: 01" />
+            <TextView
+                android:id="@+id/tv_data_entrada_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Entrada: "
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_modelo_marca" />
 
-        <TextView
-            android:id="@+id/tv_entrada"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="@id/tv_placa"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_placa"
-            tools:text="Entrada: 25/11/2025 10:00" />
+            <TextView
+                android:id="@+id/tv_data_entrada"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{clienteVaga.dataEntrada.toString()}"
+                app:layout_constraintBottom_toBottomOf="@id/tv_data_entrada_label"
+                app:layout_constraintStart_toEndOf="@id/tv_data_entrada_label"
+                app:layout_constraintTop_toTopOf="@id/tv_data_entrada_label"
+                tools:text="20/07/2024 10:00" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_check_out"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Fazer Check-out"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_car_icon" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_fazer_checkout"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fazer Check-out"
+                android:onClick="@{clickListener}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
