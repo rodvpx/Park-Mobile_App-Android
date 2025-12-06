@@ -52,18 +52,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        val btnCadastro = findViewById<Button>(R.id.bt_cadastrar)
-//        btnCadastro.setOnClickListener {
-//            val intent = Intent(this, CadastroActivity::class.java)
-//            startActivity(intent)
-//        }
-
-
-        // pra testar mais facil a parte do Admin
         val btnCadastro = findViewById<Button>(R.id.bt_cadastrar)
         btnCadastro.setOnClickListener {
-            val intent = Intent(this, HomeAdminActivity::class.java)
+            val intent = Intent(this, CadastroActivity::class.java)
             startActivity(intent)
         }
+
     }
 }
