@@ -4,18 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.ClienteVaga
-import com.example.parkmobile.databinding.BottomSheetReciboDetalhesBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class ReciboDetalhesBottomSheet : BottomSheetDialogFragment() {
 
-    private var _binding: BottomSheetReciboDetalhesBinding? = null
-    private val binding get() = _binding!!
-
     private var clienteVaga: ClienteVaga? = null
+
+    private lateinit var tvReciboDetalhes: TextView
+    private lateinit var tvPlacaDetalhes: TextView
+    private lateinit var tvDataEntradaDetalhes: TextView
+    private lateinit var tvDataSaidaDetalhes: TextView
+    private lateinit var tvValorDetalhes: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,29 +31,30 @@ class ReciboDetalhesBottomSheet : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = BottomSheetReciboDetalhesBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.bottom_sheet_recibo_detalhes, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tvReciboDetalhes = view.findViewById(R.id.tv_recibo_detalhes)
+        tvPlacaDetalhes = view.findViewById(R.id.tv_placa_detalhes)
+        tvDataEntradaDetalhes = view.findViewById(R.id.tv_data_entrada_detalhes)
+        tvDataSaidaDetalhes = view.findViewById(R.id.tv_data_saida_detalhes)
+        tvValorDetalhes = view.findViewById(R.id.tv_valor_detalhes)
+
         clienteVaga?.let { item ->
-            binding.tvReciboDetalhes.text = "Recibo: ${item.recibo}"
-            binding.tvPlacaDetalhes.text = "Placa: ${item.placa}"
+            tvReciboDetalhes.text = "Recibo: ${item.recibo}"
+            tvPlacaDetalhes.text = "Placa: ${item.placa}"
 
             val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            binding.tvDataEntradaDetalhes.text = item.dataEntrada?.let { "Entrada: ${format.format(it)}" } ?: "Entrada: --"
-            binding.tvDataSaidaDetalhes.text = item.dataSaida?.let { "Saída: ${format.format(it)}" } ?: "Saída: --"
+            tvDataEntradaDetalhes.text = item.dataEntrada?.let { "Entrada: ${format.format(it)}" } ?: "Entrada: --"
+            tvDataSaidaDetalhes.text = item.dataSaida?.let { "Saída: ${format.format(it)}" } ?: "Saída: --"
 
             val valorSeguro = item.valor ?: 0.0
-            binding.tvValorDetalhes.text = String.format(Locale.getDefault(), "R$ %.2f", valorSeguro)
+            tvValorDetalhes.text = String.format(Locale.getDefault(), "R$ %.2f", valorSeguro)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

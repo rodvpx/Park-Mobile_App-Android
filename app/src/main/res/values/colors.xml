@@ -16,6 +16,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="vaga_disponivel">#AFF4C6</color>
-    <color name="vaga_ocupada">#FCB3AD</color>
+    <!-- Cores para status de vagas -->
+    <color name="vaga_disponivel">#AFF4C6</color> <!-- Verde claro -->
+    <color name="vaga_ocupada">#FCB3AD</color> <!-- Vermelho claro -->
+    <color name="vaga_interditada">#D3D3D3</color> <!-- Cinza claro -->
+
 </resources>

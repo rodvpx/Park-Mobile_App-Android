@@ -3,33 +3,51 @@ package com.example.parkmobile.ui.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.parkmobile.databinding.ActivityCadastroBinding
+import com.example.parkmobile.R
 import com.example.parkmobile.ui.home.HomeAdminActivity
+import com.google.android.material.textfield.TextInputEditText
 
 class CadastroActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityCadastroBinding
     private val viewModel: AuthViewModel by viewModels { AuthViewModelFactory() }
+
+    private lateinit var editNome: TextInputEditText
+    private lateinit var editCpf: TextInputEditText
+    private lateinit var editEmail: TextInputEditText
+    private lateinit var editSenha: TextInputEditText
+    private lateinit var editConfirmarSenha: TextInputEditText
+    private lateinit var buttonCadastrar: Button
+    private lateinit var progressBar: ProgressBar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityCadastroBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_cadastro)
+
+        editNome = findViewById(R.id.edit_nome)
+        editCpf = findViewById(R.id.edit_cpf)
+        editEmail = findViewById(R.id.edit_email)
+        editSenha = findViewById(R.id.edit_senha)
+        editConfirmarSenha = findViewById(R.id.edit_confirmar_senha)
+        buttonCadastrar = findViewById(R.id.button_cadastrar)
+        progressBar = findViewById(R.id.progressBar)
 
         setupListeners()
         observeAuthState()
     }
 
     private fun setupListeners() {
-        binding.buttonCadastrar.setOnClickListener {
-            val nome = binding.editNome.text.toString()
-            val cpf = binding.editCpf.text.toString()
-            val email = binding.editEmail.text.toString()
-            val senha = binding.editSenha.text.toString()
-            val confirmarSenha = binding.editConfirmarSenha.text.toString()
+        buttonCadastrar.setOnClickListener {
+            val nome = editNome.text.toString()
+            val cpf = editCpf.text.toString()
+            val email = editEmail.text.toString()
+            val senha = editSenha.text.toString()
+            val confirmarSenha = editConfirmarSenha.text.toString()
 
             viewModel.cadastrar(email, senha, confirmarSenha, nome, cpf)
         }
@@ -39,20 +57,20 @@ class CadastroActivity : AppCompatActivity() {
         viewModel.authState.observe(this) { state ->
             when (state) {
                 is AuthState.Loading -> {
-                    binding.progressBar.visibility = View.VISIBLE
-                    binding.buttonCadastrar.isEnabled = false
+                    progressBar.visibility = View.VISIBLE
+                    buttonCadastrar.isEnabled = false
                 }
                 is AuthState.Authenticated -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.buttonCadastrar.isEnabled = true
+                    progressBar.visibility = View.GONE
+                    buttonCadastrar.isEnabled = true
                     Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show()
                     // Navegar para a tela principal
                     startActivity(Intent(this, HomeAdminActivity::class.java))
                     finish()
                 }
                 is AuthState.Error -> {
-                    binding.progressBar.visibility = View.GONE
-                    binding.buttonCadastrar.isEnabled = true
+                    progressBar.visibility = View.GONE
+                    buttonCadastrar.isEnabled = true
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                 }
                 else -> {}

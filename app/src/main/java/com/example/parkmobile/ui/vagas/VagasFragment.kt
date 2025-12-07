@@ -7,28 +7,32 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import com.example.parkmobile.R
 import com.example.parkmobile.data.repository.VagaRepository
-import com.example.parkmobile.databinding.FragmentVagasBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 
 class VagasFragment : Fragment() {
 
-    private var _binding: FragmentVagasBinding? = null
-    private val binding get() = _binding!!
-
     private lateinit var viewModel: VagasViewModel
+
+    private lateinit var rvVagas: RecyclerView
+    private lateinit var fabAddVaga: FloatingActionButton
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentVagasBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.fragment_vagas, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        rvVagas = view.findViewById(R.id.rv_vagas)
+        fabAddVaga = view.findViewById(R.id.fab_add_vaga)
 
         // 1. Configuração do ViewModel (sem Hilt)
         val firestore = FirebaseFirestore.getInstance()
@@ -36,18 +40,14 @@ class VagasFragment : Fragment() {
         val factory = VagasViewModelFactory(vagaRepository)
         viewModel = ViewModelProvider(this, factory)[VagasViewModel::class.java]
 
-        // 2. Ligar o ViewModel e o LifecycleOwner ao DataBinding
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        // 3. Configuração do RecyclerView
+        // 2. Configuração do RecyclerView
         val vagasAdapter = VagasAdapter { vaga ->
             val bottomSheet = EditVagaBottomSheetFragment.newInstance(vaga)
             bottomSheet.show(childFragmentManager, "EditVagaBottomSheetFragment")
         }
-        binding.rvVagas.adapter = vagasAdapter
+        rvVagas.adapter = vagasAdapter
 
-        // 4. Observar mudanças nos dados
+        // 3. Observar mudanças nos dados
         viewModel.vagas.observe(viewLifecycleOwner) { vagas ->
             vagasAdapter.submitList(vagas)
         }
@@ -56,18 +56,13 @@ class VagasFragment : Fragment() {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
 
-        // 5. Carregar os dados iniciais
+        // 4. Carregar os dados iniciais
         viewModel.carregarVagas()
 
-        // 6. Configuração do FAB
-        binding.fabAddVaga.setOnClickListener {
+        // 5. Configuração do FAB
+        fabAddVaga.setOnClickListener {
             val bottomSheet = AddVagaBottomSheetFragment()
             bottomSheet.show(childFragmentManager, "AddVagaBottomSheetFragment")
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null // Evitar memory leaks
     }
 }

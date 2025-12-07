@@ -1,17 +1,23 @@
 package com.example.parkmobile.ui.vagas
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Vaga
-import com.example.parkmobile.databinding.ItemVagasBinding
+import com.google.android.material.card.MaterialCardView
 
 class VagasAdapter(private val onItemClick: (Vaga) -> Unit) : ListAdapter<Vaga, VagasAdapter.VagaViewHolder>(VagaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VagaViewHolder {
-        return VagaViewHolder.from(parent)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_vagas, parent, false)
+        return VagaViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: VagaViewHolder, position: Int) {
@@ -19,21 +25,20 @@ class VagasAdapter(private val onItemClick: (Vaga) -> Unit) : ListAdapter<Vaga, 
         holder.bind(vaga, onItemClick)
     }
 
-    class VagaViewHolder private constructor(private val binding: ItemVagasBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class VagaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val cardVaga: MaterialCardView = itemView.findViewById(R.id.card_vaga)
+        private val tvVaga: TextView = itemView.findViewById(R.id.tv_vaga)
 
         fun bind(vaga: Vaga, onItemClick: (Vaga) -> Unit) {
-            binding.vaga = vaga
-            binding.root.setOnClickListener { onItemClick(vaga) }
-            binding.executePendingBindings()
-        }
+            tvVaga.text = vaga.codigo
+            itemView.setOnClickListener { onItemClick(vaga) }
 
-        companion object {
-            fun from(parent: ViewGroup): VagaViewHolder {
-                val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemVagasBinding.inflate(layoutInflater, parent, false)
-                return VagaViewHolder(binding)
+            val backgroundColor = when (vaga.status) {
+                "Livre" -> R.color.vaga_disponivel
+                "Ocupada" -> R.color.vaga_ocupada
+                else -> R.color.vaga_interditada
             }
+            cardVaga.setCardBackgroundColor(ContextCompat.getColor(itemView.context, backgroundColor))
         }
     }
 }

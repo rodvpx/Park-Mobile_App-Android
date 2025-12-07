@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.parkmobile.databinding.FragmentCheckOutBinding
+import androidx.recyclerview.widget.RecyclerView
+import com.example.parkmobile.R
 
 class CheckOutFragment : Fragment() {
 
-    private var _binding: FragmentCheckOutBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var rvCheckOut: RecyclerView
 
     private val viewModel: EstacionamentoViewModel by activityViewModels {
         EstacionamentoViewModelFactory()
@@ -22,13 +22,14 @@ class CheckOutFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentCheckOutBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.fragment_check_out, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        rvCheckOut = view.findViewById(R.id.rv_check_out)
 
         val adapter = EstacionamentoAdapter { clienteVaga ->
             // Confirmar antes de fazer o check-out
@@ -42,7 +43,7 @@ class CheckOutFragment : Fragment() {
                 .show()
         }
 
-        binding.rvCheckOut.adapter = adapter
+        rvCheckOut.adapter = adapter
 
         // O ViewModel precisa de um LiveData para expor a lista de veículos estacionados
         viewModel.veiculosEstacionados.observe(viewLifecycleOwner) {
@@ -66,10 +67,5 @@ class CheckOutFragment : Fragment() {
 
         // Carregar a lista inicial
         viewModel.carregarVeiculosEstacionados()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

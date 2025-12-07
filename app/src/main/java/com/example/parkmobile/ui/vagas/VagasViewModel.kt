@@ -29,7 +29,7 @@ class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
         }
     }
 
-    fun addVaga(codigo: String, status: Vaga.StatusVaga) {
+    fun addVaga(codigo: String, status: String) {
         if (codigo.isBlank()) {
             _errorMessage.value = "O código da vaga não pode estar em branco."
             return
@@ -37,7 +37,7 @@ class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val novaVaga = Vaga(codigo = codigo, status = status.name)
+                val novaVaga = Vaga(codigo = codigo, status = status)
                 vagaRepository.addVaga(novaVaga)
                 carregarVagas() // Recarrega a lista para mostrar a nova vaga
                 _dismiss.value = true // Sinaliza para o BottomSheet fechar
@@ -47,7 +47,7 @@ class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
         }
     }
 
-    fun updateVaga(vaga: Vaga, novoCodigo: String, novoStatus: Vaga.StatusVaga) {
+    fun updateVaga(vaga: Vaga, novoCodigo: String, novoStatus: String) {
         if (novoCodigo.isBlank()) {
             _errorMessage.value = "O código da vaga não pode estar em branco."
             return
@@ -55,7 +55,7 @@ class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
 
         viewModelScope.launch {
             try {
-                val vagaAtualizada = vaga.copy(codigo = novoCodigo, status = novoStatus.name)
+                val vagaAtualizada = vaga.copy(codigo = novoCodigo, status = novoStatus)
                 vagaRepository.updateVaga(vagaAtualizada)
                 carregarVagas() // Recarrega a lista para refletir a mudança
                 _dismiss.value = true // Sinaliza para o BottomSheet fechar
