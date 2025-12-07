@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81292801396",
+    "project_id": "bd-park-mobile",
+    "storage_bucket": "bd-park-mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81292801396:android:b8c1e0f87f634230442821",
+        "android_client_info": {
+          "package_name": "com.example.parkmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd2jLw73ERBWsWCq5Y5zeidODpvSuIct8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
