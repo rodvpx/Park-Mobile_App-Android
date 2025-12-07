@@ -1,12 +1,14 @@
 package com.example.parkmobile.ui.historico
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.ClienteVaga
-import com.example.parkmobile.databinding.ItemHistoricoBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -14,8 +16,8 @@ class HistoricoAdapter(private val onItemClick: (ClienteVaga) -> Unit) :
     ListAdapter<ClienteVaga, HistoricoAdapter.HistoricoViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoricoViewHolder {
-        val binding = ItemHistoricoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return HistoricoViewHolder(binding)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_historico, parent, false)
+        return HistoricoViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: HistoricoViewHolder, position: Int) {
@@ -23,23 +25,29 @@ class HistoricoAdapter(private val onItemClick: (ClienteVaga) -> Unit) :
         holder.bind(item, onItemClick)
     }
 
-    class HistoricoViewHolder(private val binding: ItemHistoricoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class HistoricoViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+
+        private val tvPlaca: TextView = itemView.findViewById(R.id.tv_placa)
+        private val tvRecibo: TextView = itemView.findViewById(R.id.tv_recibo)
+        private val tvDataEntrada: TextView = itemView.findViewById(R.id.tv_data_entrada)
+        private val tvDataSaida: TextView = itemView.findViewById(R.id.tv_data_saida)
+        private val tvValor: TextView = itemView.findViewById(R.id.tv_valor)
 
         fun bind(item: ClienteVaga, onItemClick: (ClienteVaga) -> Unit) {
             // Define o clique na view raiz do item
-            binding.root.setOnClickListener { onItemClick(item) }
+            itemView.setOnClickListener { onItemClick(item) }
 
-            // Preenche os dados manualmente usando os IDs do View Binding
-            binding.tvPlaca.text = item.placa
-            binding.tvRecibo.text = "Recibo: ${item.recibo}"
+            // Preenche os dados manualmente usando os IDs
+            tvPlaca.text = item.placa
+            tvRecibo.text = "Recibo: ${item.recibo}"
 
             val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            binding.tvDataEntrada.text = item.dataEntrada?.let { "Entrada: ${format.format(it)}" } ?: "Entrada: --"
-            binding.tvDataSaida.text = item.dataSaida?.let { "Saída: ${format.format(it)}" } ?: "Saída: --"
+            tvDataEntrada.text = item.dataEntrada?.let { "Entrada: ${format.format(it)}" } ?: "Entrada: --"
+            tvDataSaida.text = item.dataSaida?.let { "Saída: ${format.format(it)}" } ?: "Saída: --"
 
             val valorSeguro = item.valor ?: 0.0
-            binding.tvValor.text = String.format(Locale.getDefault(), "R$ %.2f", valorSeguro)
+            tvValor.text = String.format(Locale.getDefault(), "R$ %.2f", valorSeguro)
         }
     }
 

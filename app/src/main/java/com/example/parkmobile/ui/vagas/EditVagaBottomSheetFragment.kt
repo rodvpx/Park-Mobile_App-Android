@@ -5,20 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Vaga
-import com.example.parkmobile.databinding.BottomSheetEditVagaBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.TextInputEditText
 
 class EditVagaBottomSheetFragment : BottomSheetDialogFragment() {
-
-    private var _binding: BottomSheetEditVagaBinding? = null
-    private val binding get() = _binding!!
 
     private val viewModel: VagasViewModel by activityViewModels()
 
     private var vaga: Vaga? = null
+
+    private lateinit var etCodigoVaga: TextInputEditText
+    private lateinit var rbLivre: RadioButton
+    private lateinit var rbOcupado: RadioButton
+    private lateinit var btnSalvarVaga: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,33 +41,36 @@ class EditVagaBottomSheetFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = BottomSheetEditVagaBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.bottom_sheet_edit_vaga, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.vaga = vaga
+        etCodigoVaga = view.findViewById(R.id.et_codigo_vaga)
+        rbLivre = view.findViewById(R.id.rb_livre)
+        rbOcupado = view.findViewById(R.id.rb_ocupado)
+        btnSalvarVaga = view.findViewById(R.id.btn_salvar_vaga)
+
+        etCodigoVaga.setText(vaga?.codigo)
 
         // Pre-seleciona o RadioButton correto
-        if (vaga?.status == Vaga.StatusVaga.LIVRE.name) {
-            binding.rbLivre.isChecked = true
+        if (vaga?.status == "Livre") {
+            rbLivre.isChecked = true
         } else {
-            binding.rbOcupado.isChecked = true
+            rbOcupado.isChecked = true
         }
 
-        binding.btnSalvarVaga.setOnClickListener {
+        btnSalvarVaga.setOnClickListener {
             vaga?.let {
-                val novoCodigo = binding.etCodigoVaga.text.toString()
-                val novoStatus = if (binding.rbLivre.isChecked) {
-                    Vaga.StatusVaga.LIVRE
+                val novoCodigo = etCodigoVaga.text.toString()
+                val novoStatus = if (rbLivre.isChecked) {
+                    "Livre"
                 } else {
-                    Vaga.StatusVaga.OCUPADA
+                    "Ocupada"
                 }
+                // Supondo que o ViewModel aceite String para o status.
                 viewModel.updateVaga(it, novoCodigo, novoStatus)
             }
         }
@@ -79,11 +87,6 @@ class EditVagaBottomSheetFragment : BottomSheetDialogFragment() {
                 viewModel.onDismissed()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

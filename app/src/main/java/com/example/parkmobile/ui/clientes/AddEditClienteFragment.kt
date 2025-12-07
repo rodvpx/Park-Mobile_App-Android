@@ -5,21 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Cliente
-import com.example.parkmobile.databinding.BottomSheetAddEditClienteBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.TextInputEditText
 
 class AddEditClienteFragment : BottomSheetDialogFragment() {
-
-    private var _binding: BottomSheetAddEditClienteBinding? = null
-    private val binding get() = _binding!!
 
     private val viewModel: ClientesViewModel by activityViewModels()
 
     private var cliente: Cliente? = null
+
+    private lateinit var tvTitle: TextView
+    private lateinit var etNomeCliente: TextInputEditText
+    private lateinit var etCpfCliente: TextInputEditText
+    private lateinit var btnSalvarCliente: Button
+    private lateinit var btnDeletarCliente: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,13 +43,18 @@ class AddEditClienteFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = BottomSheetAddEditClienteBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.bottom_sheet_add_edit_cliente, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tvTitle = view.findViewById(R.id.tv_title)
+        etNomeCliente = view.findViewById(R.id.et_nome_cliente)
+        etCpfCliente = view.findViewById(R.id.et_cpf_cliente)
+        btnSalvarCliente = view.findViewById(R.id.btn_salvar_cliente)
+        btnDeletarCliente = view.findViewById(R.id.btn_deletar_cliente)
 
         setupUI()
         setupListeners()
@@ -53,21 +64,21 @@ class AddEditClienteFragment : BottomSheetDialogFragment() {
     private fun setupUI() {
         if (cliente == null) {
             // Modo Adicionar
-            binding.tvTitle.text = "Adicionar Cliente"
-            binding.btnDeletarCliente.visibility = View.GONE
+            tvTitle.text = "Adicionar Cliente"
+            btnDeletarCliente.visibility = View.GONE
         } else {
             // Modo Editar
-            binding.tvTitle.text = "Editar Cliente"
-            binding.etNomeCliente.setText(cliente?.nome)
-            binding.etCpfCliente.setText(cliente?.cpf)
-            binding.btnDeletarCliente.visibility = View.VISIBLE
+            tvTitle.text = "Editar Cliente"
+            etNomeCliente.setText(cliente?.nome)
+            etCpfCliente.setText(cliente?.cpf)
+            btnDeletarCliente.visibility = View.VISIBLE
         }
     }
 
     private fun setupListeners() {
-        binding.btnSalvarCliente.setOnClickListener {
-            val nome = binding.etNomeCliente.text.toString()
-            val cpf = binding.etCpfCliente.text.toString()
+        btnSalvarCliente.setOnClickListener {
+            val nome = etNomeCliente.text.toString()
+            val cpf = etCpfCliente.text.toString()
 
             if (cliente == null) {
                 viewModel.addCliente(nome, cpf)
@@ -76,7 +87,7 @@ class AddEditClienteFragment : BottomSheetDialogFragment() {
             }
         }
 
-        binding.btnDeletarCliente.setOnClickListener {
+        btnDeletarCliente.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setTitle("Deletar Cliente")
                 .setMessage("Tem certeza que deseja deletar este cliente? Esta ação não pode ser desfeita.")
@@ -102,11 +113,6 @@ class AddEditClienteFragment : BottomSheetDialogFragment() {
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

@@ -4,42 +4,47 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Vaga
-import com.example.parkmobile.databinding.BottomSheetAddVagaBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.textfield.TextInputEditText
 
 class AddVagaBottomSheetFragment : BottomSheetDialogFragment() {
 
-    private var _binding: BottomSheetAddVagaBinding? = null
-    private val binding get() = _binding!!
-
-    // Use activityViewModels() para compartilhar o ViewModel com o VagasFragment
     private val viewModel: VagasViewModel by activityViewModels()
+
+    private lateinit var etCodigoVaga: TextInputEditText
+    private lateinit var rbLivre: RadioButton
+    private lateinit var btnCadastrarVaga: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = BottomSheetAddVagaBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.bottom_sheet_add_vaga, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        etCodigoVaga = view.findViewById(R.id.et_codigo_vaga)
+        rbLivre = view.findViewById(R.id.rb_livre)
+        btnCadastrarVaga = view.findViewById(R.id.btn_cadastrar_vaga)
 
-        binding.btnCadastrarVaga.setOnClickListener {
-            val codigo = binding.etCodigoVaga.text.toString()
-            val status = if (binding.rbLivre.isChecked) {
-                Vaga.StatusVaga.LIVRE
+        btnCadastrarVaga.setOnClickListener {
+            val codigo = etCodigoVaga.text.toString()
+            val status = if (rbLivre.isChecked) {
+                "Livre"
             } else {
-                Vaga.StatusVaga.OCUPADA
+                "Ocupada"
             }
+            // Supondo que o ViewModel aceite String para o status.
+            // Se o ViewModel esperar Vaga.StatusVaga, você precisará ajustar aqui.
             viewModel.addVaga(codigo, status)
         }
 
@@ -55,10 +60,5 @@ class AddVagaBottomSheetFragment : BottomSheetDialogFragment() {
                 viewModel.onDismissed() // Reseta o estado para não fechar novamente
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

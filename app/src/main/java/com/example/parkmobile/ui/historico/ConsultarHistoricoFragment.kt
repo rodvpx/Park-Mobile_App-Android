@@ -9,34 +9,43 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.parkmobile.databinding.FragmentConsultarHistoricoBinding
+import androidx.recyclerview.widget.RecyclerView
+import com.example.parkmobile.R
+import com.example.parkmobile.data.repository.ClienteRepository
 import com.example.parkmobile.ui.clientes.ClientesAdapter
 import com.example.parkmobile.ui.clientes.ClientesViewModel
 import com.example.parkmobile.ui.clientes.ClientesViewModelFactory
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ConsultarHistoricoFragment : Fragment() {
 
-    private var _binding: FragmentConsultarHistoricoBinding? = null
-    private val binding get() = _binding!!
+    private val viewModel: ClientesViewModel by viewModels { 
+        ClientesViewModelFactory(ClienteRepository(FirebaseFirestore.getInstance())) 
+    }
 
-    private val viewModel: ClientesViewModel by viewModels { ClientesViewModelFactory() }
+    private lateinit var searchView: SearchView
+    private lateinit var rvClientesResultado: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentConsultarHistoricoBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.fragment_consultar_historico, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        searchView = view.findViewById(R.id.search_view)
+        rvClientesResultado = view.findViewById(R.id.rv_clientes_resultado)
+
         val clientesAdapter = ClientesAdapter { cliente ->
-            val action = RelatoriosAdminFragmentDirections.actionRelatoriosAdminFragmentToResultadoHistoricoFragment(cliente.id, cliente.nome)
-            findNavController().navigate(action)
+            // Substitua RelatoriosAdminFragmentDirections pelo gerado para seu nav_graph
+            // val action = RelatoriosAdminFragmentDirections.actionRelatoriosAdminFragmentToResultadoHistoricoFragment(cliente.id, cliente.nome)
+            // findNavController().navigate(action)
+            Toast.makeText(context, "Cliente selecionado: ${cliente.nome}", Toast.LENGTH_SHORT).show()
         }
-        binding.rvClientesResultado.adapter = clientesAdapter
+        rvClientesResultado.adapter = clientesAdapter
 
         setupSearch(clientesAdapter)
         observeViewModel(clientesAdapter)
@@ -45,7 +54,7 @@ class ConsultarHistoricoFragment : Fragment() {
     }
 
     private fun setupSearch(adapter: ClientesAdapter) {
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -73,10 +82,5 @@ class ConsultarHistoricoFragment : Fragment() {
                 Toast.makeText(context, error, Toast.LENGTH_LONG).show()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -4,35 +4,39 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.parkmobile.databinding.FragmentHistoricoBinding
+import androidx.recyclerview.widget.RecyclerView
+import com.example.parkmobile.R
 
 class HistoricoFragment : Fragment() {
 
-    private var _binding: FragmentHistoricoBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var recyclerViewHistorico: RecyclerView
+    private lateinit var progressBar: ProgressBar
 
     private val viewModel: HistoricoViewModel by viewModels { HistoricoViewModelFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentHistoricoBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.fragment_historico, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        recyclerViewHistorico = view.findViewById(R.id.recyclerViewHistorico)
+        progressBar = view.findViewById(R.id.progressBar)
+
         val historicoAdapter = HistoricoAdapter { clienteVaga ->
             // TODO: Implementar o que acontece ao clicar em um item do histórico
             Toast.makeText(context, "Recibo selecionado: ${clienteVaga.recibo}", Toast.LENGTH_SHORT).show()
         }
-        binding.recyclerViewHistorico.adapter = historicoAdapter
+        recyclerViewHistorico.adapter = historicoAdapter
 
         observeViewModel(historicoAdapter)
 
@@ -45,12 +49,7 @@ class HistoricoFragment : Fragment() {
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBar.isVisible = isLoading
+            progressBar.isVisible = isLoading
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

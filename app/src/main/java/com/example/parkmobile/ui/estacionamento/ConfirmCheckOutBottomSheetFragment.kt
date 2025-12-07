@@ -5,23 +5,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.ClienteVaga
-import com.example.parkmobile.databinding.BottomSheetConfirmCheckoutBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
 class ConfirmCheckOutBottomSheetFragment : BottomSheetDialogFragment() {
 
-    private var _binding: BottomSheetConfirmCheckoutBinding? = null
-    private val binding get() = _binding!!
-
     private val viewModel: EstacionamentoViewModel by activityViewModels {
         EstacionamentoViewModelFactory()
     }
 
     private var clienteVaga: ClienteVaga? = null
+
+    private lateinit var tvConfirmPlaca: TextView
+    private lateinit var tvConfirmModeloMarca: TextView
+    private lateinit var tvConfirmEntrada: TextView
+    private lateinit var btnCancelar: Button
+    private lateinit var btnConfirmar: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,35 +43,35 @@ class ConfirmCheckOutBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = BottomSheetConfirmCheckoutBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.bottom_sheet_confirm_checkout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        tvConfirmPlaca = view.findViewById(R.id.tv_confirm_placa)
+        tvConfirmModeloMarca = view.findViewById(R.id.tv_confirm_modelo_marca)
+        tvConfirmEntrada = view.findViewById(R.id.tv_confirm_entrada)
+        btnCancelar = view.findViewById(R.id.btn_cancelar)
+        btnConfirmar = view.findViewById(R.id.btn_confirmar)
+
         clienteVaga?.let {
-            binding.tvConfirmPlaca.text = "Placa: ${it.placa}"
-            binding.tvConfirmModeloMarca.text = "${it.modelo} - ${it.marca}"
+            tvConfirmPlaca.text = "Placa: ${it.placa}"
+            tvConfirmModeloMarca.text = "${it.modelo} - ${it.marca}"
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            binding.tvConfirmEntrada.text = "Entrada: ${sdf.format(it.dataEntrada)}"
+            tvConfirmEntrada.text = "Entrada: ${sdf.format(it.dataEntrada)}"
         }
 
-        binding.btnCancelar.setOnClickListener { dismiss() }
+        btnCancelar.setOnClickListener { dismiss() }
 
-        binding.btnConfirmar.setOnClickListener {
+        btnConfirmar.setOnClickListener {
             clienteVaga?.recibo?.let {
                 viewModel.realizarCheckOut(it)
                 // O observer no fragment pai cuidará de mostrar o Toast e atualizar a lista
                 dismiss()
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

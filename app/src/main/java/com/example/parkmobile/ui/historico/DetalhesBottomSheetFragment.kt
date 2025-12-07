@@ -5,71 +5,83 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.parkmobile.data.model.HistoricoItem
-import com.example.parkmobile.databinding.FragmentReciboDetalhesBottomSheetBinding
-import com.example.parkmobile.databinding.PartialReciboItemBinding
+import android.widget.TextView
+import com.example.parkmobile.R
+import com.example.parkmobile.data.model.ClienteVaga
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class DetalhesBottomSheetFragment : BottomSheetDialogFragment() {
 
-    private var _binding: FragmentReciboDetalhesBottomSheetBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var detalhesCodigoValor: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentReciboDetalhesBottomSheetBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        return inflater.inflate(R.layout.fragment_recibo_detalhes_bottom_sheet, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        detalhesCodigoValor = view.findViewById(R.id.detalhes_codigo_valor)
+
         val item = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable("historico_item", HistoricoItem::class.java)
+            arguments?.getParcelable(ARG_CLIENTE_VAGA, ClienteVaga::class.java)
         } else {
             @Suppress("DEPRECATION")
-            arguments?.getParcelable<HistoricoItem>("historico_item")
+            arguments?.getParcelable<ClienteVaga>(ARG_CLIENTE_VAGA)
         }
 
-        item?.let {
+        item?.let { clienteVaga ->
             // Popula o código do recibo
-            binding.detalhesCodigoValor.text = it.codigo
+            detalhesCodigoValor.text = clienteVaga.recibo
 
             // Popula os itens restantes
-            setupItem(binding.itemCpf, "CPF:", it.cpf)
-            setupItem(binding.itemVaga, "Vaga:", it.vaga)
-            setupItem(binding.itemEntrada, "Entrada:", it.entrada)
-            setupItem(binding.itemSaida, "Saída:", it.saida)
-            setupItem(binding.itemTempo, "Tempo:", it.tempo)
+            setupItem(view.findViewById(R.id.item_cpf), "ID Cliente:", clienteVaga.idCliente)
+            setupItem(view.findViewById(R.id.item_vaga), "ID Vaga:", clienteVaga.idVaga)
+            
+            val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            val entrada = clienteVaga.dataEntrada?.let { format.format(it) } ?: "--"
+            val saida = clienteVaga.dataSaida?.let { format.format(it) } ?: "--"
 
-            setupItem(binding.itemPlaca, "Placa:", it.placa)
-            setupItem(binding.itemMarca, "Marca:", it.marca)
-            setupItem(binding.itemModelo, "Modelo:", it.modelo)
-            setupItem(binding.itemCor, "Cor:", it.cor)
+            setupItem(view.findViewById(R.id.item_entrada), "Entrada:", entrada)
+            setupItem(view.findViewById(R.id.item_saida), "Saída:", saida)
+            setupItem(view.findViewById(R.id.item_tempo), "Tempo:", "--") // O tempo não está disponível em ClienteVaga
 
-            setupItem(binding.itemValor, "Valor:", it.valor)
-            setupItem(binding.itemDesconto, "Desconto:", it.desconto)
-            setupItem(binding.itemValorTotal, "Total:", it.total)
+            setupItem(view.findViewById(R.id.item_placa), "Placa:", clienteVaga.placa)
+            setupItem(view.findViewById(R.id.item_marca), "Marca:", clienteVaga.marca)
+            setupItem(view.findViewById(R.id.item_modelo), "Modelo:", clienteVaga.modelo)
+            setupItem(view.findViewById(R.id.item_cor), "Cor:", clienteVaga.cor)
+
+            val valor = clienteVaga.valor?.let { String.format(Locale.getDefault(), "R$ %.2f", it) } ?: "R$ 0,00"
+            val desconto = clienteVaga.desconto?.let { String.format(Locale.getDefault(), "R$ %.2f", it) } ?: "R$ 0,00"
+            val total = (clienteVaga.valor ?: 0.0) - (clienteVaga.desconto ?: 0.0)
+            val totalFormatado = String.format(Locale.getDefault(), "R$ %.2f", total)
+
+            setupItem(view.findViewById(R.id.item_valor), "Valor:", valor)
+            setupItem(view.findViewById(R.id.item_desconto), "Desconto:", desconto)
+            setupItem(view.findViewById(R.id.item_valor_total), "Total:", totalFormatado)
         }
     }
 
-    private fun setupItem(itemBinding: PartialReciboItemBinding, label: String, value: String?) {
-        itemBinding.label.text = label
-        itemBinding.valor.text = value
-    }
+    private fun setupItem(itemView: View, label: String, value: String?) {
+        val labelView = itemView.findViewById<TextView>(R.id.label)
+        val valueView = itemView.findViewById<TextView>(R.id.valor)
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        labelView.text = label
+        valueView.text = value
     }
 
     companion object {
-        fun newInstance(item: HistoricoItem): DetalhesBottomSheetFragment {
+        private const val ARG_CLIENTE_VAGA = "clienteVaga"
+
+        fun newInstance(item: ClienteVaga): DetalhesBottomSheetFragment {
             val fragment = DetalhesBottomSheetFragment()
             val args = Bundle()
-            args.putParcelable("historico_item", item)
+            args.putParcelable(ARG_CLIENTE_VAGA, item)
             fragment.arguments = args
             return fragment
         }

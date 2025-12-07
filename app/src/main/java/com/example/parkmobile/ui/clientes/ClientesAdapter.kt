@@ -1,19 +1,21 @@
 package com.example.parkmobile.ui.clientes
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Cliente
-import com.example.parkmobile.databinding.ItemResultClientesBinding
 
 class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) :
     ListAdapter<Cliente, ClientesAdapter.ClienteViewHolder>(ClienteDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClienteViewHolder {
-        val binding = ItemResultClientesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ClienteViewHolder(binding)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_result_clientes, parent, false)
+        return ClienteViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ClienteViewHolder, position: Int) {
@@ -21,15 +23,19 @@ class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) :
         holder.bind(cliente, onItemClick)
     }
 
-    class ClienteViewHolder(private val binding: ItemResultClientesBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class ClienteViewHolder(itemView: View) :
+        RecyclerView.ViewHolder(itemView) {
+
+        private val tvIdCliente: TextView = itemView.findViewById(R.id.tv_id_cliente)
+        private val tvNomeCliente: TextView = itemView.findViewById(R.id.tv_nome_cliente)
+        private val tvCpfCliente: TextView = itemView.findViewById(R.id.tv_cpf_cliente)
 
         fun bind(cliente: Cliente, onItemClick: (Cliente) -> Unit) {
-            binding.root.setOnClickListener { onItemClick(cliente) }
+            itemView.setOnClickListener { onItemClick(cliente) }
 
-            binding.tvIdCliente.text = cliente.id
-            binding.tvNomeCliente.text = cliente.nome
-            binding.tvCpfCliente.text = cliente.cpf
+            tvIdCliente.text = cliente.id
+            tvNomeCliente.text = cliente.nome
+            tvCpfCliente.text = cliente.cpf
         }
     }
 }
