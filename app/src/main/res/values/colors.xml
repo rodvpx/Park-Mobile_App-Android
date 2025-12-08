@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Cores da Marca (Exemplos) -->
-    <color name="md_theme_primary">#00668B</color> <!-- Azul escuro -->
-    <color name="md_theme_onPrimary">#FFFFFF</color> <!-- Texto sobre a cor primária -->
-    <color name="md_theme_secondary">#4D616C</color> <!-- Um tom de cinza-azulado -->
-    <color name="md_theme_onSecondary">#FFFFFF</color> <!-- Texto sobre a cor secundária -->
-    <color name="md_theme_error">#BA1A1A</color> <!-- Vermelho para erros -->
+    <!-- Nova Paleta Roxa -->
+    <color name="md_theme_primary">#6750A4</color> <!-- Roxo Principal -->
+    <color name="md_theme_onPrimary">#FFFFFF</color> <!-- Texto sobre a cor primária (Branco) -->
+    <color name="md_theme_secondary">#625B71</color> <!-- Roxo Secundário/Neutro -->
+    <color name="md_theme_onSecondary">#FFFFFF</color> <!-- Texto sobre a cor secundária (Branco) -->
+    <color name="md_theme_error">#B3261E</color> <!-- Vermelho para erros -->
     <color name="md_theme_onError">#FFFFFF</color>
-    <color name="md_theme_background">#FDFCFF</color> <!-- Fundo geral do app -->
-    <color name="md_theme_onBackground">#1A1C18</color> <!-- Texto sobre o fundo -->
-    <color name="md_theme_surface">#FDFCFF</color> <!-- Cor de superfícies como Cards -->
-    <color name="md_theme_onSurface">#1A1C18</color> <!-- Texto sobre superfícies -->
+    <color name="md_theme_background">#FFFBFE</color> <!-- Fundo geral do app (Branco levemente roxo) -->
+    <color name="md_theme_onBackground">#1C1B1F</color> <!-- Texto sobre o fundo -->
+    <color name="md_theme_surface">#FFFBFE</color> <!-- Cor de superfícies como Cards -->
+    <color name="md_theme_onSurface">#1C1B1F</color> <!-- Texto sobre superfícies -->
 
     <!-- Cores comuns -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Cores para status de vagas -->
+    <!-- Cores para status de vagas (mantidas) -->
     <color name="vaga_disponivel">#AFF4C6</color> <!-- Verde claro -->
     <color name="vaga_ocupada">#FCB3AD</color> <!-- Vermelho claro -->
     <color name="vaga_interditada">#D3D3D3</color> <!-- Cinza claro -->
