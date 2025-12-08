@@ -7,15 +7,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Cliente
 import com.example.parkmobile.data.repository.ClienteRepository
 import com.example.parkmobile.util.CpfMaskTextWatcher
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.firestore.FirebaseFirestore
 
-class AddEditClienteFragment : DialogFragment() {
+// Alterado de DialogFragment para BottomSheetDialogFragment
+class AddEditClienteFragment : BottomSheetDialogFragment() {
 
     private val clienteRepository by lazy { ClienteRepository(FirebaseFirestore.getInstance()) }
     private val viewModel: ClientesViewModel by activityViewModels { ClientesViewModelFactory(clienteRepository) }
