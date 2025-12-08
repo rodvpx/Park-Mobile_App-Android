@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import com.example.parkmobile.R
+import com.example.parkmobile.data.model.Usuario
 import com.example.parkmobile.ui.home.HomeAdminActivity
+import com.example.parkmobile.ui.home.HomeClienteActivity
 import com.example.parkmobile.ui.views.HeaderView
 import com.google.android.material.textfield.TextInputEditText
 
@@ -82,8 +84,11 @@ class LoginActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                     buttonLogin.isEnabled = true
                     Toast.makeText(this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
-                    // Navegar para a tela principal
-                    startActivity(Intent(this, HomeAdminActivity::class.java))
+                    if (state.user.role == Usuario.Role.ADMIN.name) {
+                        startActivity(Intent(this, HomeAdminActivity::class.java))
+                    } else {
+                        startActivity(Intent(this, HomeClienteActivity::class.java))
+                    }
                     finishAffinity() // Fecha todas as activities da pilha
                 }
                 is AuthState.Error -> {
@@ -91,7 +96,6 @@ class LoginActivity : AppCompatActivity() {
                     buttonLogin.isEnabled = true
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                 }
-                else -> {}
             }
         }
     }

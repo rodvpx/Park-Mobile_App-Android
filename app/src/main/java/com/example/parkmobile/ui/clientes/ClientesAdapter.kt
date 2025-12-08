@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Cliente
 
-class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) :
-    ListAdapter<Cliente, ClientesAdapter.ClienteViewHolder>(ClienteDiffCallback()) {
+class ClientesAdapter(private val onItemClicked: (Cliente) -> Unit) :
+    ListAdapter<Cliente, ClientesAdapter.ClienteViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClienteViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_result_clientes, parent, false)
@@ -20,32 +20,37 @@ class ClientesAdapter(private val onItemClick: (Cliente) -> Unit) :
 
     override fun onBindViewHolder(holder: ClienteViewHolder, position: Int) {
         val cliente = getItem(position)
-        holder.bind(cliente, onItemClick)
+        holder.bind(cliente)
+        holder.itemView.setOnClickListener { onItemClicked(cliente) }
     }
 
-    class ClienteViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    class ClienteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val nomeTextView: TextView = itemView.findViewById(R.id.tv_nome_cliente)
+        private val cpfTextView: TextView = itemView.findViewById(R.id.tv_cpf_cliente)
+        private val idTextView: TextView = itemView.findViewById(R.id.tv_id_cliente)
 
-        private val tvIdCliente: TextView = itemView.findViewById(R.id.tv_id_cliente)
-        private val tvNomeCliente: TextView = itemView.findViewById(R.id.tv_nome_cliente)
-        private val tvCpfCliente: TextView = itemView.findViewById(R.id.tv_cpf_cliente)
+        fun bind(cliente: Cliente) {
+            nomeTextView.text = cliente.nome
+            cpfTextView.text = formatarCpf(cliente.cpf)
+            idTextView.text = cliente.id
+        }
 
-        fun bind(cliente: Cliente, onItemClick: (Cliente) -> Unit) {
-            itemView.setOnClickListener { onItemClick(cliente) }
-
-            tvIdCliente.text = cliente.id
-            tvNomeCliente.text = cliente.nome
-            tvCpfCliente.text = cliente.cpf
+        private fun formatarCpf(cpf: String): String {
+            return if (cpf.length == 11) {
+                cpf.replaceFirst(Regex("(\\d{3})(\\d{3})(\\d{3})(\\d{2})"), "$1.$2.$3-$4")
+            } else {
+                cpf
+            }
         }
     }
-}
 
-class ClienteDiffCallback : DiffUtil.ItemCallback<Cliente>() {
-    override fun areItemsTheSame(oldItem: Cliente, newItem: Cliente): Boolean {
-        return oldItem.id == newItem.id
-    }
+    companion object DiffCallback : DiffUtil.ItemCallback<Cliente>() {
+        override fun areItemsTheSame(oldItem: Cliente, newItem: Cliente): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areContentsTheSame(oldItem: Cliente, newItem: Cliente): Boolean {
-        return oldItem == newItem
+        override fun areContentsTheSame(oldItem: Cliente, newItem: Cliente): Boolean {
+            return oldItem == newItem
+        }
     }
 }

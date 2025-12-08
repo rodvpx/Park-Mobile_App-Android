@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import com.example.parkmobile.R
-import com.example.parkmobile.ui.home.HomeAdminActivity
+import com.example.parkmobile.ui.home.HomeClienteActivity
+import com.example.parkmobile.util.CpfMaskTextWatcher
 import com.google.android.material.textfield.TextInputEditText
 
 class CadastroActivity : AppCompatActivity() {
@@ -40,6 +41,8 @@ class CadastroActivity : AppCompatActivity() {
         buttonCadastrar = findViewById(R.id.button_cadastrar)
         progressBar = findViewById(R.id.progressBar)
 
+        editCpf.addTextChangedListener(CpfMaskTextWatcher(editCpf))
+
         setupToolbar()
         setupListeners()
         observeAuthState()
@@ -66,11 +69,16 @@ class CadastroActivity : AppCompatActivity() {
 
     private fun setupListeners() {
         buttonCadastrar.setOnClickListener {
-            val nome = editNome.text.toString()
-            val cpf = editCpf.text.toString()
-            val email = editEmail.text.toString()
-            val senha = editSenha.text.toString()
-            val confirmarSenha = editConfirmarSenha.text.toString()
+            val nome = editNome.text.toString().trim()
+            val cpf = editCpf.text.toString().filter { it.isDigit() }
+            val email = editEmail.text.toString().trim()
+            val senha = editSenha.text.toString().trim()
+            val confirmarSenha = editConfirmarSenha.text.toString().trim()
+
+            if (nome.isBlank() || cpf.length != 11 || email.isBlank() || senha.isBlank()) {
+                Toast.makeText(this, "Todos os campos são obrigatórios.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             viewModel.cadastrar(email, senha, confirmarSenha, nome, cpf)
         }
@@ -87,16 +95,17 @@ class CadastroActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                     buttonCadastrar.isEnabled = true
                     Toast.makeText(this, "Cadastro realizado com sucesso!", Toast.LENGTH_SHORT).show()
-                    // Navegar para a tela principal
-                    startActivity(Intent(this, HomeAdminActivity::class.java))
-                    finish()
+                    // Navega para a tela de cliente, que é o correto
+                    val intent = Intent(this, HomeClienteActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finishAffinity()
                 }
                 is AuthState.Error -> {
                     progressBar.visibility = View.GONE
                     buttonCadastrar.isEnabled = true
                     Toast.makeText(this, state.message, Toast.LENGTH_LONG).show()
                 }
-                else -> {}
             }
         }
     }

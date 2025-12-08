@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.parkmobile.data.model.Usuario
 import com.example.parkmobile.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -27,7 +28,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             val result = authRepository.cadastrar(email, senha, nome, cpf)
             result.onSuccess {
-                _authState.value = AuthState.Authenticated
+                _authState.value = AuthState.Authenticated(it)
             }.onFailure {
                 _authState.value = AuthState.Error("Falha no cadastro: ${it.message}")
             }
@@ -45,7 +46,7 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             val result = authRepository.login(email, senha)
             result.onSuccess {
-                _authState.value = AuthState.Authenticated
+                _authState.value = AuthState.Authenticated(it)
             }.onFailure {
                 _authState.value = AuthState.Error("Falha no login: ${it.message}")
             }
@@ -55,6 +56,6 @@ class AuthViewModel(private val authRepository: AuthRepository) : ViewModel() {
 
 sealed class AuthState {
     object Loading : AuthState()
-    object Authenticated : AuthState()
+    data class Authenticated(val user: Usuario) : AuthState()
     data class Error(val message: String) : AuthState()
 }

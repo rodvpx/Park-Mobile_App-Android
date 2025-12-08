@@ -17,6 +17,35 @@ class AuthRepository(
             val firebaseUser = authResult.user
                 ?: return Result.failure(Exception("Falha ao criar o usuário no Firebase. O usuário é nulo."))
 
+            // Verifica se já existe um cliente com este CPF sem usuário vinculado
+            val query = firestore.collection("clientes")
+                .whereEqualTo("cpf", cpf)
+                .whereEqualTo("idUsuario", "")
+                .limit(1)
+                .get()
+                .await()
+
+            if (!query.isEmpty) {
+                // Cliente pré-cadastrado encontrado, carrega o objeto, atualiza e salva de volta.
+                val clienteDoc = query.documents.first()
+                val clienteExistente = clienteDoc.toObject(Cliente::class.java)!!
+                val clienteAtualizado = clienteExistente.copy(
+                    nome = nome, // Atualiza para o nome que o cliente digitou
+                    idUsuario = firebaseUser.uid // Vincula o novo ID de usuário
+                )
+                firestore.collection("clientes").document(clienteDoc.id).set(clienteAtualizado).await()
+
+            } else {
+                // Nenhum cliente pré-cadastrado, cria um novo
+                val novoCliente = Cliente(
+                    nome = nome,
+                    cpf = cpf,
+                    idUsuario = firebaseUser.uid
+                )
+                // Usamos o UID do usuário como ID do documento para facilitar a busca no futuro
+                firestore.collection("clientes").document(firebaseUser.uid).set(novoCliente).await()
+            }
+
             val novoUsuario = Usuario(
                 id = firebaseUser.uid,
                 username = email,
@@ -24,24 +53,19 @@ class AuthRepository(
             )
             firestore.collection("usuarios").document(firebaseUser.uid).set(novoUsuario).await()
 
-            val novoCliente = Cliente(
-                id = firebaseUser.uid,
-                nome = nome,
-                cpf = cpf,
-                idUsuario = firebaseUser.uid
-            )
-            firestore.collection("clientes").document(firebaseUser.uid).set(novoCliente).await()
-
             return Result.success(novoUsuario)
         } catch (e: Exception) {
             return Result.failure(e)
         }
     }
 
-    suspend fun login(email: String, senha: String): Result<Unit> {
+    suspend fun login(email: String, senha: String): Result<Usuario> {
         try {
-            auth.signInWithEmailAndPassword(email, senha).await()
-            return Result.success(Unit)
+            val authResult = auth.signInWithEmailAndPassword(email, senha).await()
+            val firebaseUser = authResult.user ?: return Result.failure(Exception("Usuário não encontrado"))
+            val userDoc = firestore.collection("usuarios").document(firebaseUser.uid).get().await()
+            val usuario = userDoc.toObject(Usuario::class.java) ?: return Result.failure(Exception("Dados do usuário não encontrados"))
+            return Result.success(usuario)
         } catch (e: Exception) {
             return Result.failure(e)
         }

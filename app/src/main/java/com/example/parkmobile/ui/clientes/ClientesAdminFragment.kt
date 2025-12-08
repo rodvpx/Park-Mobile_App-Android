@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ class ClientesAdminFragment : Fragment() {
 
     private lateinit var rvClientes: RecyclerView
     private lateinit var fabAddCliente: FloatingActionButton
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +36,7 @@ class ClientesAdminFragment : Fragment() {
 
         rvClientes = view.findViewById(R.id.rv_clientes)
         fabAddCliente = view.findViewById(R.id.fab_add_cliente)
+        searchView = view.findViewById(R.id.search_view)
 
         val clientesAdapter = ClientesAdapter { cliente ->
             AddEditClienteFragment.newInstance(cliente).show(childFragmentManager, "AddEditClienteFragment")
@@ -55,5 +58,20 @@ class ClientesAdminFragment : Fragment() {
         fabAddCliente.setOnClickListener {
             AddEditClienteFragment.newInstance(null).show(childFragmentManager, "AddEditClienteFragment")
         }
+
+        setupSearch()
+    }
+
+    private fun setupSearch() {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.filtrarClientes(newText)
+                return true
+            }
+        })
     }
 }
