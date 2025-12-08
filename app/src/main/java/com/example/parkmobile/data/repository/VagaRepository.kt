@@ -3,60 +3,38 @@ package com.example.parkmobile.data.repository
 import com.example.parkmobile.data.model.Vaga
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
 class VagaRepository(private val firestore: FirebaseFirestore) {
 
-    private val vagaCollection = firestore.collection("vagas")
+    private val vagasCollection = firestore.collection("vagas")
 
-    suspend fun getAllVagas(): List<Vaga> {
-        return try {
-            vagaCollection.orderBy("codigo", Query.Direction.ASCENDING).get().await().toObjects(Vaga::class.java)
-        } catch (e: Exception) {
-            emptyList()
-        }
-    }
-
-    suspend fun addVaga(vaga: Vaga): Unit {
-        // O Firestore vai gerar um ID automaticamente se não passarmos um no document()
-        vagaCollection.add(vaga).await()
-    }
-
-    suspend fun getVaga(id: String): Vaga? {
-        return try {
-            vagaCollection.document(id).get().await().toObject(Vaga::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    suspend fun getVagaByCodigo(codigo: String): Vaga? {
-        return try {
-            val query = vagaCollection.whereEqualTo("codigo", codigo).limit(1).get().await()
-            if (query.isEmpty) {
-                null
-            } else {
-                query.documents.first().toObject(Vaga::class.java)
+    // Agora retorna um Flow para atualizações em tempo real
+    fun getAllVagas(): Flow<List<Vaga>> = callbackFlow {
+        val listener = vagasCollection
+            .orderBy("codigo", Query.Direction.ASCENDING)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    close(error) // Fecha o flow com erro
+                    return@addSnapshotListener
+                }
+                if (snapshot != null) {
+                    val vagas = snapshot.toObjects(Vaga::class.java)
+                    trySend(vagas).isSuccess // Envia a nova lista para o flow
+                }
             }
-        } catch (e: Exception) {
-            null
-        }
+        awaitClose { listener.remove() } // Garante que o listener seja removido quando o flow for cancelado
     }
 
-    suspend fun getVagaLivre(): Vaga? {
-        return try {
-            val query = vagaCollection.whereEqualTo("status", Vaga.StatusVaga.LIVRE.name).limit(1).get().await()
-            if (query.isEmpty) {
-                null
-            } else {
-                query.documents.first().toObject(Vaga::class.java)
-            }
-        } catch (e: Exception) {
-            null
-        }
+    suspend fun addVaga(vaga: Vaga) {
+        // O ID do documento será o próprio código da vaga para fácil acesso
+        vagasCollection.document(vaga.codigo).set(vaga).await()
     }
 
-    suspend fun updateVaga(vaga: Vaga): Unit {
-        vagaCollection.document(vaga.id).set(vaga).await()
+    suspend fun updateVaga(vaga: Vaga) {
+        vagasCollection.document(vaga.id).set(vaga).await()
     }
 }

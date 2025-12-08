@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.parkmobile.data.model.Vaga
 import com.example.parkmobile.data.repository.VagaRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
@@ -21,10 +22,8 @@ class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
 
     fun carregarVagas() {
         viewModelScope.launch {
-            try {
-                _vagas.value = vagaRepository.getAllVagas()
-            } catch (e: Exception) {
-                _errorMessage.value = e.message
+            vagaRepository.getAllVagas().collect {
+                _vagas.value = it
             }
         }
     }
@@ -39,7 +38,6 @@ class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
             try {
                 val novaVaga = Vaga(codigo = codigo, status = status)
                 vagaRepository.addVaga(novaVaga)
-                carregarVagas() // Recarrega a lista para mostrar a nova vaga
                 _dismiss.value = true // Sinaliza para o BottomSheet fechar
             } catch (e: Exception) {
                 _errorMessage.value = e.message
@@ -57,7 +55,6 @@ class VagasViewModel(private val vagaRepository: VagaRepository) : ViewModel() {
             try {
                 val vagaAtualizada = vaga.copy(codigo = novoCodigo, status = novoStatus)
                 vagaRepository.updateVaga(vagaAtualizada)
-                carregarVagas() // Recarrega a lista para refletir a mudança
                 _dismiss.value = true // Sinaliza para o BottomSheet fechar
             } catch (e: Exception) {
                 _errorMessage.value = e.message
