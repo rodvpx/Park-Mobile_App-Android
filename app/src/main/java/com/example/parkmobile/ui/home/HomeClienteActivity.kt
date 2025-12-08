@@ -2,27 +2,23 @@ package com.example.parkmobile.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.parkmobile.ui.auth.MainActivity
 import com.example.parkmobile.R
 import com.example.parkmobile.ui.configuracoes.ConfiguracoesActivity
 import com.example.parkmobile.ui.historico.HistoricoFragment
 import com.example.parkmobile.ui.relatorio.RelatorioFragment
-import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 
-class HomeClienteActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class HomeClienteActivity : AppCompatActivity() {
 
-    private lateinit var drawerLayout: DrawerLayout
     private lateinit var toolbarTitle: TextView
     private lateinit var historicoButton: LinearLayout
     private lateinit var relatoriosButton: LinearLayout
@@ -32,40 +28,14 @@ class HomeClienteActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_cliente)
 
-        // Handle system back (including gesture) to close drawer if it's open
-        val backCallback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                    drawerLayout.closeDrawer(GravityCompat.END)
-                } else {
-                    // disable and let system handle back
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
-                    isEnabled = true
-                }
-            }
-        }
-        onBackPressedDispatcher.addCallback(this, backCallback)
-
         val toolbar: Toolbar = findViewById(R.id.toolbar_sup)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-
-        // Acessa a view de header do NavigationView e configura clique em "Configurar Conta"
-        val header = navigationView.getHeaderView(0)
-        // atualiza o nome do header a partir de resources (permite tradução)
-        val headerName = header.findViewById<TextView>(R.id.nav_header_name)
-        headerName?.text = getString(R.string.nome_do_usuario)
-        // Botão de voltar (seta) não é necessário quando se tem o menu lateral
-        // Ação de abrir o menu será no ícone de perfil
         profileImageCard = findViewById(R.id.profile_image_card)
         profileImageCard.visibility = View.VISIBLE
-        profileImageCard.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.END)
+        profileImageCard.setOnClickListener { view ->
+            showProfileMenu(view)
         }
 
         toolbarTitle = findViewById(R.id.toolbar_title)
@@ -77,27 +47,33 @@ class HomeClienteActivity : AppCompatActivity(), NavigationView.OnNavigationItem
 
         if (savedInstanceState == null) {
             loadFragment(HistoricoFragment(), "Histórico")
-            navigationView.setCheckedItem(R.id.nav_configuracoes) // Marcar item como selecionado
         }
 
         historicoButton.setOnClickListener { loadFragment(HistoricoFragment(), "Histórico") }
         relatoriosButton.setOnClickListener { loadFragment(RelatorioFragment(), "Relatórios") }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.nav_configuracoes -> {
-                val intent = Intent(this, ConfiguracoesActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_sair -> {
-                // Aqui você pode adicionar a lógica para fazer logout
-                Toast.makeText(this, "Saindo...", Toast.LENGTH_SHORT).show()
-                finish()
+    private fun showProfileMenu(anchor: View) {
+        val popup = PopupMenu(this, anchor)
+        popup.menuInflater.inflate(R.menu.profile_menu, popup.menu)
+
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_config -> {
+                    startActivity(Intent(this, ConfiguracoesActivity::class.java))
+                    true
+                }
+                R.id.menu_sair -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    true
+                }
+                else -> false
             }
         }
-        drawerLayout.closeDrawer(GravityCompat.END)
-        return true
+        popup.show()
     }
 
     private fun updateButtonSelection(title: String) {
@@ -112,7 +88,4 @@ class HomeClienteActivity : AppCompatActivity(), NavigationView.OnNavigationItem
         toolbarTitle.text = title
         updateButtonSelection(title)
     }
-
-    // back is handled via OnBackPressedCallback registered in onCreate
-
 }
