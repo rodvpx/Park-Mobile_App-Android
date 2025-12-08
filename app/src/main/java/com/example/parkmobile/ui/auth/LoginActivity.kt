@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
 import com.example.parkmobile.R
 import com.example.parkmobile.ui.home.HomeAdminActivity
+import com.example.parkmobile.ui.views.HeaderView
 import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
@@ -30,8 +34,33 @@ class LoginActivity : AppCompatActivity() {
         buttonLogin = findViewById(R.id.button_login)
         progressBar = findViewById(R.id.progressBar)
 
+        // Configura a imagem e o texto de capa
+        val header: HeaderView = findViewById(R.id.header_view)
+        header.setHeaderText("Entrar?")
+        header.setHeaderImageResource(R.drawable.capa_home)
+
+        setupToolbar()
         setupListeners()
         observeAuthState()
+    }
+
+    private fun setupToolbar() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        toolbar.setNavigationOnClickListener {
+            finish() // Fecha a activity e volta para a anterior
+        }
+
+        // Oculta o ícone de perfil
+        val profileImageCard: CardView = findViewById(R.id.profile_image_card)
+        profileImageCard.visibility = View.GONE
+
+        // Define o título da tela
+        val toolbarTitle: TextView = findViewById(R.id.toolbar_title)
+        toolbarTitle.text = "Login"
     }
 
     private fun setupListeners() {
