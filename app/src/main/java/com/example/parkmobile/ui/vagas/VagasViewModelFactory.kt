@@ -3,12 +3,14 @@ package com.example.parkmobile.ui.vagas
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.parkmobile.data.repository.VagaRepository
+import com.google.firebase.firestore.FirebaseFirestore
 
-@Suppress("UNCHECKED_CAST")
-class VagasViewModelFactory(private val vagaRepository: VagaRepository) : ViewModelProvider.Factory {
+class VagasViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(VagasViewModel::class.java)) {
-            return VagasViewModel(vagaRepository) as T
+            val repository = VagaRepository(FirebaseFirestore.getInstance())
+            @Suppress("UNCHECKED_CAST")
+            return VagasViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

@@ -4,21 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
-import com.example.parkmobile.data.repository.VagaRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.firestore.FirebaseFirestore
 
 class VagasFragment : Fragment() {
 
-    private lateinit var viewModel: VagasViewModel
-
-    private lateinit var rvVagas: RecyclerView
-    private lateinit var fabAddVaga: FloatingActionButton
+    private val viewModel: VagasViewModel by viewModels { VagasViewModelFactory() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,38 +26,27 @@ class VagasFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvVagas = view.findViewById(R.id.rv_vagas)
-        fabAddVaga = view.findViewById(R.id.fab_add_vaga)
+        val rvVagas = view.findViewById<RecyclerView>(R.id.rv_vagas)
+        val fabAddVaga = view.findViewById<FloatingActionButton>(R.id.fab_add_vaga)
 
-        // 1. Configuração do ViewModel (sem Hilt)
-        val firestore = FirebaseFirestore.getInstance()
-        val vagaRepository = VagaRepository(firestore)
-        val factory = VagasViewModelFactory(vagaRepository)
-        viewModel = ViewModelProvider(this, factory)[VagasViewModel::class.java]
-
-        // 2. Configuração do RecyclerView
         val vagasAdapter = VagasAdapter { vaga ->
-            val bottomSheet = EditVagaBottomSheetFragment.newInstance(vaga)
-            bottomSheet.show(childFragmentManager, "EditVagaBottomSheetFragment")
+            // Ao clicar, abre a tela de edição
+            AddEditVagaFragment.newInstance(vaga).show(childFragmentManager, "AddEditVagaFragment")
         }
-        rvVagas.adapter = vagasAdapter
 
-        // 3. Observar mudanças nos dados
+        rvVagas.adapter = vagasAdapter
+        rvVagas.layoutManager = GridLayoutManager(context, 2) // 2 colunas
+
         viewModel.vagas.observe(viewLifecycleOwner) { vagas ->
             vagasAdapter.submitList(vagas)
         }
 
-        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        }
-
-        // 4. Carregar os dados iniciais
-        viewModel.carregarVagas()
-
-        // 5. Configuração do FAB
         fabAddVaga.setOnClickListener {
-            val bottomSheet = AddVagaBottomSheetFragment()
-            bottomSheet.show(childFragmentManager, "AddVagaBottomSheetFragment")
+            // Ao clicar no FAB, abre a tela de adição (sem passar vaga)
+            AddEditVagaFragment.newInstance(null).show(childFragmentManager, "AddEditVagaFragment")
         }
+
+        // Carrega as vagas quando a tela é criada
+        viewModel.carregarVagas()
     }
 }
