@@ -1,22 +1,80 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme for Night/Dark mode. -->
-    <style name="Base.Theme.ParkMobile" parent="Theme.Material3.Dark.NoActionBar">
-        <!-- As cores aqui devem ser versões escuras das cores do seu app -->
-        <!-- Exemplo: (idealmente, use o Material Theme Builder para gerar) -->
-        <item name="colorPrimary">#52D7FE</item> <!-- Azul mais claro -->
-        <item name="colorOnPrimary">#003548</item>
-        <item name="colorSecondary">#B4C9D5</item>
-        <item name="colorOnSecondary">#1F333C</item>
-        <item name="colorError">#FFB4AB</item>
-        <item name="colorOnError">#690005</item>
-        <item name="android:colorBackground">#1A1C18</item>
-        <item name="colorOnBackground">#E2E2E6</item>
-        <item name="colorSurface">#1A1C18</item>
-        <item name="colorOnSurface">#E2E2E6</item>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ParkMobile" parent="Theme.Material3.Light.NoActionBar">
+<!--        fonte padrão-->
+        <!-- Cores primárias da marca -->
+        <item name="colorPrimary">@color/md_theme_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+
+        <!-- Cores secundárias da marca -->
+        <item name="colorSecondary">@color/md_theme_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+
+        <!-- Cor de erro -->
+        <item name="colorError">@color/md_theme_error</item>
+        <item name="colorOnError">@color/md_theme_onError</item>
+
+        <!-- Cores de fundo e superfície -->
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
 
         <!-- Cor da barra de status -->
-        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
     </style>
+
+    <!-- ESTILO PARA OS BOTÕES DA TELA PRINCIPAL -->
+    <style name="BotaoTelaPrincipal" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginStart">45dp</item>
+        <item name="android:layout_marginEnd">45dp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="iconSize">35dp</item>
+        <item name="cornerRadius">16dp</item> <!-- Bônus: adicionando cantos arredondados consistentes -->
+    </style>
+
+    <style name="BotaoGeral" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BotaoGeralVermelho" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">15dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="CampoFormulario" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+    </style>
+
+        <style name="ReciboLabel">
+            <item name="android:textSize">18sp</item>
+            <item name="android:textStyle">bold</item>
+            <item name="android:textColor">#222222</item>
+            <item name="android:layout_marginEnd">2dp</item>
+        </style>
+
+        <style name="ReciboValue">
+            <item name="android:textSize">18sp</item>
+            <item name="android:textStyle">normal</item>
+            <item name="android:textColor">#333333</item>
+        </style>
+
 
     <style name="Theme.ParkMobile" parent="Base.Theme.ParkMobile" />
 </resources>

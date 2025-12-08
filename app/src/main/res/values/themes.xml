@@ -1,8 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme for Day/Light mode. -->
-    <style name="Base.Theme.ParkMobile" parent="Theme.Material3.DayNight.NoActionBar">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ParkMobile" parent="Theme.Material3.Light.NoActionBar">
 <!--        fonte padrão-->
-        <item name="android:fontFamily">helvetica</item>
         <!-- Cores primárias da marca -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -79,4 +78,3 @@
 
     <style name="Theme.ParkMobile" parent="Base.Theme.ParkMobile" />
 </resources>
-
