@@ -8,12 +8,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
+import java.util.Date
+import java.util.Locale
 
 class CheckOutFragment : Fragment() {
 
     private lateinit var rvCheckOut: RecyclerView
+    private lateinit var adapter: EstacionamentoAdapter // Corrigido para EstacionamentoAdapter
 
     private val viewModel: EstacionamentoViewModel by activityViewModels {
         EstacionamentoViewModelFactory()
@@ -29,43 +33,61 @@ class CheckOutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvCheckOut = view.findViewById(R.id.rv_check_out)
+        setupRecyclerView(view)
+        observeViewModel()
 
-        val adapter = EstacionamentoAdapter { clienteVaga ->
-            // Confirmar antes de fazer o check-out
+        viewModel.carregarVeiculosEstacionados()
+    }
+
+    private fun setupRecyclerView(view: View) {
+        rvCheckOut = view.findViewById(R.id.rv_check_out)
+        rvCheckOut.layoutManager = LinearLayoutManager(context)
+
+        // Corrigido para EstacionamentoAdapter
+        adapter = EstacionamentoAdapter { historico -> 
+            val checkInTime = historico.checkIn
+            if (checkInTime == null) {
+                Toast.makeText(context, "Erro: Horário de check-in não encontrado.", Toast.LENGTH_SHORT).show()
+                return@EstacionamentoAdapter
+            }
+
+            val valorCalculado = viewModel.calcularValor(checkInTime, Date())
+            val valorFormatado = String.format(Locale.getDefault(), "%.2f", valorCalculado)
+
             AlertDialog.Builder(requireContext())
                 .setTitle("Confirmar Check-out")
-                .setMessage("Deseja realmente fazer o check-out do veículo com placa ${clienteVaga.placa}?")
-                .setPositiveButton("Sim") { _, _ ->
-                    viewModel.realizarCheckOut(clienteVaga.recibo)
+                .setMessage("Veículo: ${historico.placaVeiculo.uppercase()}\nValor a pagar: R$ $valorFormatado\n\nDeseja confirmar o check-out?")
+                .setPositiveButton("Confirmar") { _, _ ->
+                    viewModel.realizarCheckOut(historico)
                 }
-                .setNegativeButton("Não", null)
+                .setNegativeButton("Cancelar", null)
                 .show()
         }
-
         rvCheckOut.adapter = adapter
+    }
 
-        // O ViewModel precisa de um LiveData para expor a lista de veículos estacionados
-        viewModel.veiculosEstacionados.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+    private fun observeViewModel() {
+        viewModel.veiculosEstacionados.observe(viewLifecycleOwner) { veiculos ->
+            adapter.submitList(veiculos)
         }
 
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is EstacionamentoUiState.Success -> {
-                    Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
-                    // A lista será atualizada automaticamente porque estamos observando `veiculosEstacionados`
+                    Toast.makeText(context, state.message, Toast.LENGTH_SHORT).show()
                 }
                 is EstacionamentoUiState.Error -> {
                     Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
                 }
                 is EstacionamentoUiState.Loading -> {
-                    // Pode-se mostrar um indicador de loading específico para o item clicado
+                    // Lidar com o estado de carregamento, se necessário
                 }
             }
         }
+    }
 
-        // Carregar a lista inicial
+    override fun onResume() {
+        super.onResume()
         viewModel.carregarVeiculosEstacionados()
     }
 }
