@@ -21,4 +21,7 @@ data class Cliente(
     val dataModificacao: Date? = null,
     val criadoPor: String = "",
     val modificadoPor: String = ""
-) : Parcelable
+) : Parcelable {
+    // Construtor vazio necessário para o Firestore
+    constructor() : this("", "", "", "", null, null, "", "")
+}
