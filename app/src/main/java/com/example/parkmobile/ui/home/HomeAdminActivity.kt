@@ -1,23 +1,25 @@
 package com.example.parkmobile.ui.home
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
-import androidx.activity.OnBackPressedCallback
+import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import androidx.cardview.widget.CardView
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.parkmobile.ui.auth.MainActivity
 import com.example.parkmobile.R
-import com.google.android.material.navigation.NavigationView
+import com.example.parkmobile.ui.configuracoes.ConfiguracoesActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class HomeAdminActivity : AppCompatActivity() {
 
-    private lateinit var drawerLayout: DrawerLayout
     private lateinit var navController: NavController
+    private lateinit var toolbarTitle: TextView
 
     // Botões da barra de navegação inferior
     private lateinit var navVagas: LinearLayout
@@ -31,53 +33,56 @@ class HomeAdminActivity : AppCompatActivity() {
 
         setupNavigation()
         setupToolbar()
-        setupDrawer()
         setupBottomNav()
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            updateButtonSelection(destination.id)
+            updateScreenForDestination(destination.id)
         }
 
-        updateButtonSelection(navController.currentDestination?.id ?: R.id.vagasFragment)
-
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                    drawerLayout.closeDrawer(GravityCompat.END)
-                } else {
-                    // Disable this callback and let the default back press behavior handle it
-                    isEnabled = false
-                    onBackPressedDispatcher.onBackPressed()
-                    isEnabled = true // Re-enable for next back press
-                }
-            }
-        })
+        // Garante que o estado inicial esteja correto
+        updateScreenForDestination(navController.currentDestination?.id ?: R.id.vagasFragment)
     }
 
     private fun setupToolbar() {
         val toolbar: Toolbar = findViewById(R.id.toolbar_sup)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false) // Desabilita o título padrão
+
+        toolbarTitle = findViewById(R.id.toolbar_title)
+
+        val profileImageCard: CardView = findViewById(R.id.profile_image_card)
+        profileImageCard.visibility = View.VISIBLE
+        profileImageCard.setOnClickListener { view ->
+            showProfileMenu(view)
+        }
+    }
+
+    private fun showProfileMenu(anchor: View) {
+        val popup = PopupMenu(this, anchor)
+        popup.menuInflater.inflate(R.menu.profile_menu, popup.menu)
+
+        popup.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_config -> {
+                    startActivity(Intent(this, ConfiguracoesActivity::class.java))
+                    true
+                }
+                R.id.menu_sair -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    true
+                }
+                else -> false
+            }
+        }
+        popup.show()
     }
 
     private fun setupNavigation() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-    }
-
-    private fun setupDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_menu_hamburguer)
-
-
-        navView.setNavigationItemSelectedListener {
-            // Lógica para itens do drawer
-            drawerLayout.closeDrawer(GravityCompat.END)
-            true
-        }
     }
 
     private fun setupBottomNav() {
@@ -92,30 +97,20 @@ class HomeAdminActivity : AppCompatActivity() {
         navRelatorios.setOnClickListener { if (navController.currentDestination?.id != R.id.relatoriosAdminFragment) navController.navigate(R.id.relatoriosAdminFragment) }
     }
 
-    private fun updateButtonSelection(destinationId: Int) {
-        navVagas.isSelected = false
-        navClientes.isSelected = false
-        navEstacionamento.isSelected = false
-        navRelatorios.isSelected = false
-
-        when (destinationId) {
-            R.id.vagasFragment -> navVagas.isSelected = true
-            R.id.clientesAdminFragment -> navClientes.isSelected = true
-            R.id.estacionamentoFragment -> navEstacionamento.isSelected = true
-            R.id.relatoriosAdminFragment -> navRelatorios.isSelected = true
+    private fun updateScreenForDestination(destinationId: Int) {
+        // Atualiza o título
+        toolbarTitle.text = when (destinationId) {
+            R.id.vagasFragment -> "Vagas"
+            R.id.clientesAdminFragment -> "Clientes"
+            R.id.estacionamentoFragment -> "Estacionamento"
+            R.id.relatoriosAdminFragment -> "Relatórios"
+            else -> ""
         }
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // O ícone do menu (home) abre e fecha o drawer lateral.
-        if (item.itemId == android.R.id.home) {
-            if (drawerLayout.isDrawerOpen(GravityCompat.END)) {
-                drawerLayout.closeDrawer(GravityCompat.END)
-            } else {
-                drawerLayout.openDrawer(GravityCompat.END)
-            }
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+        // Atualiza a seleção do botão
+        navVagas.isSelected = destinationId == R.id.vagasFragment
+        navClientes.isSelected = destinationId == R.id.clientesAdminFragment
+        navEstacionamento.isSelected = destinationId == R.id.estacionamentoFragment
+        navRelatorios.isSelected = destinationId == R.id.relatoriosAdminFragment
     }
 }

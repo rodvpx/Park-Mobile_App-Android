@@ -1,43 +1,26 @@
 package com.example.parkmobile.ui.clientes
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.parkmobile.R
 import com.example.parkmobile.data.model.Cliente
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.textfield.TextInputEditText
+import com.example.parkmobile.data.repository.ClienteRepository
+import com.example.parkmobile.util.CpfMaskTextWatcher
+import com.google.firebase.firestore.FirebaseFirestore
 
-class AddEditClienteFragment : BottomSheetDialogFragment() {
+class AddEditClienteFragment : DialogFragment() {
 
-    private val viewModel: ClientesViewModel by activityViewModels()
+    private val clienteRepository by lazy { ClienteRepository(FirebaseFirestore.getInstance()) }
+    private val viewModel: ClientesViewModel by activityViewModels { ClientesViewModelFactory(clienteRepository) }
 
     private var cliente: Cliente? = null
-
-    private lateinit var tvTitle: TextView
-    private lateinit var etNomeCliente: TextInputEditText
-    private lateinit var etCpfCliente: TextInputEditText
-    private lateinit var btnSalvarCliente: Button
-    private lateinit var btnDeletarCliente: Button
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            cliente = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelable(ARG_CLIENTE, Cliente::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                it.getParcelable(ARG_CLIENTE)
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,78 +33,46 @@ class AddEditClienteFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvTitle = view.findViewById(R.id.tv_title)
-        etNomeCliente = view.findViewById(R.id.et_nome_cliente)
-        etCpfCliente = view.findViewById(R.id.et_cpf_cliente)
-        btnSalvarCliente = view.findViewById(R.id.btn_salvar_cliente)
-        btnDeletarCliente = view.findViewById(R.id.btn_deletar_cliente)
+        val etNome = view.findViewById<EditText>(R.id.et_nome_cliente)
+        val etCpf = view.findViewById<EditText>(R.id.et_cpf_cliente)
+        val btnSalvar = view.findViewById<Button>(R.id.btn_salvar_cliente)
 
-        setupUI()
-        setupListeners()
-        observeViewModel()
-    }
+        etCpf.addTextChangedListener(CpfMaskTextWatcher(etCpf))
 
-    private fun setupUI() {
-        if (cliente == null) {
-            // Modo Adicionar
-            tvTitle.text = "Adicionar Cliente"
-            btnDeletarCliente.visibility = View.GONE
-        } else {
-            // Modo Editar
-            tvTitle.text = "Editar Cliente"
-            etNomeCliente.setText(cliente?.nome)
-            etCpfCliente.setText(cliente?.cpf)
-            btnDeletarCliente.visibility = View.VISIBLE
+        arguments?.let {
+            cliente = it.getParcelable("cliente")
+            cliente?.let {
+                etNome.setText(it.nome)
+                etCpf.setText(it.cpf)
+            }
         }
-    }
 
-    private fun setupListeners() {
-        btnSalvarCliente.setOnClickListener {
-            val nome = etNomeCliente.text.toString()
-            val cpf = etCpfCliente.text.toString()
+        btnSalvar.setOnClickListener {
+            val nome = etNome.text.toString().trim()
+            val cpf = etCpf.text.toString().filter { it.isDigit() }
+
+            if (nome.isBlank() || cpf.length != 11) {
+                Toast.makeText(requireContext(), "Nome e CPF (11 dígitos) são obrigatórios.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
             if (cliente == null) {
-                viewModel.addCliente(nome, cpf)
+                // Adicionando novo cliente (idUsuario fica em branco)
+                viewModel.addCliente(nome, cpf, "")
             } else {
-                viewModel.updateCliente(cliente!!, nome, cpf)
+                // Editando cliente existente
+                val clienteAtualizado = cliente!!.copy(nome = nome, cpf = cpf)
+                viewModel.updateCliente(clienteAtualizado)
             }
-        }
-
-        btnDeletarCliente.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setTitle("Deletar Cliente")
-                .setMessage("Tem certeza que deseja deletar este cliente? Esta ação não pode ser desfeita.")
-                .setPositiveButton("Deletar") { _, _ ->
-                    cliente?.let { viewModel.deleteCliente(it) }
-                    dismiss()
-                }
-                .setNegativeButton("Cancelar", null)
-                .show()
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.dismiss.observe(viewLifecycleOwner) { shouldDismiss ->
-            if (shouldDismiss) {
-                dismiss()
-                viewModel.onDismissed()
-            }
-        }
-
-        viewModel.errorMessage.observe(viewLifecycleOwner) { message ->
-            if (message.isNotBlank()) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-            }
+            dismiss()
         }
     }
 
     companion object {
-        private const val ARG_CLIENTE = "cliente"
-
         fun newInstance(cliente: Cliente?): AddEditClienteFragment {
             val fragment = AddEditClienteFragment()
             val args = Bundle()
-            args.putParcelable(ARG_CLIENTE, cliente)
+            args.putParcelable("cliente", cliente)
             fragment.arguments = args
             return fragment
         }
