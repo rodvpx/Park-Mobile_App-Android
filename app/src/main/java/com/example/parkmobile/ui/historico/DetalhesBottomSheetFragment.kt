@@ -7,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.parkmobile.R
-import com.example.parkmobile.data.model.ClienteVaga
+import com.example.parkmobile.data.model.HistoricoEstacionamento
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 class DetalhesBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -29,36 +30,48 @@ class DetalhesBottomSheetFragment : BottomSheetDialogFragment() {
         detalhesCodigoValor = view.findViewById(R.id.detalhes_codigo_valor)
 
         val item = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            arguments?.getParcelable(ARG_CLIENTE_VAGA, ClienteVaga::class.java)
+            arguments?.getParcelable(ARG_HISTORICO, HistoricoEstacionamento::class.java)
         } else {
             @Suppress("DEPRECATION")
-            arguments?.getParcelable<ClienteVaga>(ARG_CLIENTE_VAGA)
+            arguments?.getParcelable<HistoricoEstacionamento>(ARG_HISTORICO)
         }
 
-        item?.let { clienteVaga ->
+        item?.let { historico ->
             // Popula o código do recibo
-            detalhesCodigoValor.text = clienteVaga.recibo
+            detalhesCodigoValor.text = historico.recibo
 
             // Popula os itens restantes
-            setupItem(view.findViewById(R.id.item_cpf), "ID Cliente:", clienteVaga.idCliente)
-            setupItem(view.findViewById(R.id.item_vaga), "ID Vaga:", clienteVaga.idVaga)
-            
+            setupItem(view.findViewById(R.id.item_cpf), "ID Cliente:", historico.idCliente)
+            setupItem(view.findViewById(R.id.item_vaga), "ID Vaga:", historico.idVaga)
+
             val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            val entrada = clienteVaga.dataEntrada?.let { format.format(it) } ?: "--"
-            val saida = clienteVaga.dataSaida?.let { format.format(it) } ?: "--"
+            val entrada = historico.checkIn?.let { format.format(it) } ?: "--"
+            val saida = historico.checkOut?.let { format.format(it) } ?: "--"
+
+            var tempoEstacionado = "--"
+            historico.checkIn?.let { checkInDate ->
+                historico.checkOut?.let { checkOutDate ->
+                    val diffInMillis = checkOutDate.time - checkInDate.time
+                    val diffInMinutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+                    val hours = diffInMinutes / 60
+                    val minutes = diffInMinutes % 60
+                    tempoEstacionado = String.format("%02dh %02dmin", hours, minutes)
+                }
+            }
+
 
             setupItem(view.findViewById(R.id.item_entrada), "Entrada:", entrada)
             setupItem(view.findViewById(R.id.item_saida), "Saída:", saida)
-            setupItem(view.findViewById(R.id.item_tempo), "Tempo:", "--") // O tempo não está disponível em ClienteVaga
+            setupItem(view.findViewById(R.id.item_tempo), "Tempo:", tempoEstacionado)
 
-            setupItem(view.findViewById(R.id.item_placa), "Placa:", clienteVaga.placa)
-            setupItem(view.findViewById(R.id.item_marca), "Marca:", clienteVaga.marca)
-            setupItem(view.findViewById(R.id.item_modelo), "Modelo:", clienteVaga.modelo)
-            setupItem(view.findViewById(R.id.item_cor), "Cor:", clienteVaga.cor)
+            setupItem(view.findViewById(R.id.item_placa), "Placa:", historico.placaVeiculo)
+            setupItem(view.findViewById(R.id.item_marca), "Marca:", historico.marcaVeiculo)
+            setupItem(view.findViewById(R.id.item_modelo), "Modelo:", historico.modeloVeiculo)
+            setupItem(view.findViewById(R.id.item_cor), "Cor:", historico.corVeiculo)
 
-            val valor = clienteVaga.valor?.let { String.format(Locale.getDefault(), "R$ %.2f", it) } ?: "R$ 0,00"
-            val desconto = clienteVaga.desconto?.let { String.format(Locale.getDefault(), "R$ %.2f", it) } ?: "R$ 0,00"
-            val total = (clienteVaga.valor ?: 0.0) - (clienteVaga.desconto ?: 0.0)
+            val valor = historico.valor?.let { String.format(Locale.getDefault(), "R$ %.2f", it) } ?: "R$ 0,00"
+            val desconto = historico.descontoAplicado?.let { String.format(Locale.getDefault(), "R$ %.2f", it) } ?: "R$ 0,00"
+            val total = (historico.valor ?: 0.0) - (historico.descontoAplicado ?: 0.0)
             val totalFormatado = String.format(Locale.getDefault(), "R$ %.2f", total)
 
             setupItem(view.findViewById(R.id.item_valor), "Valor:", valor)
@@ -76,12 +89,12 @@ class DetalhesBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     companion object {
-        private const val ARG_CLIENTE_VAGA = "clienteVaga"
+        private const val ARG_HISTORICO = "historico"
 
-        fun newInstance(item: ClienteVaga): DetalhesBottomSheetFragment {
+        fun newInstance(item: HistoricoEstacionamento): DetalhesBottomSheetFragment {
             val fragment = DetalhesBottomSheetFragment()
             val args = Bundle()
-            args.putParcelable(ARG_CLIENTE_VAGA, item)
+            args.putParcelable(ARG_HISTORICO, item)
             fragment.arguments = args
             return fragment
         }
