@@ -20,11 +20,39 @@
         tools:text="Recibo: 123456" />
 
     <TextView
+        android:id="@+id/tv_nome_cliente_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Cliente: João da Silva" />
+
+    <TextView
+        android:id="@+id/tv_cpf_cliente_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="CPF: 123.456.789-00" />
+
+    <TextView
         android:id="@+id/tv_placa_detalhes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         tools:text="Placa: ABC-1234" />
+
+    <TextView
+        android:id="@+id/tv_marca_modelo_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Veículo: Fiat Uno" />
+
+    <TextView
+        android:id="@+id/tv_cor_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Cor: Prata" />
 
     <TextView
         android:id="@+id/tv_data_entrada_detalhes"
@@ -41,10 +69,25 @@
         tools:text="Saída: 01/01/2024 12:00" />
 
     <TextView
+        android:id="@+id/tv_tempo_permanencia_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Permanência: 2h 0m" />
+
+    <TextView
+        android:id="@+id/tv_desconto_detalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        tools:text="Desconto: R$ 5,00" />
+
+    <TextView
         android:id="@+id/tv_valor_detalhes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        tools:text="Valor: R$ 25,00" />
+        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+        tools:text="Valor Final: R$ 20,00" />
 
 </LinearLayout>
