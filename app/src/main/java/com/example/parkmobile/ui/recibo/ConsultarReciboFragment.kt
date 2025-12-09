@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
-import com.example.parkmobile.ui.historico.HistoricoAdapter
+import com.example.parkmobile.data.model.HistoricoEstacionamento
 import com.example.parkmobile.ui.relatorio.RelatorioUiState
 import com.example.parkmobile.ui.relatorio.RelatorioViewModel
 import com.example.parkmobile.ui.relatorio.RelatorioViewModelFactory
@@ -39,8 +39,8 @@ class ConsultarReciboFragment : Fragment() {
         progressBar = view.findViewById(R.id.progress_bar)
         rvRecibos = view.findViewById(R.id.rv_recibos)
 
-        val recibosAdapter = HistoricoAdapter { clienteVaga ->
-            val bottomSheet = ReciboDetalhesBottomSheet.newInstance(clienteVaga)
+        val recibosAdapter = RecibosAdapter { historico ->
+            val bottomSheet = ReciboDetalhesBottomSheet.newInstance(historico)
             bottomSheet.show(childFragmentManager, "ReciboDetalhesBottomSheet")
         }
         rvRecibos.adapter = recibosAdapter
@@ -51,7 +51,7 @@ class ConsultarReciboFragment : Fragment() {
         viewModel.carregarTodosOsRecibos()
     }
 
-    private fun setupSearch(adapter: HistoricoAdapter) {
+    private fun setupSearch(adapter: RecibosAdapter) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
 
@@ -71,7 +71,7 @@ class ConsultarReciboFragment : Fragment() {
         })
     }
 
-    private fun observeViewModel(adapter: HistoricoAdapter) {
+    private fun observeViewModel(adapter: RecibosAdapter) {
         viewModel.todosOsRecibos.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }

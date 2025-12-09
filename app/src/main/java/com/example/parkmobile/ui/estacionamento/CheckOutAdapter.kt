@@ -9,30 +9,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
-import com.example.parkmobile.data.model.ClienteVaga
+import com.example.parkmobile.data.model.HistoricoEstacionamento
+import com.example.parkmobile.data.model.HistoricoEstacionamentoDetalhado
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
-class CheckOutAdapter(private val onCheckOutClick: (ClienteVaga) -> Unit) : ListAdapter<ClienteVaga, CheckOutAdapter.CheckOutViewHolder>(ClienteVagaDiffCallback()) {
-
-    class CheckOutViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
-
-        private val tvPlaca: TextView = itemView.findViewById(R.id.tv_placa)
-        private val tvModeloMarca: TextView = itemView.findViewById(R.id.tv_modelo_marca)
-        private val tvDataEntrada: TextView = itemView.findViewById(R.id.tv_data_entrada)
-        private val btnFazerCheckout: Button = itemView.findViewById(R.id.btn_fazer_checkout)
-
-        fun bind(item: ClienteVaga, onCheckOutClick: (ClienteVaga) -> Unit) {
-            tvPlaca.text = item.placa
-            tvModeloMarca.text = "${item.modelo} - ${item.marca}"
-
-            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            tvDataEntrada.text = sdf.format(item.dataEntrada)
-
-            btnFazerCheckout.setOnClickListener { onCheckOutClick(item) }
-        }
-    }
+class CheckOutAdapter(
+    private val onCheckOutClick: (HistoricoEstacionamento) -> Unit
+) : ListAdapter<HistoricoEstacionamentoDetalhado, CheckOutAdapter.CheckOutViewHolder>(CheckOutDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CheckOutViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_check_out, parent, false)
@@ -41,16 +25,43 @@ class CheckOutAdapter(private val onCheckOutClick: (ClienteVaga) -> Unit) : List
 
     override fun onBindViewHolder(holder: CheckOutViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, onCheckOutClick)
+        holder.bind(item)
+    }
+
+    inner class CheckOutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvPlacaVeiculo: TextView = itemView.findViewById(R.id.tv_placa_veiculo)
+        private val tvModeloVeiculo: TextView = itemView.findViewById(R.id.tv_modelo_veiculo)
+        private val tvVagaCodigo: TextView = itemView.findViewById(R.id.tv_vaga_codigo)
+        private val tvNomeCliente: TextView = itemView.findViewById(R.id.tv_nome_cliente)
+        private val tvCpfCliente: TextView = itemView.findViewById(R.id.tv_cpf_cliente)
+        private val tvHorarioCheckIn: TextView = itemView.findViewById(R.id.tv_horario_checkin)
+        private val btnRealizarCheckOut: Button = itemView.findViewById(R.id.btn_realizar_checkout)
+
+        fun bind(detalhado: HistoricoEstacionamentoDetalhado) {
+            val historico = detalhado.historico
+            tvPlacaVeiculo.text = historico.placaVeiculo
+            tvModeloVeiculo.text = "${historico.marcaVeiculo} ${historico.modeloVeiculo}"
+            tvVagaCodigo.text = "Vaga: ${detalhado.vaga?.codigo ?: "N/A"}"
+            tvNomeCliente.text = detalhado.cliente?.nome ?: "Cliente não encontrado"
+            tvCpfCliente.text = detalhado.cliente?.cpf ?: "CPF não encontrado"
+
+            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            val checkInDate = historico.checkIn?.let { sdf.format(it) } ?: "N/A"
+            tvHorarioCheckIn.text = "Check-in: $checkInDate"
+
+            btnRealizarCheckOut.setOnClickListener {
+                onCheckOutClick(historico)
+            }
+        }
     }
 }
 
-class ClienteVagaDiffCallback : DiffUtil.ItemCallback<ClienteVaga>() {
-    override fun areItemsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
-        return oldItem.id == newItem.id
+class CheckOutDiffCallback : DiffUtil.ItemCallback<HistoricoEstacionamentoDetalhado>() {
+    override fun areItemsTheSame(oldItem: HistoricoEstacionamentoDetalhado, newItem: HistoricoEstacionamentoDetalhado): Boolean {
+        return oldItem.historico.id == newItem.historico.id
     }
 
-    override fun areContentsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
+    override fun areContentsTheSame(oldItem: HistoricoEstacionamentoDetalhado, newItem: HistoricoEstacionamentoDetalhado): Boolean {
         return oldItem == newItem
     }
 }
