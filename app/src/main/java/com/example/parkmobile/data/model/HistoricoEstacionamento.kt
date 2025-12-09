@@ -9,24 +9,22 @@ import java.util.Date
 
 @IgnoreExtraProperties
 @Parcelize
-data class ClienteVaga(
+data class HistoricoEstacionamento(
     @DocumentId
     val id: String = "",
     val recibo: String = "",
-    val placa: String = "",
-    val marca: String = "",
-    val modelo: String = "",
-    val cor: String = "",
-    val dataEntrada: Date? = null,
-    var dataSaida: Date? = null,
+    val placaVeiculo: String = "",
+    val marcaVeiculo: String = "",
+    val modeloVeiculo: String = "",
+    val corVeiculo: String = "",
+    val checkIn: Date? = null,
+    val checkOut: Date? = null,
     var valor: Double? = null,
-    var desconto: Double? = null,
+    var descontoAplicado: Double? = null, // Renomeado de 'desconto' para clareza
     val idCliente: String = "",
     val idVaga: String = "",
     @ServerTimestamp
     val dataCriacao: Date? = null,
     @ServerTimestamp
-    val dataModificacao: Date? = null,
-    val criadoPor: String = "",
-    val modificadoPor: String = ""
+    val dataModificacao: Date? = null
 ) : Parcelable

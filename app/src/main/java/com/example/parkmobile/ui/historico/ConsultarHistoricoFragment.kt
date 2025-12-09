@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
 import com.example.parkmobile.data.repository.ClienteRepository
@@ -38,12 +40,14 @@ class ConsultarHistoricoFragment : Fragment() {
 
         searchView = view.findViewById(R.id.search_view)
         rvClientesResultado = view.findViewById(R.id.rv_clientes_resultado)
+        rvClientesResultado.layoutManager = LinearLayoutManager(requireContext())
 
         val clientesAdapter = ClientesAdapter { cliente ->
-            // Substitua RelatoriosAdminFragmentDirections pelo gerado para seu nav_graph
-            // val action = RelatoriosAdminFragmentDirections.actionRelatoriosAdminFragmentToResultadoHistoricoFragment(cliente.id, cliente.nome)
-            // findNavController().navigate(action)
-            Toast.makeText(context, "Cliente selecionado: ${cliente.nome}", Toast.LENGTH_SHORT).show()
+            val bundle = bundleOf(
+                "clienteId" to cliente.id,
+                "clienteNome" to cliente.nome
+            )
+            findNavController().navigate(R.id.action_relatoriosAdminFragment_to_resultadoHistoricoFragment, bundle)
         }
         rvClientesResultado.adapter = clientesAdapter
 

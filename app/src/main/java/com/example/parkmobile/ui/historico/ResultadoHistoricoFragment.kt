@@ -9,21 +9,34 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
 import com.example.parkmobile.ui.recibo.ReciboDetalhesBottomSheet
+import com.example.parkmobile.ui.recibo.RecibosAdapter
 import com.example.parkmobile.ui.relatorio.RelatorioUiState
 import com.example.parkmobile.ui.relatorio.RelatorioViewModel
 import com.example.parkmobile.ui.relatorio.RelatorioViewModelFactory
 
 class ResultadoHistoricoFragment : Fragment() {
 
-    private val viewModel: RelatorioViewModel by viewModels { RelatorioViewModelFactory() }
+    private val viewModel: RelatorioViewModel by activityViewModels { RelatorioViewModelFactory() }
 
-    private lateinit var tvTitle: TextView
+    private lateinit var tvNomeCliente: TextView
+    private lateinit var rvHistoricoCliente: RecyclerView
     private lateinit var progressBar: ProgressBar
-    private lateinit var rvHistoricoResultado: RecyclerView
+
+    private var clienteId: String? = null
+    private var clienteNome: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            clienteId = it.getString("clienteId")
+            clienteNome = it.getString("clienteNome")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,27 +48,27 @@ class ResultadoHistoricoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tvTitle = view.findViewById(R.id.tv_title)
-        progressBar = view.findViewById(R.id.progressBar)
-        rvHistoricoResultado = view.findViewById(R.id.rv_historico_resultado)
+        tvNomeCliente = view.findViewById(R.id.tv_nome_cliente_historico)
+        rvHistoricoCliente = view.findViewById(R.id.rv_historico_cliente)
+        progressBar = view.findViewById(R.id.progress_bar_historico)
+        rvHistoricoCliente.layoutManager = LinearLayoutManager(requireContext())
 
-        // O título será genérico pois não recebemos mais o nome do cliente
-        tvTitle.text = "Histórico do Cliente"
+        tvNomeCliente.text = "Histórico de ${clienteNome ?: "Cliente"}"
 
-        val historicoAdapter = HistoricoAdapter { clienteVaga ->
-            val bottomSheet = ReciboDetalhesBottomSheet.newInstance(clienteVaga)
+        val recibosAdapter = RecibosAdapter { historico ->
+            val bottomSheet = ReciboDetalhesBottomSheet.newInstance(historico)
             bottomSheet.show(childFragmentManager, "ReciboDetalhesBottomSheet")
         }
-        rvHistoricoResultado.adapter = historicoAdapter
+        rvHistoricoCliente.adapter = recibosAdapter
 
-        observeViewModel(historicoAdapter)
+        observeViewModel(recibosAdapter)
 
-        // A lógica para buscar por um cliente específico precisa ser refeita
-        // Por agora, vamos carregar um histórico geral ou vazio
-        // viewModel.buscarHistoricoPorClienteId(args.clienteId) // Esta linha não funciona mais
+        clienteId?.let {
+            viewModel.buscarHistoricoPorClienteId(it)
+        }
     }
 
-    private fun observeViewModel(adapter: HistoricoAdapter) {
+    private fun observeViewModel(adapter: RecibosAdapter) {
         viewModel.historicoCliente.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
