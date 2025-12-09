@@ -15,52 +15,93 @@
             android:id="@+id/toolbar_sup"
             layout="@layout/partial_toolbar_superior" />
 
+        <!-- Bloco de perfil -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="8dp">
 
-            <!-- Imagem do Perfil -->
             <ImageView
                 android:id="@+id/profile_image"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginBottom="24dp"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_marginBottom="16dp"
                 android:contentDescription="@string/descricao_imagem_perfil"
                 android:src="@drawable/ic_profile" />
 
-            <!-- Informações do Usuário -->
-            <include
-                android:id="@+id/info_nome"
-                layout="@layout/partial_recibo_item" />
-
-            <include
-                android:id="@+id/info_cpf"
-                layout="@layout/partial_recibo_item" />
-
-            <include
-                android:id="@+id/info_email"
-                layout="@layout/partial_recibo_item" />
-
-        </LinearLayout>
-
-        <!-- Formulário de Alteração de Senha -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:paddingBottom="24dp">
-
+            <!-- Nome -->
             <TextView
+                android:id="@+id/tv_label_nome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:text="@string/nome"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_valor_nome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                tools:text="Nome do Usuário" />
+
+            <!-- CPF -->
+            <TextView
+                android:id="@+id/tv_label_cpf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cpf"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_valor_cpf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                tools:text="123.456.789-00" />
+
+            <!-- Email -->
+            <TextView
+                android:id="@+id/tv_label_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_valor_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="usuario@exemplo.com" />
+        </LinearLayout>
+
+        <!-- Formulário de alteração de senha -->
+        <LinearLayout
+            android:id="@+id/layout_form_senha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bottom_sheet_backgroud"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/tv_title_alterar_senha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorPrimary"
                 android:text="@string/alterar_senha"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -68,6 +109,7 @@
                 style="@style/CampoFormulario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:hint="@string/senha_atual"
                 app:endIconMode="password_toggle">
 
@@ -83,7 +125,7 @@
                 style="@style/CampoFormulario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:hint="@string/nova_senha"
                 app:endIconMode="password_toggle">
 
@@ -99,7 +141,7 @@
                 style="@style/CampoFormulario"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="12dp"
                 android:hint="@string/confirmar_nova_senha"
                 app:endIconMode="password_toggle">
 
@@ -110,23 +152,20 @@
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_alterar_senha"
-                android:layout_width="match_parent"
+                style="@style/BotaoGeral"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/alterar_senha" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_sair"
+                style="@style/BotaoGeral"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:backgroundTint="@color/md_theme_error"
+                android:text="@string/sair_da_conta" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_sair"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="25dp"
-            android:backgroundTint="@color/md_theme_error"
-            android:text="@string/sair_da_conta" />
     </LinearLayout>
 </ScrollView>
