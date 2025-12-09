@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Nova Paleta Roxa -->
-    <color name="md_theme_primary">#6750A4</color> <!-- Roxo Principal -->
-    <color name="md_theme_onPrimary">#FFFFFF</color> <!-- Texto sobre a cor primária (Branco) -->
-    <color name="md_theme_secondary">#625B71</color> <!-- Roxo Secundário/Neutro -->
-    <color name="md_theme_onSecondary">#FFFFFF</color> <!-- Texto sobre a cor secundária (Branco) -->
-    <color name="md_theme_error">#B3261E</color> <!-- Vermelho para erros -->
+    <color name="md_theme_primary">#0D47A1</color>      <!-- Azul principal -->
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+
+    <color name="md_theme_secondary">#FFB74D</color>    <!-- Laranja médio -->
+    <color name="md_theme_onSecondary">#000000</color>
+
+    <color name="md_theme_error">#B3261E</color>
     <color name="md_theme_onError">#FFFFFF</color>
-    <color name="md_theme_background">#FFFBFE</color> <!-- Fundo geral do app (Branco levemente roxo) -->
-    <color name="md_theme_onBackground">#1C1B1F</color> <!-- Texto sobre o fundo -->
-    <color name="md_theme_surface">#FFFBFE</color> <!-- Cor de superfícies como Cards -->
-    <color name="md_theme_onSurface">#1C1B1F</color> <!-- Texto sobre superfícies -->
+
+    <color name="md_theme_background">#FAFAFA</color>
+    <color name="md_theme_onBackground">#1C1B1F</color>
+
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_onSurface">#1C1B1F</color>
 
     <!-- Cores comuns -->
     <color name="black">#FF000000</color>

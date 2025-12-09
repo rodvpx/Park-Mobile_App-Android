@@ -9,6 +9,10 @@
     <string name="configurar_conta">Configurar Conta</string>
 
     <!-- Configurações -->
+    <string name="nome">Nome</string>
+    <string name="cpf">CPF</string>
+    <string name="email">Email</string>
+    <string name="usuario">Usuário</string>
     <string name="alterar_senha">Alterar Senha</string>
     <string name="senha_atual">Senha atual</string>
     <string name="nova_senha">Nova senha</string>

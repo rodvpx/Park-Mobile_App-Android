@@ -62,14 +62,24 @@ class ConfiguracoesActivity : AppCompatActivity() {
                     // Show loading indicator
                 }
                 is ConfiguracoesState.ProfileLoaded -> {
+                    val tvValorNome: TextView = findViewById(R.id.tv_valor_nome)
+                    val tvValorCpf: TextView = findViewById(R.id.tv_valor_cpf)
+                    val tvValorEmail: TextView = findViewById(R.id.tv_valor_email)
+                    val tvLabelNome: TextView = findViewById(R.id.tv_label_nome)
+                    val tvLabelCpf: TextView = findViewById(R.id.tv_label_cpf)
+                    val tvLabelEmail: TextView = findViewById(R.id.tv_label_email)
+
                     if (state.profile.nome == "Administrador") {
-                        findViewById<View>(R.id.info_nome).visibility = View.GONE
-                        findViewById<View>(R.id.info_cpf).visibility = View.GONE
-                        setupInfoItem(R.id.info_email, "Usuário", state.profile.email)
+                        tvLabelNome.visibility = View.GONE
+                        tvValorNome.visibility = View.GONE
+                        tvLabelCpf.visibility = View.GONE
+                        tvValorCpf.visibility = View.GONE
+                        tvLabelEmail.text = getString(R.string.usuario)
+                        tvValorEmail.text = state.profile.email
                     } else {
-                        setupInfoItem(R.id.info_nome, "Nome", state.profile.nome)
-                        setupInfoItem(R.id.info_cpf, "CPF", formatarCpf(state.profile.cpf))
-                        setupInfoItem(R.id.info_email, "Email", state.profile.email)
+                        tvValorNome.text = state.profile.nome
+                        tvValorCpf.text = formatarCpf(state.profile.cpf)
+                        tvValorEmail.text = state.profile.email
                     }
                 }
                 is ConfiguracoesState.PasswordChanged -> {
@@ -85,15 +95,6 @@ class ConfiguracoesActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun setupInfoItem(viewId: Int, label: String, value: String) {
-        val itemView = findViewById<View>(viewId)
-        val labelView = itemView.findViewById<TextView>(R.id.label)
-        val valueView = itemView.findViewById<TextView>(R.id.valor)
-
-        labelView.text = label
-        valueView.text = value
     }
 
     private fun formatarCpf(cpf: String): String {
