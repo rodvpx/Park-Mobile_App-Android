@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
-import com.example.parkmobile.data.model.ClienteVaga
+import com.example.parkmobile.data.model.HistoricoEstacionamento
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class HistoricoAdapter(private val onItemClick: (ClienteVaga) -> Unit) :
-    ListAdapter<ClienteVaga, HistoricoAdapter.HistoricoViewHolder>(DiffCallback) {
+class HistoricoAdapter(
+    private val onItemClick: (HistoricoEstacionamento) -> Unit
+) : ListAdapter<HistoricoEstacionamento, HistoricoAdapter.HistoricoViewHolder>(HistoricoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoricoViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_historico, parent, false)
@@ -21,43 +22,34 @@ class HistoricoAdapter(private val onItemClick: (ClienteVaga) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: HistoricoViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item, onItemClick)
+        val historico = getItem(position)
+        holder.bind(historico)
     }
 
-    class HistoricoViewHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
+    inner class HistoricoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val tvReciboNumero: TextView = itemView.findViewById(R.id.tv_recibo_numero)
+        private val tvPlaca: TextView = itemView.findViewById(R.id.tv_placa_veiculo_historico)
+        private val tvData: TextView = itemView.findViewById(R.id.tv_data_checkout)
 
-        private val tvPlaca: TextView = itemView.findViewById(R.id.tv_placa)
-        private val tvRecibo: TextView = itemView.findViewById(R.id.tv_recibo)
-        private val tvDataEntrada: TextView = itemView.findViewById(R.id.tv_data_entrada)
-        private val tvDataSaida: TextView = itemView.findViewById(R.id.tv_data_saida)
-        private val tvValor: TextView = itemView.findViewById(R.id.tv_valor)
+        fun bind(historico: HistoricoEstacionamento) {
+            tvReciboNumero.text = "Recibo: ${historico.recibo}"
+            tvPlaca.text = "Placa: ${historico.placaVeiculo}"
+            val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+            tvData.text = "Data: ${historico.checkOut?.let { sdf.format(it) } ?: "N/A"}"
 
-        fun bind(item: ClienteVaga, onItemClick: (ClienteVaga) -> Unit) {
-            // Define o clique na view raiz do item
-            itemView.setOnClickListener { onItemClick(item) }
-
-            // Preenche os dados manualmente usando os IDs
-            tvPlaca.text = item.placa
-            tvRecibo.text = "Recibo: ${item.recibo}"
-
-            val format = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            tvDataEntrada.text = item.dataEntrada?.let { "Entrada: ${format.format(it)}" } ?: "Entrada: --"
-            tvDataSaida.text = item.dataSaida?.let { "Saída: ${format.format(it)}" } ?: "Saída: --"
-
-            val valorSeguro = item.valor ?: 0.0
-            tvValor.text = String.format(Locale.getDefault(), "R$ %.2f", valorSeguro)
+            itemView.setOnClickListener {
+                onItemClick(historico)
+            }
         }
     }
+}
 
-    companion object DiffCallback : DiffUtil.ItemCallback<ClienteVaga>() {
-        override fun areItemsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
-            return oldItem.id == newItem.id
-        }
+class HistoricoDiffCallback : DiffUtil.ItemCallback<HistoricoEstacionamento>() {
+    override fun areItemsTheSame(oldItem: HistoricoEstacionamento, newItem: HistoricoEstacionamento): Boolean {
+        return oldItem.id == newItem.id
+    }
 
-        override fun areContentsTheSame(oldItem: ClienteVaga, newItem: ClienteVaga): Boolean {
-            return oldItem == newItem
-        }
+    override fun areContentsTheSame(oldItem: HistoricoEstacionamento, newItem: HistoricoEstacionamento): Boolean {
+        return oldItem == newItem
     }
 }

@@ -44,12 +44,18 @@ class HistoricoFragment : Fragment() {
     }
 
     private fun observeViewModel(adapter: HistoricoAdapter) {
-        viewModel.historico.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.historico.observe(viewLifecycleOwner) { historicoList ->
+            adapter.submitList(historicoList)
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             progressBar.isVisible = isLoading
+        }
+
+        viewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            if (error.isNotBlank()) {
+                Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            }
         }
     }
 }
