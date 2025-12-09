@@ -1,7 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <!-- Base application theme. -->
     <style name="Base.Theme.ParkMobile" parent="Theme.Material3.Light.NoActionBar">
-<!--        fonte padrão-->
+
+        <!-- Card global usando o style abaixo -->
+        <item name="materialCardViewStyle">@style/CardGeral</item>
+
+        <!-- Ripple geral (botões, backgrounds seletáveis) -->
+        <item name="colorControlHighlight">@color/md_theme_secondary</item>
+
         <!-- Cores primárias da marca -->
         <item name="colorPrimary">@color/md_theme_primary</item>
         <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
@@ -22,58 +29,83 @@
 
         <!-- Cor da barra de status -->
         <item name="android:statusBarColor">?attr/colorPrimary</item>
+
+        <!-- FAB padrão do app -->
+        <item name="floatingActionButtonStyle">@style/FabSecundario</item>
+    </style>
+
+    <!-- Style global dos MaterialCardView -->
+    <style name="CardGeral" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="rippleColor">@color/md_theme_secondary</item>
     </style>
 
     <!-- ESTILO PARA OS BOTÕES DA TELA PRINCIPAL -->
-    <style name="BotaoTelaPrincipal" parent="Widget.MaterialComponents.Button">
-        <item name="android:layout_width">0dp</item>
+    <style name="BotaoTelaPrincipal" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">80dp</item>
         <item name="android:layout_marginStart">45dp</item>
         <item name="android:layout_marginEnd">45dp</item>
         <item name="android:textSize">25sp</item>
         <item name="iconSize">35dp</item>
-        <item name="cornerRadius">16dp</item> <!-- Bônus: adicionando cantos arredondados consistentes -->
+        <item name="cornerRadius">16dp</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="BotaoGeral" parent="Widget.MaterialComponents.Button">
-        <item name="android:layout_width">0dp</item>
+    <style name="BotaoGeral" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_marginStart">32dp</item>
         <item name="android:layout_marginEnd">32dp</item>
         <item name="android:textStyle">bold</item>
         <item name="cornerRadius">15dp</item>
         <item name="android:textSize">16sp</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
     </style>
 
-    <style name="BotaoGeralVermelho" parent="Widget.MaterialComponents.Button">
-        <item name="android:layout_width">0dp</item>
+    <style name="BotaoGeralVermelho" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_marginStart">32dp</item>
         <item name="android:layout_marginEnd">32dp</item>
         <item name="android:textStyle">bold</item>
         <item name="cornerRadius">15dp</item>
         <item name="android:textSize">16sp</item>
+        <item name="backgroundTint">?attr/colorError</item>
+        <item name="android:textColor">?attr/colorOnError</item>
     </style>
 
-    <style name="CampoFormulario" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="CampoFormulario" parent="Widget.Material3.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">32dp</item>
         <item name="android:layout_marginEnd">32dp</item>
     </style>
 
-        <style name="ReciboLabel">
-            <item name="android:textSize">18sp</item>
-            <item name="android:textStyle">bold</item>
-            <item name="android:textColor">#222222</item>
-            <item name="android:layout_marginEnd">2dp</item>
-        </style>
+    <style name="ReciboLabel">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#222222</item>
+        <item name="android:layout_marginEnd">2dp</item>
+    </style>
 
-        <style name="ReciboValue">
-            <item name="android:textSize">18sp</item>
-            <item name="android:textStyle">normal</item>
-            <item name="android:textColor">#333333</item>
-        </style>
+    <style name="ReciboValue">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#333333</item>
+    </style>
+
+    <style name="FabSecundario" parent="Widget.Material3.FloatingActionButton.Primary">
+        <!-- Cor de fundo do FAB -->
+        <item name="backgroundTint">@color/md_theme_secondary</item>
+        <!-- Cor do ícone dentro do FAB -->
+        <item name="tint">@color/md_theme_onSecondary</item>
+        <!-- Ripple do FAB -->
+        <item name="rippleColor">@color/md_theme_secondary</item>
+    </style>
 
 
     <style name="Theme.ParkMobile" parent="Base.Theme.ParkMobile" />
