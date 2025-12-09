@@ -35,7 +35,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/md_theme_primary"
         android:contentDescription="@string/adicionar_cliente"
         android:src="@drawable/ic_add"
         app:tint="@android:color/white" />
