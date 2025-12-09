@@ -23,7 +23,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="@string/adicionar_vaga"
-        android:backgroundTint="@color/md_theme_primary"
         android:src="@drawable/ic_add"
         app:tint="@android:color/white" />
 
