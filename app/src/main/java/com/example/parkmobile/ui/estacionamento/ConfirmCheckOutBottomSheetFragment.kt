@@ -68,7 +68,7 @@ class ConfirmCheckOutBottomSheetFragment : BottomSheetDialogFragment() {
 
         btnConfirmar.setOnClickListener {
             historico?.let { h ->
-                viewModel.realizarCheckOut(h)
+                viewModel.realizarCheckOut(h, 0.0)
                 dismiss()
             }
         }

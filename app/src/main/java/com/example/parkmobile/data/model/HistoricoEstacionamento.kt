@@ -20,7 +20,7 @@ data class HistoricoEstacionamento(
     val checkIn: Date? = null,
     val checkOut: Date? = null,
     var valor: Double? = null,
-    var desconto: Double? = null,
+    var descontoAplicado: Double? = null, // Renomeado de 'desconto' para clareza
     val idCliente: String = "",
     val idVaga: String = "",
     @ServerTimestamp

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.parkmobile.data.model.Cliente
 import com.example.parkmobile.data.model.HistoricoEstacionamento
+import com.example.parkmobile.data.model.HistoricoEstacionamentoDetalhado
 import com.example.parkmobile.data.model.Vaga
 import com.example.parkmobile.data.repository.EstacionamentoRepository
 import kotlinx.coroutines.launch
@@ -22,8 +23,12 @@ class EstacionamentoViewModel(private val repository: EstacionamentoRepository) 
     private val _uiState = MutableLiveData<EstacionamentoUiState>()
     val uiState: LiveData<EstacionamentoUiState> = _uiState
 
-    private val _veiculosEstacionados = MutableLiveData<List<HistoricoEstacionamento>>()
-    val veiculosEstacionados: LiveData<List<HistoricoEstacionamento>> = _veiculosEstacionados
+    // Lista original, sem filtro
+    private var _listaCompletaVeiculosEstacionados = listOf<HistoricoEstacionamentoDetalhado>()
+
+    // Lista a ser exibida na UI (pode ser filtrada)
+    private val _veiculosEstacionadosDetalhado = MutableLiveData<List<HistoricoEstacionamentoDetalhado>>()
+    val veiculosEstacionadosDetalhado: LiveData<List<HistoricoEstacionamentoDetalhado>> = _veiculosEstacionadosDetalhado
 
     private val _clientes = MutableLiveData<List<Cliente>>()
     val clientes: LiveData<List<Cliente>> = _clientes
@@ -33,10 +38,48 @@ class EstacionamentoViewModel(private val repository: EstacionamentoRepository) 
 
     fun carregarVeiculosEstacionados() {
         viewModelScope.launch {
-            repository.getVeiculosEstacionados()
-                .onSuccess { _veiculosEstacionados.postValue(it) }
-                .onFailure { _uiState.postValue(EstacionamentoUiState.Error("Erro ao carregar veículos: ${it.message}")) }
+            _uiState.value = EstacionamentoUiState.Loading
+            val historicoResult = repository.getVeiculosEstacionados()
+            val clientesResult = repository.getClientes()
+            val vagasResult = repository.getVagas()
+
+            if (historicoResult.isSuccess && clientesResult.isSuccess && vagasResult.isSuccess) {
+                val historicos = historicoResult.getOrThrow()
+                val clientes = clientesResult.getOrThrow()
+                val vagas = vagasResult.getOrThrow()
+
+                val listaDetalhada = historicos.map { historico ->
+                    HistoricoEstacionamentoDetalhado(
+                        historico = historico,
+                        cliente = clientes.find { it.id == historico.idCliente },
+                        vaga = vagas.find { it.id == historico.idVaga }
+                    )
+                }
+                _listaCompletaVeiculosEstacionados = listaDetalhada
+                _veiculosEstacionadosDetalhado.postValue(listaDetalhada)
+                _uiState.value = EstacionamentoUiState.Success("Veículos carregados") // Mensagem interna
+            } else {
+                val errorMsg = historicoResult.exceptionOrNull()?.message ?: clientesResult.exceptionOrNull()?.message ?: vagasResult.exceptionOrNull()?.message
+                _uiState.value = EstacionamentoUiState.Error("Erro ao carregar veículos: $errorMsg")
+            }
         }
+    }
+
+    fun filtrarVeiculos(query: String?) {
+        val listaFiltrada = if (query.isNullOrBlank()) {
+            _listaCompletaVeiculosEstacionados
+        } else {
+            val lowerCaseQuery = query.lowercase()
+            _listaCompletaVeiculosEstacionados.filter { detalhado ->
+                detalhado.historico.placaVeiculo.lowercase().contains(lowerCaseQuery) ||
+                detalhado.historico.marcaVeiculo.lowercase().contains(lowerCaseQuery) ||
+                detalhado.historico.modeloVeiculo.lowercase().contains(lowerCaseQuery) ||
+                detalhado.cliente?.nome?.lowercase()?.contains(lowerCaseQuery) == true ||
+                detalhado.cliente?.cpf?.lowercase()?.contains(lowerCaseQuery) == true ||
+                detalhado.vaga?.codigo?.lowercase()?.contains(lowerCaseQuery) == true
+            }
+        }
+        _veiculosEstacionadosDetalhado.postValue(listaFiltrada)
     }
 
     fun carregarClientes() {
@@ -78,34 +121,42 @@ class EstacionamentoViewModel(private val repository: EstacionamentoRepository) 
             repository.realizarCheckIn(novoCheckin)
                 .onSuccess {
                     _uiState.postValue(EstacionamentoUiState.Success("Check-in de ${placa.uppercase()} realizado!"))
-                    carregarVeiculosEstacionados()
                     carregarVagasLivres()
                 }
                 .onFailure { _uiState.postValue(EstacionamentoUiState.Error("Erro no check-in: ${it.message}")) }
         }
     }
 
-    fun calcularValor(checkIn: Date, checkOut: Date): Double {
+    fun calcularHoras(checkIn: Date, checkOut: Date): Int {
         val diff = checkOut.time - checkIn.time
         val horas = ceil(diff.toDouble() / (1000 * 60 * 60)).toInt()
-        val horasCobradas = if (horas < 1) 1 else horas
-        return horasCobradas * PRECO_POR_HORA
+        return if (horas < 1) 1 else horas
     }
 
-    fun realizarCheckOut(historico: HistoricoEstacionamento) {
+    fun calcularValor(horas: Int): Double {
+        return horas * PRECO_POR_HORA
+    }
+
+    fun realizarCheckOut(historico: HistoricoEstacionamento, descontoPorcentagem: Double) {
         viewModelScope.launch {
             _uiState.value = EstacionamentoUiState.Loading
             
             val checkOutTime = Date()
-            val valorCalculado = historico.checkIn?.let { calcularValor(it, checkOutTime) } ?: PRECO_POR_HORA
+            val horasEstacionado = historico.checkIn?.let { calcularHoras(it, checkOutTime) } ?: 1
+            val valorOriginal = calcularValor(horasEstacionado)
 
-            val historicoAtualizado = historico.copy(checkOut = checkOutTime, valor = valorCalculado)
+            val valorFinal = valorOriginal * (1 - (descontoPorcentagem / 100))
+
+            val historicoAtualizado = historico.copy(
+                checkOut = checkOutTime,
+                valor = valorFinal,
+                descontoAplicado = descontoPorcentagem
+            )
 
             repository.realizarCheckOut(historicoAtualizado)
                 .onSuccess {
                     _uiState.postValue(EstacionamentoUiState.Success("Check-out de ${historico.placaVeiculo.uppercase()} realizado!"))
-                    carregarVeiculosEstacionados()
-                    carregarVagasLivres()
+                    carregarVeiculosEstacionados() // Recarrega a lista detalhada
                 }
                 .onFailure { _uiState.postValue(EstacionamentoUiState.Error("Erro no check-out: ${it.message}")) }
         }

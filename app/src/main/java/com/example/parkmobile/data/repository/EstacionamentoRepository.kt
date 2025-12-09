@@ -18,7 +18,6 @@ class EstacionamentoRepository {
         return try {
             val snapshot = historicoCollection
                 .whereEqualTo("checkOut", null)
-                .orderBy("checkIn", Query.Direction.DESCENDING)
                 .get()
                 .await()
             Result.success(snapshot.toObjects(HistoricoEstacionamento::class.java))
@@ -31,6 +30,15 @@ class EstacionamentoRepository {
         return try {
             val snapshot = clientesCollection.get().await()
             Result.success(snapshot.toObjects(Cliente::class.java))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getVagas(): Result<List<Vaga>> {
+        return try {
+            val snapshot = vagasCollection.get().await()
+            Result.success(snapshot.toObjects(Vaga::class.java))
         } catch (e: Exception) {
             Result.failure(e)
         }
