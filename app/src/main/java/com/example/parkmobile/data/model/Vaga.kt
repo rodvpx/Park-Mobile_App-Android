@@ -21,6 +21,9 @@ data class Vaga(
     val criadoPor: String = "",
     val modificadoPor: String = ""
 ) : Parcelable {
+    // Construtor vazio necessário para o Firestore
+    constructor() : this("", "", StatusVaga.LIVRE.name, null, null, "", "")
+
     enum class StatusVaga {
         LIVRE, OCUPADA
     }

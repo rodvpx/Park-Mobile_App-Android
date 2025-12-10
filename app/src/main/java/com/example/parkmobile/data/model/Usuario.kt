@@ -18,6 +18,9 @@ data class Usuario(
     val criadoPor: String = "",
     val modificadoPor: String = ""
 ) {
+    // Construtor vazio necessário para o Firestore
+    constructor() : this("", "", Role.CLIENTE.name, null, null, "", "")
+
     enum class Role {
         ADMIN, CLIENTE
     }

@@ -27,4 +27,7 @@ data class HistoricoEstacionamento(
     val dataCriacao: Date? = null,
     @ServerTimestamp
     val dataModificacao: Date? = null
-) : Parcelable
+) : Parcelable {
+    // Construtor vazio necessário para o Firestore
+    constructor() : this("", "", "", "", "", "", null, null, null, null, "", "", null, null)
+}

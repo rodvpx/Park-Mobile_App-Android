@@ -17,45 +17,21 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    // ✅ Função 1: VERIFICAÇÃO (executa no onCreate - SEM DADOS)
-    private fun verificarBanco() {
-        lifecycleScope.launch {
-            try {
-                Log.d("MainActivity", "🔍 Verificando banco de dados...")
-                FirestoreSeeder.seedDatabase() // VERIFICA se já tem dados (NÃO popula)
-            } catch (e: Exception) {
-                Log.e("MainActivity", "Erro na verificação", e)
-            }
-        }
-    }
+
 
     // ✅ Função 2: POPULAR (descomente 1x para popular, depois comente)
-    /*
+
     private fun popularBanco() {
         lifecycleScope.launch {
             try {
                 Log.d("MainActivity", "🚀 POPULANDO banco de dados...")
-                FirestoreSeeder.seedDatabase(force = false) // Popula só se estiver vazio
+                FirestoreSeeder.seedDatabase() // Popula só se estiver vazio
             } catch (e: Exception) {
                 Log.e("MainActivity", "Erro no seed", e)
             }
         }
     }
-    */
 
-    // ✅ Função 3: FORÇAR RECRIAÇÃO (descomente só para resetar TUDO)
-    /*
-    private fun forcarRecriacao() {
-        lifecycleScope.launch {
-            try {
-                Log.d("MainActivity", "💥 FORÇANDO recriação completa...")
-                FirestoreSeeder.seedDatabase(force = true) // LIMPA TUDO e recria
-            } catch (e: Exception) {
-                Log.e("MainActivity", "Erro no force seed", e)
-            }
-        }
-    }
-    */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,12 +66,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // ✅ CHAMADA DA VERIFICAÇÃO (executa sempre, só verifica)
-        verificarBanco()
-
-        // forcarRecriacao() // 👈 DESCOMENTE só para resetar TUDO depois popule
-
-        // popularBanco()  // 👈 DESCOMENTE 1x para popular, depois COMENTE
+         // popularBanco()  // 👈 DESCOMENTE 1x para popular, depois COMENTE
 
     }
 }
