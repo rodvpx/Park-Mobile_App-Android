@@ -16,7 +16,6 @@ import com.example.parkmobile.data.model.HistoricoEstacionamento
 import com.example.parkmobile.ui.historico.HistoricoViewModel
 import com.example.parkmobile.ui.historico.HistoricoViewModelFactory
 import com.example.parkmobile.util.PdfGeneratorService
-import com.google.firebase.auth.FirebaseAuth
 import java.io.File
 
 class RelatorioFragment : Fragment() {
@@ -56,10 +55,7 @@ class RelatorioFragment : Fragment() {
         }
 
         btnGerarRelatorio.setOnClickListener {
-            // PASSO DE DEPURAÇÃO: MOSTRAR O ID DO USUÁRIO ATUAL
-            val userId = FirebaseAuth.getInstance().currentUser?.uid
-            Toast.makeText(requireContext(), "Buscando recibos para o usuário ID: $userId", Toast.LENGTH_LONG).show()
-
+            Toast.makeText(requireContext(), "Gerando relatório...", Toast.LENGTH_SHORT).show()
             pdfGerado = true // Ativa a flag antes de carregar os dados
             viewModel.carregarHistoricoDoUsuarioLogado()
         }
