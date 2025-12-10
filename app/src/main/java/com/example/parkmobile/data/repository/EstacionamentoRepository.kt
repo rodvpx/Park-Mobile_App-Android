@@ -6,6 +6,8 @@ import com.example.parkmobile.data.model.Vaga
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
+import java.util.Date
+import java.util.UUID
 
 class EstacionamentoRepository {
 
@@ -53,11 +55,38 @@ class EstacionamentoRepository {
         }
     }
 
-    suspend fun realizarCheckIn(historico: HistoricoEstacionamento): Result<Unit> {
+    // MODIFICADO: Recebe os IDs e outros dados, e monta o objeto aqui dentro
+    suspend fun realizarCheckIn(
+        clienteDocId: String,
+        idVaga: String,
+        placa: String,
+        marca: String,
+        modelo: String,
+        cor: String
+    ): Result<Unit> {
         return try {
-            historicoCollection.document(historico.id).set(historico).await()
-            // Marcar vaga como ocupada
-            vagasCollection.document(historico.idVaga).update("status", Vaga.StatusVaga.OCUPADA.name).await()
+            // 1. Busca o cliente para pegar o ID de autenticação (idUsuario)
+            val clienteDoc = clientesCollection.document(clienteDocId).get().await()
+            val idUsuarioAuth = clienteDoc.getString("idUsuario")
+                ?: return Result.failure(Exception("Cliente selecionado não possui um usuário vinculado."))
+
+            // 2. Cria o objeto de histórico com o ID de autenticação correto
+            val novoHistorico = HistoricoEstacionamento(
+                id = UUID.randomUUID().toString(),
+                recibo = "REC-${System.currentTimeMillis()}",
+                placaVeiculo = placa,
+                marcaVeiculo = marca,
+                modeloVeiculo = modelo,
+                corVeiculo = cor,
+                checkIn = Date(),
+                idCliente = idUsuarioAuth, // CORREÇÃO APLICADA
+                idVaga = idVaga
+            )
+
+            // 3. Salva o histórico e atualiza o status da vaga
+            historicoCollection.document(novoHistorico.id).set(novoHistorico).await()
+            vagasCollection.document(idVaga).update("status", Vaga.StatusVaga.OCUPADA.name).await()
+            
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
