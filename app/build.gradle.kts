@@ -65,4 +65,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // iText para geração de PDF
+    implementation("com.itextpdf:itext7-core:7.2.5")
+    implementation("com.itextpdf:layout:7.2.5") // Módulo de Layout
+    implementation("org.slf4j:slf4j-android:1.7.36") // Adicionado para evitar warnings do iText
 }

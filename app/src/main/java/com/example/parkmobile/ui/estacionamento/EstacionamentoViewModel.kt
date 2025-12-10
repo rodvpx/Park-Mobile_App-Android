@@ -98,27 +98,16 @@ class EstacionamentoViewModel(private val repository: EstacionamentoRepository) 
         }
     }
 
-    fun realizarCheckIn(idCliente: String, idVaga: String, placa: String, marca: String, modelo: String, cor: String) {
-        if (idCliente.isBlank() || idVaga.isBlank() || placa.isBlank() || marca.isBlank() || modelo.isBlank() || cor.isBlank()) {
+    // MODIFICADO: Passa os dados brutos para o repositório
+    fun realizarCheckIn(clienteDocId: String, idVaga: String, placa: String, marca: String, modelo: String, cor: String) {
+        if (clienteDocId.isBlank() || idVaga.isBlank() || placa.isBlank() || marca.isBlank() || modelo.isBlank() || cor.isBlank()) {
             _uiState.value = EstacionamentoUiState.Error("Todos os campos são obrigatórios")
             return
         }
 
         viewModelScope.launch {
             _uiState.value = EstacionamentoUiState.Loading
-            val novoCheckin = HistoricoEstacionamento(
-                id = UUID.randomUUID().toString(),
-                recibo = "REC-${System.currentTimeMillis()}",
-                placaVeiculo = placa,
-                marcaVeiculo = marca,
-                modeloVeiculo = modelo,
-                corVeiculo = cor,
-                checkIn = Date(),
-                idCliente = idCliente,
-                idVaga = idVaga
-            )
-
-            repository.realizarCheckIn(novoCheckin)
+            repository.realizarCheckIn(clienteDocId, idVaga, placa, marca, modelo, cor)
                 .onSuccess {
                     _uiState.postValue(EstacionamentoUiState.Success("Check-in de ${placa.uppercase()} realizado!"))
                     carregarVagasLivres()
