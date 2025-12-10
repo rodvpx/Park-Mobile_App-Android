@@ -13,13 +13,14 @@ import com.example.parkmobile.data.model.Cliente
 import com.example.parkmobile.data.repository.ClienteRepository
 import com.example.parkmobile.util.CpfMaskTextWatcher
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-// Alterado de DialogFragment para BottomSheetDialogFragment
 class AddEditClienteFragment : BottomSheetDialogFragment() {
 
     private val clienteRepository by lazy { ClienteRepository(FirebaseFirestore.getInstance()) }
     private val viewModel: ClientesViewModel by activityViewModels { ClientesViewModelFactory(clienteRepository) }
+    private val auth by lazy { FirebaseAuth.getInstance() } // Instância do Firebase Auth
 
     private var cliente: Cliente? = null
 
@@ -58,8 +59,13 @@ class AddEditClienteFragment : BottomSheetDialogFragment() {
             }
 
             if (cliente == null) {
-                // Adicionando novo cliente (idUsuario fica em branco)
-                viewModel.addCliente(nome, cpf, "")
+                // CORREÇÃO: Adicionando novo cliente com o ID do usuário logado
+                val userId = auth.currentUser?.uid
+                if (userId == null) {
+                    Toast.makeText(requireContext(), "Erro: Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                viewModel.addCliente(nome, cpf, userId)
             } else {
                 // Editando cliente existente
                 val clienteAtualizado = cliente!!.copy(nome = nome, cpf = cpf)
