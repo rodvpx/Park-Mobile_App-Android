@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
+import com.example.parkmobile.ui.recibo.ReciboDetalhesClienteBottomSheet
 
 class HistoricoFragment : Fragment() {
 
@@ -33,8 +34,9 @@ class HistoricoFragment : Fragment() {
         progressBar = view.findViewById(R.id.progressBar)
 
         val historicoAdapter = HistoricoAdapter { clienteVaga ->
-            // TODO: Implementar o que acontece ao clicar em um item do histórico
-            Toast.makeText(context, "Recibo selecionado: ${clienteVaga.recibo}", Toast.LENGTH_SHORT).show()
+            // ABRE O BOTTOM SHEET COM OS DETALHES DO RECIBO
+            ReciboDetalhesClienteBottomSheet.newInstance(clienteVaga)
+                .show(childFragmentManager, "ReciboDetalhesClienteBottomSheet")
         }
         recyclerViewHistorico.adapter = historicoAdapter
 
