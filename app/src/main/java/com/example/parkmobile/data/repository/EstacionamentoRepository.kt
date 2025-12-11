@@ -4,7 +4,6 @@ import com.example.parkmobile.data.model.Cliente
 import com.example.parkmobile.data.model.HistoricoEstacionamento
 import com.example.parkmobile.data.model.Vaga
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 import java.util.Date
 import java.util.UUID
@@ -79,7 +78,8 @@ class EstacionamentoRepository {
                 modeloVeiculo = modelo,
                 corVeiculo = cor,
                 checkIn = Date(),
-                idCliente = idUsuarioAuth, // CORREÇÃO APLICADA
+                idCliente = clienteDocId, 
+                idUsuario = idUsuarioAuth,
                 idVaga = idVaga
             )
 

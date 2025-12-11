@@ -24,47 +24,41 @@ class HistoricoViewModel(private val repository: RelatorioRepository) : ViewMode
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    // MODIFICADO PARA DEPURAÇÃO DETALHADA
+    // Buscar histórico do usuário logado por idUsuario
     fun carregarHistoricoDoUsuarioLogado() {
         _isLoading.postValue(true)
 
         val userId = FirebaseAuth.getInstance().currentUser?.uid
         if (userId == null) {
-            _errorMessage.postValue("DEBUG: Usuário não logado, impossível buscar histórico.")
+            _errorMessage.postValue("Usuário não logado, impossível buscar histórico.")
             _isLoading.postValue(false)
-            _historico.postValue(emptyList()) // Garante que o observer seja notificado
+            _historico.postValue(emptyList())
             return
         }
 
-        println("ParkMobile DEBUG: Iniciando busca no Firestore para o usuário: $userId")
-
         FirebaseFirestore.getInstance().collection("historico_estacionamento")
-            .whereEqualTo("idCliente", userId)
+            .whereEqualTo("idUsuario", userId) // agora sempre por idUsuario
             .get()
             .addOnSuccessListener { snapshot ->
                 if (snapshot.isEmpty) {
-                    println("ParkMobile DEBUG: SUCESSO. A consulta não encontrou documentos.")
                     _historico.postValue(emptyList())
                 } else {
-                    println("ParkMobile DEBUG: SUCESSO. A consulta encontrou ${snapshot.size()} documentos.")
                     try {
                         val recibos = snapshot.toObjects(HistoricoEstacionamento::class.java)
                         _historico.postValue(recibos)
                     } catch (e: Exception) {
-                        println("ParkMobile DEBUG: ERRO DE DESERIALIZAÇÃO: ${e.message}")
                         _errorMessage.postValue("Erro ao processar dados: ${e.message}")
                     }
                 }
                 _isLoading.postValue(false)
             }
             .addOnFailureListener { e ->
-                println("ParkMobile DEBUG: FALHA na consulta ao Firestore. Erro: ${e.message}")
                 _errorMessage.postValue("Falha no acesso ao banco: ${e.message}")
                 _isLoading.postValue(false)
             }
     }
 
-    // Função antiga que pode ser usada pelo Admin
+    // Função para o Admin
     fun carregarHistoricoCompleto() {
         viewModelScope.launch {
             _isLoading.value = true
@@ -78,17 +72,5 @@ class HistoricoViewModel(private val repository: RelatorioRepository) : ViewMode
                 }
             _isLoading.value = false
         }
-    }
-
-    fun filtrarHistorico(query: String?) {
-        val listaFiltrada = if (query.isNullOrBlank()) {
-            listaCompletaHistorico
-        } else {
-            val lowerCaseQuery = query.lowercase().trim()
-            listaCompletaHistorico.filter {
-                it.recibo.lowercase().contains(lowerCaseQuery) || it.placaVeiculo.lowercase().contains(lowerCaseQuery)
-            }
-        }
-        _historico.postValue(listaFiltrada)
     }
 }

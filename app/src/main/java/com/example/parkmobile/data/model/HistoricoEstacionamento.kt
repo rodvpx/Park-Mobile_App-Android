@@ -23,11 +23,12 @@ data class HistoricoEstacionamento(
     var descontoAplicado: Double? = null, // Renomeado de 'desconto' para clareza
     val idCliente: String = "",
     val idVaga: String = "",
+    val idUsuario: String = "",
     @ServerTimestamp
     val dataCriacao: Date? = null,
     @ServerTimestamp
     val dataModificacao: Date? = null
 ) : Parcelable {
     // Construtor vazio necessário para o Firestore
-    constructor() : this("", "", "", "", "", "", null, null, null, null, "", "", null, null)
+    constructor() : this("", "", "", "", "", "", null, null, null, null, "", "", "", null, null)
 }

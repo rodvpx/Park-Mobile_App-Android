@@ -31,8 +31,8 @@ class CheckInFragment : Fragment() {
     private var clientes: List<Cliente> = emptyList()
     private var vagas: List<Vaga> = emptyList()
 
-    private var selectedCliente: Cliente? = null
-    private var selectedVaga: Vaga? = null
+    private var selectedClienteId: String? = null
+    private var selectedVagaId: String? = null
 
     private val viewModel: EstacionamentoViewModel by activityViewModels {
         EstacionamentoViewModelFactory()
@@ -50,7 +50,6 @@ class CheckInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         bindViews(view)
-        setupAdapters()
         setupListeners()
         observeViewModel()
 
@@ -66,22 +65,18 @@ class CheckInFragment : Fragment() {
         etModeloCarro = view.findViewById(R.id.et_modelo_carro)
         etCorCarro = view.findViewById(R.id.et_cor_carro)
         btnConfirmarCheckIn = view.findViewById(R.id.btn_confirmar_check_in)
-        // Corrigido para o ID correto do XML
-        progressBar = view.findViewById(R.id.progress_bar_check_in) 
-    }
-
-    private fun setupAdapters() {
-        actvCliente.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, mutableListOf<String>()))
-        actvVaga.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, mutableListOf<String>()))
+        progressBar = view.findViewById(R.id.progress_bar_check_in)
     }
 
     private fun setupListeners() {
         actvCliente.setOnItemClickListener { _, _, position, _ ->
-            selectedCliente = clientes.getOrNull(position)
+            val cliente = clientes.getOrNull(position)
+            selectedClienteId = cliente?.id
         }
 
         actvVaga.setOnItemClickListener { _, _, position, _ ->
-            selectedVaga = vagas.getOrNull(position)
+            val vaga = vagas.getOrNull(position)
+            selectedVagaId = vaga?.id
         }
 
         btnConfirmarCheckIn.setOnClickListener {
@@ -90,15 +85,15 @@ class CheckInFragment : Fragment() {
             val modelo = etModeloCarro.text.toString()
             val cor = etCorCarro.text.toString()
 
-            val cliente = selectedCliente
-            val vaga = selectedVaga
+            val clienteId = selectedClienteId
+            val vagaId = selectedVagaId
 
-            if (cliente == null || vaga == null) {
-                Toast.makeText(context, "Selecione um cliente e uma vaga.", Toast.LENGTH_SHORT).show()
+            if (clienteId == null || vagaId == null) {
+                Toast.makeText(context, "Selecione um cliente e uma vaga válidos.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            viewModel.realizarCheckIn(cliente.id, vaga.id, placa, marca, modelo, cor)
+            viewModel.realizarCheckIn(clienteId, vagaId, placa, marca, modelo, cor)
         }
     }
 
@@ -142,15 +137,18 @@ class CheckInFragment : Fragment() {
         etMarcaCarro.text?.clear()
         etModeloCarro.text?.clear()
         etCorCarro.text?.clear()
-        selectedCliente = null
-        selectedVaga = null
+        selectedClienteId = null
+        selectedVagaId = null
         actvCliente.clearFocus()
         actvVaga.clearFocus()
+        // Recarrega os dados para garantir a consistência após o check-in
+        viewModel.carregarClientes()
         viewModel.carregarVagasLivres()
     }
 
     override fun onResume() {
         super.onResume()
+        // Garante que os dados estejam sempre atualizados ao exibir o fragmento
         viewModel.carregarClientes()
         viewModel.carregarVagasLivres()
     }

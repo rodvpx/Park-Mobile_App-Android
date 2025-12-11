@@ -53,18 +53,20 @@ class RelatorioViewModel(
         _uiState.value = RelatorioUiState.Loading
         viewModelScope.launch {
             try {
-                val resultado = historicoEstacionamentoRepository.getHistoricoPorClienteId(clienteId)
-                _historicoCliente.value = resultado
-                if (resultado.isEmpty()) {
+                val lista = historicoEstacionamentoRepository.getHistoricoPorClienteId(clienteId)
+                _historicoCliente.value = lista
+                if (lista.isEmpty()) {
                     _uiState.value = RelatorioUiState.Empty("Nenhum histórico para este cliente.")
                 } else {
                     _uiState.value = RelatorioUiState.Success("Histórico carregado.")
                 }
             } catch (e: Exception) {
-                _uiState.value = RelatorioUiState.Error("Falha ao buscar histórico: ${e.message}")
+                _uiState.value = RelatorioUiState.Error("Erro ao carregar histórico: ${e.message}")
             }
         }
     }
+
+
 
     fun buscarClientePorId(clienteId: String) {
         if (clienteId.isBlank()) return
