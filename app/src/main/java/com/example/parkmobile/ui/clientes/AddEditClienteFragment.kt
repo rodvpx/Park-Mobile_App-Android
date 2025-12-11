@@ -58,21 +58,22 @@ class AddEditClienteFragment : BottomSheetDialogFragment() {
                 return@setOnClickListener
             }
 
+            val userId = auth.currentUser?.uid
+            if (userId == null) {
+                Toast.makeText(requireContext(), "Erro: Usuário não autenticado.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (cliente == null) {
-                // CORREÇÃO: Adicionando novo cliente com o ID do usuário logado
-                val userId = auth.currentUser?.uid
-                if (userId == null) {
-                    Toast.makeText(requireContext(), "Erro: Usuário não autenticado.", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
+                // Admin criando cliente
                 viewModel.addCliente(nome, cpf, userId)
             } else {
                 // Editando cliente existente
-                val clienteAtualizado = cliente!!.copy(nome = nome, cpf = cpf)
-                viewModel.updateCliente(clienteAtualizado)
+                viewModel.updateCliente(cliente!!.copy(nome = nome, cpf = cpf), userId)
             }
             dismiss()
         }
+
     }
 
     companion object {

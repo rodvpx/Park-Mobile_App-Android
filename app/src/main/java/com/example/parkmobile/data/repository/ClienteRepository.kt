@@ -37,17 +37,22 @@ class ClienteRepository(private val firestore: FirebaseFirestore) {
             null
         }
     }
+    suspend fun createCliente(cliente: Cliente) {
+        // Gera ID só para o documento de cliente
+        val novoIdCliente = clienteCollection.document().id
+        val adminId = cliente.criadoPor
 
-    suspend fun createCliente(cliente: Cliente): Unit {
-        // Usamos add() para que o Firestore gere um ID automaticamente
-        clienteCollection.add(cliente).await()
+        val novoCliente = cliente.copy(
+            id = novoIdCliente,
+            idUsuario = "",
+            modificadoPor = adminId
+        )
+
+        clienteCollection.document(novoIdCliente).set(novoCliente).await()
     }
+
 
     suspend fun updateCliente(cliente: Cliente): Unit {
         clienteCollection.document(cliente.id).set(cliente).await()
-    }
-
-    suspend fun deleteCliente(clienteId: String): Unit {
-        clienteCollection.document(clienteId).delete().await()
     }
 }

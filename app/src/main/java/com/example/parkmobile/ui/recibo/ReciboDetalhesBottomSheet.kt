@@ -98,11 +98,23 @@ class ReciboDetalhesBottomSheet : BottomSheetDialogFragment() {
             }
         }
 
-        val desconto = item.descontoAplicado ?: 0.0
-        tvDescontoDetalhes.text = String.format(Locale.getDefault(), "Desconto: R$ %.2f", desconto)
+        val valorBase = item.valor ?: 0.0          // campo valor do histórico
+        val descontoPercent = item.descontoAplicado ?: 0.0
 
-        val valorFinal = (item.valor ?: 0.0) - desconto
-        tvValorDetalhes.text = String.format(Locale.getDefault(), "Valor Final: R$ %.2f", valorFinal)
+        // Desconto apenas em porcentagem
+        tvDescontoDetalhes.text = String.format(
+            Locale.getDefault(),
+            "Desconto: %.0f%%",
+            descontoPercent
+        )
+
+        val valorFinal = valorBase * (1 - descontoPercent / 100.0)
+        tvValorDetalhes.text = String.format(
+            Locale.getDefault(),
+            "Valor Final: R$ %.2f",
+            valorFinal
+        )
+
     }
 
     companion object {

@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
-import com.example.parkmobile.ui.recibo.ReciboDetalhesClienteBottomSheet
+import com.example.parkmobile.ui.recibo.ReciboDetalhesBottomSheet
 
 class HistoricoFragment : Fragment() {
 
@@ -35,7 +35,7 @@ class HistoricoFragment : Fragment() {
 
         val historicoAdapter = HistoricoAdapter { clienteVaga ->
             // ABRE O BOTTOM SHEET COM OS DETALHES DO RECIBO
-            ReciboDetalhesClienteBottomSheet.newInstance(clienteVaga)
+            ReciboDetalhesBottomSheet.newInstance(clienteVaga)
                 .show(childFragmentManager, "ReciboDetalhesClienteBottomSheet")
         }
         recyclerViewHistorico.adapter = historicoAdapter

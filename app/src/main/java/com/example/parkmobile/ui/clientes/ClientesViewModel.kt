@@ -41,26 +41,41 @@ class ClientesViewModel(private val repository: ClienteRepository) : ViewModel()
         _clientes.value = listaFiltrada
     }
 
-    fun addCliente(nome: String, cpf: String, idUsuario: String) {
-        val novoCliente = Cliente(nome = nome, cpf = cpf, idUsuario = idUsuario)
+    fun addCliente(nome: String, cpf: String, adminId: String) {
+        val novoCliente = Cliente(
+            id = "",
+            nome = nome,
+            cpf = cpf,
+            idUsuario = "",
+            criadoPor = adminId,
+            modificadoPor = ""
+        )
         viewModelScope.launch {
             try {
                 repository.createCliente(novoCliente)
-                carregarClientes() // Recarrega a lista para mostrar o novo cliente
+                carregarClientes()
             } catch (e: Exception) {
                 _errorMessage.value = "Falha ao adicionar cliente."
             }
         }
     }
 
-    fun updateCliente(cliente: Cliente) {
+
+
+    fun updateCliente(cliente: Cliente, usuarioQueAlterouId: String) {
+        val clienteAtualizado = cliente.copy(
+            modificadoPor = usuarioQueAlterouId
+        )
+
         viewModelScope.launch {
             try {
-                repository.updateCliente(cliente)
-                carregarClientes() // Recarrega a lista para mostrar a atualização
+                repository.updateCliente(clienteAtualizado)
+                carregarClientes()
             } catch (e: Exception) {
                 _errorMessage.value = "Falha ao atualizar cliente."
             }
         }
     }
+
+
 }

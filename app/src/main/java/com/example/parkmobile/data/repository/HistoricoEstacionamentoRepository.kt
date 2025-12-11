@@ -29,30 +29,13 @@ class HistoricoEstacionamentoRepository(private val firestore: FirebaseFirestore
         }
     }
 
-    suspend fun getVeiculosEstacionados(): List<HistoricoEstacionamento> {
+    suspend fun getHistoricoPorUsuarioId(usuarioId: String): List<HistoricoEstacionamento> {
         return try {
-            historicoCollection.whereEqualTo("checkOut", null)
-                .orderBy("checkIn", Query.Direction.ASCENDING)
+            historicoCollection.whereEqualTo("idUsuario", usuarioId)
+                .orderBy("checkIn", Query.Direction.DESCENDING)
                 .get().await().toObjects(HistoricoEstacionamento::class.java)
         } catch (e: Exception) {
             emptyList()
         }
-    }
-
-    suspend fun getHistoricoByRecibo(recibo: String): HistoricoEstacionamento? {
-        return try {
-            val query = historicoCollection.whereEqualTo("recibo", recibo).limit(1).get().await()
-            if (query.isEmpty) {
-                null
-            } else {
-                query.documents.firstOrNull()?.toObject(HistoricoEstacionamento::class.java)
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    suspend fun save(historico: HistoricoEstacionamento): Unit {
-        historicoCollection.document(historico.id).set(historico).await()
     }
 }

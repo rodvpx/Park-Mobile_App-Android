@@ -17,7 +17,22 @@ class AuthRepository(
             val firebaseUser = authResult.user
                 ?: return Result.failure(Exception("Falha ao criar o usuário no Firebase. O usuário é nulo."))
 
-            // Verifica se já existe um cliente com este CPF sem usuário vinculado
+            val uid = firebaseUser.uid
+
+            // 1. Cria Usuario com username = email
+            val novoUsuario = Usuario(
+                id = uid,
+                username = email,
+                role = Usuario.Role.CLIENTE.name,
+                criadoPor = uid,
+                modificadoPor = uid
+            )
+            firestore.collection("usuarios")
+                .document(uid)
+                .set(novoUsuario)
+                .await()
+
+            // 2. Procura Cliente pré-cadastrado pelo admin (cpf + idUsuario vazio)
             val query = firestore.collection("clientes")
                 .whereEqualTo("cpf", cpf)
                 .whereEqualTo("idUsuario", "")
@@ -26,32 +41,60 @@ class AuthRepository(
                 .await()
 
             if (!query.isEmpty) {
-                // Cliente pré-cadastrado encontrado, carrega o objeto, atualiza e salva de volta.
+                // Cliente pré-cadastrado → só atualiza
                 val clienteDoc = query.documents.first()
                 val clienteExistente = clienteDoc.toObject(Cliente::class.java)!!
+                val clienteId = clienteDoc.id
+
                 val clienteAtualizado = clienteExistente.copy(
-                    nome = nome, // Atualiza para o nome que o cliente digitou
-                    idUsuario = firebaseUser.uid // Vincula o novo ID de usuário
+                    nome = nome,
+                    idUsuario = uid,
+                    modificadoPor = uid
                 )
-                firestore.collection("clientes").document(clienteDoc.id).set(clienteAtualizado).await()
+
+                firestore.collection("clientes")
+                    .document(clienteId)
+                    .set(clienteAtualizado)
+                    .await()
+
+                // 3. Atualiza todos os históricos existentes desse cliente: preenche idUsuario
+                val historicosSnapshot = firestore.collection("historico_estacionamento")
+                    .whereEqualTo("idCliente", clienteId)
+                    .whereEqualTo("idUsuario", "") // só os que ainda não têm usuário vinculado
+                    .get()
+                    .await()
+
+                for (doc in historicosSnapshot.documents) {
+                    doc.reference.update("idUsuario", uid).await()
+                }
 
             } else {
-                // Nenhum cliente pré-cadastrado, cria um novo
+                // Nenhum cliente pré-cadastrado → cria um novo Cliente com id = uid
                 val novoCliente = Cliente(
+                    id = uid,
                     nome = nome,
                     cpf = cpf,
-                    idUsuario = firebaseUser.uid
+                    idUsuario = uid,
+                    criadoPor = uid,
+                    modificadoPor = uid
                 )
-                // Usamos o UID do usuário como ID do documento para facilitar a busca no futuro
-                firestore.collection("clientes").document(firebaseUser.uid).set(novoCliente).await()
-            }
 
-            val novoUsuario = Usuario(
-                id = firebaseUser.uid,
-                username = email,
-                role = Usuario.Role.CLIENTE.name
-            )
-            firestore.collection("usuarios").document(firebaseUser.uid).set(novoUsuario).await()
+                firestore.collection("clientes")
+                    .document(uid)
+                    .set(novoCliente)
+                    .await()
+
+                // 3'. Atualiza históricos que já possam existir com idCliente = uid (caso raro)
+                val historicosSnapshot = firestore.collection("historico_estacionamento")
+                    .whereEqualTo("idCliente", uid)
+                    .whereEqualTo("idUsuario", "")
+                    .get()
+                    .await()
+
+                for (doc in historicosSnapshot.documents) {
+                    doc.reference.update("idUsuario", uid).await()
+                }
+            }
 
             return Result.success(novoUsuario)
         } catch (e: Exception) {
@@ -71,7 +114,7 @@ class AuthRepository(
         }
     }
 
-    fun logout(): Unit { // Retorno explícito para ajudar o compilador
+    fun logout(): Unit {
         auth.signOut()
     }
 

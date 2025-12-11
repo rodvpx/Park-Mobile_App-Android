@@ -1,15 +1,15 @@
 package com.example.parkmobile.ui.historico
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parkmobile.R
@@ -36,6 +36,7 @@ class ResultadoHistoricoFragment : Fragment() {
             clienteId = it.getString("clienteId")
             clienteNome = it.getString("clienteNome")
         }
+        setHasOptionsMenu(true) // habilita menu/back
     }
 
     override fun onCreateView(
@@ -47,6 +48,11 @@ class ResultadoHistoricoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = "Histórico de ${clienteNome ?: "Cliente"}"
+        }
 
         tvNomeCliente = view.findViewById(R.id.tv_nome_cliente_historico)
         rvHistoricoCliente = view.findViewById(R.id.rv_historico_cliente)
@@ -65,6 +71,16 @@ class ResultadoHistoricoFragment : Fragment() {
 
         clienteId?.let {
             viewModel.buscarHistoricoPorClienteId(it)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                findNavController().navigateUp()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
